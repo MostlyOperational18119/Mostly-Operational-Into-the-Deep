@@ -25,7 +25,7 @@ class FieldCentricMecanumTeleOp : LinearOpMode() {
         backRightMotor.direction = DcMotorSimple.Direction.REVERSE
 
         // Retrieve the IMU from the hardware map
-        val imu = hardwareMap.get(IMU::class.java, "imu")
+        val imu = hardwareMap.get(IMU::class.java, "imuC")
         // Adjust the orientation parameters to match your robot
         val parameters = IMU.Parameters(
             RevHubOrientationOnRobot(

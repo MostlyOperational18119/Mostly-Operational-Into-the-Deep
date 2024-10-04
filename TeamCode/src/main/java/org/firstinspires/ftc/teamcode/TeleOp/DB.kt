@@ -29,6 +29,11 @@ class DB : LinearOpMode(){
         launcher.position = startPos
         claw.position = clawOpen
         clawRotate.position = 0.25
+        rotate.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+        rotate.targetPosition = 0
+        rotate.power = 0.2
+        rotate.mode = DcMotor.RunMode.RUN_TO_POSITION
+        rotate.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
 
         waitForStart()
         while(opModeIsActive()) {
@@ -44,16 +49,19 @@ class DB : LinearOpMode(){
             if(gamepad1.x) { claw.position = clawOpen }
             if(gamepad1.b) { claw.position = clawClose }
 
-            if(gamepad1.dpad_up) { rotate.power = -.2 }
-            else if(gamepad1.dpad_down) { rotate.power = .2 }
-            else { rotate.power = 0.0 }
-
-            if (gamepad1.left_bumper && clawRotate.position < 0.5) {clawRotate.position += 0.01
+            if (gamepad1.dpad_down && rotate.targetPosition < -10) {rotate.targetPosition += 10
                 sleep(33)}
-            if (gamepad1.right_bumper && clawRotate.position > 0.16) {clawRotate.position -= 0.01
+            if (gamepad1.dpad_up && rotate.targetPosition > -630) {rotate.targetPosition -= 10
+                sleep(33)}
+
+            if (gamepad1.left_bumper && clawRotate.position < 0.45) {clawRotate.position += 0.01
+                sleep(33)}
+            if (gamepad1.right_bumper && clawRotate.position > 0.11) {clawRotate.position -= 0.01
             sleep(33)}
 
             telemetry.addData("clawrotate", clawRotate.position)
+            telemetry.addData("rotate", rotate.targetPosition)
+
             telemetry.update()
         }
     }

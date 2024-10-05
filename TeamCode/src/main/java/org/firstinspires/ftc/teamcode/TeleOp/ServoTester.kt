@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo
 @TeleOp(name = "ServoPositionTester", group = "Basic Chassis")
 class ServoTester : LinearOpMode() {
     override fun runOpMode() {
-        val airplaneServo = hardwareMap.get(Servo::class.java, "rotateServo")
+        val Servo = hardwareMap.get(Servo::class.java, "rotateServo")
 
         telemetry.addData("Status", "Initialized")
         telemetry.update()
@@ -15,13 +15,13 @@ class ServoTester : LinearOpMode() {
         telemetry.addData("Status", "Running")
         while (opModeIsActive()) {
             if (gamepad1.a) {
-                airplaneServo.position += 0.05;
+                Servo.position += 0.05;
                 sleep(100)
             } else if (gamepad1.b) {
-                airplaneServo.position -= 0.05;
+                Servo.position -= 0.05;
                 sleep(100)
             }
-            val servoPosition = airplaneServo.position;
+            val servoPosition = Servo.position;
             telemetry.addLine("servo position: $servoPosition")
             telemetry.update()
 

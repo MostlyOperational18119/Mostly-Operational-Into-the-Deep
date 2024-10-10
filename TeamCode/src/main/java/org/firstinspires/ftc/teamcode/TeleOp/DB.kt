@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.CRServo
 import com.qualcomm.robotcore.hardware.DcMotor
+import com.qualcomm.robotcore.hardware.Gamepad
 import com.qualcomm.robotcore.hardware.Servo
 
 @TeleOp(name = "DB", group = "Among Us")
@@ -24,7 +25,16 @@ class DB : LinearOpMode(){
         val clawOpen = 0.3
         val clawClose = 0.55
 
+        var leftArmToggle = false
+        var rightArmToggle = false
+
         var contPow = 0.0
+
+        //GAME PADS
+        val currentGamepad1: Gamepad = Gamepad()
+        val currentGamepad2: Gamepad = Gamepad()
+        val previousGamepad1: Gamepad = Gamepad()
+        val previousGamepad2: Gamepad = Gamepad()
 
         launcher.position = startPos
         claw.position = clawOpen
@@ -37,17 +47,36 @@ class DB : LinearOpMode(){
 
         waitForStart()
         while(opModeIsActive()) {
+            //GAMEPADS
+            previousGamepad1.copy(currentGamepad1);
+            previousGamepad2.copy(currentGamepad2);
+            currentGamepad1.copy(gamepad1);
+            currentGamepad2.copy(gamepad2);
+
             val leftY = gamepad1.left_stick_y.toDouble()
             val rightx = gamepad1.right_stick_x.toDouble()
 
             right.power = (leftY - rightx) / speedDiv
             left.power = (leftY + rightx) / speedDiv
 
-            if(gamepad1.a) { launcher.position = startPos }
-            if(gamepad1.y) { launcher.position = stopPos }
+            //Reset Purple
+            if (currentGamepad1.b&& !previousGamepad1.b){
+                leftArmToggle = !leftArmToggle
+            }
+            if (currentGamepad1.x&& !previousGamepad1.x){
+                rightArmToggle = !rightArmToggle
+            }
+            //Reset Purple
+            if(!leftArmToggle) { launcher.position = startPos }
 
-            if(gamepad1.x) { claw.position = clawOpen }
-            if(gamepad1.b) { claw.position = clawClose }
+            //Launch Purple
+            if(leftArmToggle) { launcher.position = stopPos }
+
+            // Left Up
+            if(rightArmToggle) { claw.position = clawOpen }
+
+            //Left Down
+            if(!rightArmToggle) { claw.position = clawClose }
 
             if (gamepad1.dpad_down && rotate.targetPosition < -10) {rotate.targetPosition += 10
                 sleep(33)}

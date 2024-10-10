@@ -33,7 +33,7 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
 
     //needs to be tuned
     public static double LATERAL_DISTANCE = 12; // in; distance between the left and right wheels
-    public static double FORWARD_OFFSET = -4.25s; // in; offset of the lateral wheel
+    public static double FORWARD_OFFSET = -4.25; // in; offset of the lateral wheel
 
     /* Three wheel tuning variables */
     public static double X_MULTIPLIER = 0.9719222; // Multiplier in the X direction
@@ -59,6 +59,7 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
 
         // TODO: reverse any encoders using Encoder.setDirection(Encoder.Direction.REVERSE)
         leftEncoder.setDirection(Encoder.Direction.REVERSE);
+        frontEncoder.setDirection(Encoder.Direction.REVERSE);
     }
 
     public static double encoderTicksToInches(double ticks) {

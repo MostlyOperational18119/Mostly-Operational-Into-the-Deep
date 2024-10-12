@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.Gamepad
 import com.qualcomm.robotcore.hardware.Servo
+import kotlin.math.PI
+import kotlin.math.cos
 
 @TeleOp(name = "SampleTeleOp", group = "Among Us")
 class SampleTeleOp : LinearOpMode() {
@@ -21,6 +23,9 @@ class SampleTeleOp : LinearOpMode() {
         val rotateServoMid = 0.2
         val rotateServoLong = 0.4
         val rotateServoShort = 0.0
+        var slideInches = 12.0
+        var angle = 0.0
+        var slideHorLength = 0.0
 
         //TOGGLES
         var rightintakeToggle = false
@@ -64,7 +69,7 @@ class SampleTeleOp : LinearOpMode() {
             currentGamepad1.copy(gamepad1);
             currentGamepad2.copy(gamepad2);
 
-
+            //INPUT
             val y = -gamepad1.left_stick_y.toDouble() // Remember, Y stick is reversed!
             val x = gamepad1.left_stick_x.toDouble()
             val rx = gamepad1.right_stick_x.toDouble()
@@ -76,6 +81,12 @@ class SampleTeleOp : LinearOpMode() {
             BL.power = (y - x + rx)/speedDiv
             FR.power = (y - x - rx)/speedDiv
             BR.power = (y + x - rx)/speedDiv
+
+            //TRIG
+            slideInches = -slideMotor.currentPosition / 100.0 + 13.5
+            angle = 90 - ((90/800.0)*rotateMotor.currentPosition)
+            angle = angle * Math.PI / 180
+            slideHorLength = cos(angle) * slideInches +5
 
             //CLAW SERVO
             if (currentGamepad2.right_bumper&& !previousGamepad2.right_bumper){
@@ -109,13 +120,12 @@ class SampleTeleOp : LinearOpMode() {
                 rotateServo.position = rotateServoMid
             }
 
-
             //ROTATE
-            if (rj>0) {
+            if (rj>0 && slideHorLength > -2) {
                 rotateMotor.targetPosition = -200
                 rotateMotor.power = rj/3
                 rotateTarget = 0
-            } else if (rj<0) {
+            } else if (rj<0 && slideHorLength < 42) {
                 rotateMotor.targetPosition = 1250
                 rotateMotor.power = -rj/3
                 rotateTarget = 0
@@ -127,7 +137,7 @@ class SampleTeleOp : LinearOpMode() {
             }
 
             //SLIDES
-            if (lj<0) {
+            if (lj<0 && slideHorLength < 42 && slideHorLength >-2) {
                 slideMotor.targetPosition = -4000
                 slideMotor.power = -lj/2
                 slideTarget = 0
@@ -149,6 +159,9 @@ class SampleTeleOp : LinearOpMode() {
             telemetry.addData("FR Power:  ",  FR.power)
             telemetry.addData("RotateServo Postion:  ",  rotateServo.position)
             telemetry.addData("Slide Encoder Position: ",  slideMotor?.let { (it.currentPosition)})
+            telemetry.addData("Angle (Degree): ", angle * 180.0/ PI )
+            telemetry.addData("Slide Length (IN): ",  slideInches)
+            telemetry.addData("Slide Horizontal Inches: ",  slideHorLength)
             telemetry.addData("Rotate Encoder Position: ",  rotateMotor?.let { (it.currentPosition)})
             telemetry.addData("Rotate Power: ",  rotateMotor?.let { (it.power)})
             telemetry.addLine("OpMode is active")

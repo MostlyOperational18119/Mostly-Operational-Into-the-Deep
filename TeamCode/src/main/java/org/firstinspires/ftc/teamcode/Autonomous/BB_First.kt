@@ -66,14 +66,23 @@ class BB_First : DriveMethods() {
         telemetry.update()
         drive.followTrajectorySequence(traj1)
 
-        rotateMotor.targetPosition = 50
-        rotateMotor.power = 0.5
         slideMotor.targetPosition = -2000
         slideMotor.power = -0.5
+        rotateMotor.targetPosition = 20
+        rotateMotor.power = 0.5
+        sleep(2000)
+        rotateMotor.targetPosition = 50
+        rotateMotor.power = 0.5
         sleep(2000)
         clawServo.power = -1.0
-        sleep(2000)
+        sleep(1000)
         clawServo.power = 0.0
+        rotateMotor.targetPosition = -50
+        rotateMotor.power = -0.5
+        sleep(1000)
+        slideMotor.targetPosition = 0
+        slideMotor.power = 0.5
+
 
         while (opModeIsActive() && !isStopRequested) {
             drive.update()

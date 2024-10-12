@@ -44,7 +44,7 @@ class RB_First : DriveMethods() {
         val traj1: TrajectorySequence? =
             drive.trajectorySequenceBuilder(Pose2d(-34.09, -63.19, Math.toRadians(90.00)))
                 .splineTo(Vector2d(-39.64, -47.68), Math.toRadians(144.20))
-                .splineTo(Vector2d(-57.26, -57.64), Math.toRadians(225.00))
+                .splineTo(Vector2d(-58.26, -57.64), Math.toRadians(225.00))
                 .build()
 
 
@@ -64,15 +64,22 @@ class RB_First : DriveMethods() {
         telemetry.update()
         drive.followTrajectorySequence(traj1)
 
-        rotateMotor.targetPosition = 50
-        rotateMotor.power = 0.5
         slideMotor.targetPosition = -2000
         slideMotor.power = -0.5
+        rotateMotor.targetPosition = 20
+        rotateMotor.power = 0.5
+        sleep(2000)
+        rotateMotor.targetPosition = 50
+        rotateMotor.power = 0.5
         sleep(2000)
         clawServo.power = -1.0
-        sleep(2000)
+        sleep(1000)
         clawServo.power = 0.0
-
+        rotateMotor.targetPosition = -50
+        rotateMotor.power = -0.5
+        sleep(1000)
+        slideMotor.targetPosition = 0
+        slideMotor.power = 0.5
         while (opModeIsActive() && !isStopRequested) {
             drive.update()
         }

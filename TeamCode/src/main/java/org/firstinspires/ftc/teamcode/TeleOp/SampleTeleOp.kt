@@ -127,12 +127,12 @@ class SampleTeleOp : LinearOpMode() {
             }
 
             //SLIDES
-            if (lj>0) {
-                slideMotor.targetPosition = 0
-                slideMotor.power = lj/2
+            if (lj<0) {
+                slideMotor.targetPosition = -4000
+                slideMotor.power = -lj/2
                 slideTarget = 0
-            } else if (lj<0) {
-                slideMotor.targetPosition = 4000
+            } else if (lj>0) {
+                slideMotor.targetPosition = 0
                 slideMotor.power = -lj/2
                 slideTarget = 0
             } else {

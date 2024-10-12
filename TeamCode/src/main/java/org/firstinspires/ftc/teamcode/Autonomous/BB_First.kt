@@ -2,8 +2,12 @@ package org.firstinspires.ftc.teamcode.Autonomous.NoSplineAuto
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import com.qualcomm.robotcore.hardware.CRServo
+import com.qualcomm.robotcore.hardware.DcMotor
+import com.qualcomm.robotcore.hardware.Servo
 import org.firstinspires.ftc.teamcode.DriveMethods
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
@@ -12,13 +16,30 @@ import java.util.Locale
 
 // Autonomous
 
-@TeleOp(name = "FirstAuto", group = "Linear Opmode")
-@Disabled
+
+@Autonomous(name = "FirstAuto", group = "Linear Opmode")
 class BB_First : DriveMethods() {
     override fun runOpMode() {
-        // Setup Odometry :)
-        val drive = SampleMecanumDrive(hardwareMap)
+        val rotateMotor = hardwareMap.get(DcMotor::class.java, "motorRotate")
+        rotateMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+        rotateMotor.targetPosition = 0
+        rotateMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION)
+        rotateMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
 
+        val slideMotor = hardwareMap.get(DcMotor::class.java, "motorSlide")
+        slideMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+        slideMotor.targetPosition = 0
+        slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION)
+        slideMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+
+        val clawServo = hardwareMap.get(CRServo::class.java, "clawServo")
+        val rotateServo = hardwareMap.get(Servo::class.java, "rotateServo")
+
+        rotateServo.position =  0.2
+        // Setup Odometry :)
+
+        val drive = SampleMecanumDrive(hardwareMap)
+        drive.poseEstimate =Pose2d(33.82, 62.88, Math.toRadians(90.00))
         // Setup up the trajectory sequence (drive path)
         val traj1: TrajectorySequence? =
             drive.trajectorySequenceBuilder(Pose2d(33.82, 62.88, Math.toRadians(90.00)))
@@ -27,6 +48,9 @@ class BB_First : DriveMethods() {
                 .splineTo(Vector2d(56.99, 57.75), Math.toRadians(45.00))
                 .setReversed(false)
                 .build()
+
+        // SLIDES
+
 
         // Tell the User the Robot has been initialized
         telemetry.addData("Status", "Initialized")
@@ -40,7 +64,17 @@ class BB_First : DriveMethods() {
         if (isStopRequested) return
         telemetry.addLine("not stopped")
         telemetry.update()
-        drive.followTrajectorySequenceAsync(traj1)
+        drive.followTrajectorySequence(traj1)
+
+        rotateMotor.targetPosition = 50
+        rotateMotor.power = 0.5
+        slideMotor.targetPosition = -2000
+        slideMotor.power = -0.5
+        sleep(2000)
+        clawServo.power = -1.0
+        sleep(2000)
+        clawServo.power = 0.0
+
         while (opModeIsActive() && !isStopRequested) {
             drive.update()
         }

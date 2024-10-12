@@ -96,7 +96,7 @@ class SampleTeleOp : LinearOpMode() {
             else { clawServo?.power = 0.0 }
 
             //ROTATE SERVO
-            if (slideMotor.currentPosition < 500){
+            if (slideMotor.currentPosition > -500){
                 rotateServo.position = rotateServoMid
             }
             else if (currentGamepad2.y&& !previousGamepad2.y) {

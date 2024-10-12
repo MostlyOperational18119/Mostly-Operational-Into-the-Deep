@@ -10,7 +10,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 public class MeepMeepTesting {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(800);
-        Pose2d startPose = new Pose2d(-34.09, -62.88, Math.toRadians(90.00));
+        Pose2d startPose = new Pose2d(-34.09, -63.19, Math.toRadians(90.00));
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width

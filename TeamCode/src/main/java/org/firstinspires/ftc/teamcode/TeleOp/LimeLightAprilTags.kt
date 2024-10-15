@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.TeleOp
 import com.qualcomm.hardware.limelightvision.Limelight3A
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot.UsbFacingDirection
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.IMU
@@ -10,6 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
 
 
 @TeleOp(name = "LimeLightAprilTags")
+@Disabled
 class LimeLightAprilTags : LinearOpMode() {
 
     override fun runOpMode() {

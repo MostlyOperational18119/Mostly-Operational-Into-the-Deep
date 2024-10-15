@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.TeleOp
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import org.firstinspires.ftc.teamcode.DriveMethods
 
 @TeleOp(name = "TeleopFromHell", group = "TeleopFinal")
+@Disabled
 class FirstTeleop: DriveMethods() {
     override fun runOpMode() {
 

@@ -6,8 +6,10 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
 import org.firstinspires.ftc.teamcode.VisionProcessors.SampleProcessor
 import org.firstinspires.ftc.vision.VisionPortal
 import android.util.Size
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 
 @TeleOp(name = "TestCVOpMode")
+@Disabled
 class TestCVOpMode : LinearOpMode() {
     override fun runOpMode() {
         telemetry.addLine("Initialized")

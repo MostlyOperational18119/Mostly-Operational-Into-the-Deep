@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 
-@TeleOp(name = "MotorTester", group = "0000000")
+@TeleOp(name = "MotorTester", group = "ZZZZZZZZZ")
 class MotorTester : LinearOpMode() {
     override fun runOpMode () {
         telemetry.addData("Status", "Initialized")

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.TeleOp
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.Gamepad
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor
 
 @TeleOp(name = "OdometryInTeleOp")
+@Disabled
 class OdometryInTeleOp : LinearOpMode() {
 
     enum class DRIVE_STATE{

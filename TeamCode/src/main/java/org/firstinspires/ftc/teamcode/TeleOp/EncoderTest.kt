@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.TeleOp
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.DcMotorEx
@@ -7,6 +8,7 @@ import org.firstinspires.ftc.teamcode.util.Encoder
 import java.util.Locale
 
 @TeleOp(name = "EncoderTest")
+@Disabled
 class EncoderTest : LinearOpMode() {
     override fun runOpMode() {
         val leftEncoder = Encoder(

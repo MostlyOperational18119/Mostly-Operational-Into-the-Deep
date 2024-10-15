@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.CRServo
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.Servo
+import org.firstinspires.ftc.teamcode.Autonomous.poseStorage
+import org.firstinspires.ftc.teamcode.Autonomous.poseStorage.colorSide
 import org.firstinspires.ftc.teamcode.DriveMethods
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
@@ -80,6 +82,7 @@ class RB_First : DriveMethods() {
         sleep(1000)
         slideMotor.targetPosition = 0
         slideMotor.power = 0.5
+
         while (opModeIsActive() && !isStopRequested) {
             drive.update()
         }
@@ -92,5 +95,7 @@ class RB_First : DriveMethods() {
             String.format(Locale.ENGLISH, "X: %f, Y: %f, and Rotation: %f", x, y, heading)
         )
         telemetry.update()
+        poseStorage.currentPose = drive.poseEstimate
+        colorSide = "red"
     }
 }

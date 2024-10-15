@@ -14,6 +14,7 @@ import java.util.Locale
 // Autonomous
 
 @Autonomous(name = "Straight", group = "B")
+@Disabled
 class Stest : DriveMethods() {
     override fun runOpMode() {
         // Setup Odometry :)

@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.hardware.Servo
 import kotlin.math.PI
 import kotlin.math.cos
 
-@TeleOp(name = "SampleTeleOp", group = "Among Us")
-class SampleTeleOp : LinearOpMode() {
+@TeleOp(name = "BACKUP_TELEOP", group = "AAAAAA")
+class Meet_0_BackUp : LinearOpMode() {
     override fun runOpMode () {
         telemetry.addData("Status", "Initialized")
         telemetry.update()
@@ -30,6 +30,9 @@ class SampleTeleOp : LinearOpMode() {
         //TOGGLES
         var rightintakeToggle = false
         var leftintakeToggle = false
+        var autoRotateUpToggle = false
+        var autoSlideDownToggle = false
+        var autoSlideUpToggle = false
 
         //GAME PADS
         val currentGamepad1: Gamepad = Gamepad()
@@ -74,7 +77,7 @@ class SampleTeleOp : LinearOpMode() {
             val x = gamepad1.left_stick_x.toDouble()
             val rx = gamepad1.right_stick_x.toDouble()
             val lj = gamepad2.left_stick_y.toDouble()
-            val rj = gamepad2.right_stick_y.toDouble()
+            val rj = -gamepad2.right_stick_y.toDouble()
 
             //MOVEMENT
             FL.power = (y + x + rx)/speedDiv
@@ -120,8 +123,22 @@ class SampleTeleOp : LinearOpMode() {
                 rotateServo.position = rotateServoMid
             }
 
+            if (currentGamepad1.x&& !previousGamepad1.x) {
+                autoRotateUpToggle = true
+            }
             //ROTATE
-            if (rj>0 && slideHorLength > -2) {
+            if (autoRotateUpToggle){
+                rotateMotor.targetPosition = 20
+                rotateMotor.power = -1.0
+
+                if (currentGamepad1.x&& !previousGamepad1.x){
+                    autoRotateUpToggle = false
+                }
+                if (rotateMotor.currentPosition <20){
+                    autoRotateUpToggle = false
+                }
+            }
+            else if (rj>0 && slideHorLength > -2) {
                 rotateMotor.targetPosition = -200
                 rotateMotor.power = rj/3
                 rotateTarget = 0
@@ -136,8 +153,37 @@ class SampleTeleOp : LinearOpMode() {
                 }
             }
 
+            if (currentGamepad1.y&& !previousGamepad1.y) {
+                autoSlideDownToggle = true
+            }
+            if (currentGamepad1.a&& !previousGamepad1.a) {
+                autoSlideUpToggle = true
+            }
+
             //SLIDES
-            if (lj<0 && slideHorLength < 42 && slideHorLength >-2) {
+            if (autoSlideDownToggle){
+                slideMotor.targetPosition = 0
+                slideMotor.power = -1.0
+
+                if (currentGamepad1.y&& !previousGamepad1.y){
+                    autoSlideDownToggle = false
+                }
+                if (slideMotor.currentPosition <20){
+                    autoSlideDownToggle = false
+                }
+            }
+            else if (autoSlideUpToggle){
+                slideMotor.targetPosition = 3000
+                slideMotor.power = 1.0
+
+                if (currentGamepad1.a&& !previousGamepad1.a){
+                    autoSlideUpToggle = false
+                }
+                if (slideMotor.currentPosition <20){
+                    autoSlideUpToggle = false
+                }
+            }
+            else if (lj<0 && slideHorLength < 42 && slideHorLength >-2) {
                 slideMotor.targetPosition = -4000
                 slideMotor.power = -lj/2
                 slideTarget = 0

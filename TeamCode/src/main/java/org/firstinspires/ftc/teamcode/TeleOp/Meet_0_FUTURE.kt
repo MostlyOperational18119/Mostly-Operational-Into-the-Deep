@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.TeleOp
 
-import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
@@ -11,11 +10,11 @@ import com.qualcomm.robotcore.hardware.Gamepad
 import com.qualcomm.robotcore.hardware.Servo
 import org.firstinspires.ftc.teamcode.Autonomous.poseStorage
 import org.firstinspires.ftc.teamcode.Autonomous.poseStorage.colorSide
-import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDriveCancelable
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
 import kotlin.math.PI
 import kotlin.math.cos
+
 
 enum class DRIVE_STATE{
     MANUAL,
@@ -43,6 +42,10 @@ class Meet_0_FUTURE : LinearOpMode() {
         //ODOMETRY
         val drive = SampleMecanumDriveCancelable(hardwareMap)
         drive.poseEstimate = poseStorage.currentPose
+        var redBoxVector = Vector2d(-58.26, -57.64)
+        var redBoxHeading = Math.toRadians(225.00)
+        var blueBoxVector = Vector2d(56.99, 57.75)
+        var blueBoxHeading = Math.toRadians(45.00)
 
         //TOGGLES
         var rightintakeToggle = false
@@ -97,12 +100,7 @@ class Meet_0_FUTURE : LinearOpMode() {
             val lj = gamepad2.left_stick_y.toDouble()
             val rj = gamepad2.right_stick_y.toDouble()
 
-            if (currentGamepad1.dpad_left && !previousGamepad1.dpad_left) {
-                drivestate = DRIVE_STATE.AUTONOMOUS
-            }
-            if (currentGamepad1.dpad_right && !previousGamepad1.dpad_right) {
-                drivestate = DRIVE_STATE.MANUAL
-            }
+            var drivePosition = drive.poseEstimate
 
             when (drivestate){
                 DRIVE_STATE.MANUAL ->{
@@ -225,43 +223,51 @@ class Meet_0_FUTURE : LinearOpMode() {
                         }
                     }
 
+                    //AUTONOMOUS MOVEMENT
+                    if (currentGamepad1.a) {
+                        //RED SIDE
+                        if (colorSide == "red"){
+                            val traj1 = drive.trajectoryBuilder(drivePosition).splineTo(redBoxVector, redBoxHeading).build()
+                            drive.followTrajectoryAsync(traj1)
+                            drivestate = DRIVE_STATE.AUTONOMOUS
+                        }
+                        //BLUE SIDE
+                        if (colorSide == "blue"){
+                            val traj1 = drive.trajectoryBuilder(drivePosition).splineTo(blueBoxVector, blueBoxHeading).build()
+                            drive.followTrajectoryAsync(traj1)
+                            drivestate = DRIVE_STATE.AUTONOMOUS
+                        }
+                    }
+
                     //TELEMETRY
+                    telemetry.addLine("_____________")
                     telemetry.addData("____MODE____: ",  drivestate)
-                    telemetry.addData("BL Power: ",  BL.power)
-                    telemetry.addData("BR Power:  ",  BR.power)
-                    telemetry.addData("FL Power: ",  FL.power)
-                    telemetry.addData("FR Power:  ",  FR.power)
                     telemetry.addData("RotateServo Postion:  ",  rotateServo.position)
                     telemetry.addData("Slide Encoder Position: ",  slideMotor?.let { (it.currentPosition)})
-                    telemetry.addData("Angle (Degree): ", angle * 180.0/ PI )
-                    telemetry.addData("Slide Length (IN): ",  slideInches)
+                    //telemetry.addData("Angle (Degree): ", angle * 180.0/ PI )
+                    //telemetry.addData("Slide Length (IN): ",  slideInches)
                     telemetry.addData("Slide Horizontal Inches: ",  slideHorLength)
                     telemetry.addData("Rotate Encoder Position: ",  rotateMotor?.let { (it.currentPosition)})
                     telemetry.addData("Rotate Power: ",  rotateMotor?.let { (it.power)})
                     telemetry.addLine("OpMode is active")
                     telemetry.update()
+
+                    break
                 }
                 DRIVE_STATE.AUTONOMOUS ->{
-                    if (currentGamepad1.a&& !previousGamepad1.a) {
-                        if (colorSide == "red") {
-                            val traj1: TrajectorySequence? = drive.trajectorySequenceBuilder(drive.poseEstimate)
-                                .splineTo(Vector2d(-58.26, -57.64), Math.toRadians(225.00))
-                                .build()
-                            drive.followTrajectorySequence(traj1)
-                        }
-                        else if (colorSide == "blue"){
-                            val traj1: TrajectorySequence? = drive.trajectorySequenceBuilder(drive.poseEstimate)
-                                .splineTo(Vector2d(56.99, 57.75), Math.toRadians(45.00))
-                                .build()
-                            drive.followTrajectorySequence(traj1)
-                        }
-                        telemetry.addLine("Moving")
+                    if (currentGamepad1.x && !previousGamepad1.x) {
+                        drive.breakFollowing()
+                        drivestate = DRIVE_STATE.MANUAL
                     }
-                    drive.update()
+                    if (!drive.isBusy) {
+                        drivestate = DRIVE_STATE.MANUAL
+                    }
 
+                    drive.update()
                     telemetry.addLine("____________")
                     telemetry.addData("____MODE____: ",  drivestate)
                     telemetry.update()
+                    break
                 }
             }
         }

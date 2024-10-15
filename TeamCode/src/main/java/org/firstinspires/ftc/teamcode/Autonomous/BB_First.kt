@@ -39,14 +39,12 @@ class BB_First : DriveMethods() {
         // Setup Odometry :)
 
         val drive = SampleMecanumDrive(hardwareMap)
-        drive.poseEstimate =Pose2d(33.82, 62.88, Math.toRadians(90.00))
+        drive.poseEstimate = Pose2d(33.82, 62.88, Math.toRadians(-90.00))
         // Setup up the trajectory sequence (drive path)
         val traj1: TrajectorySequence? =
-            drive.trajectorySequenceBuilder(Pose2d(33.82, 62.88, Math.toRadians(90.00)))
-                .setReversed(true)
+            drive.trajectorySequenceBuilder(Pose2d(33.82, 62.88, Math.toRadians(-90.00)))
                 .splineTo(Vector2d(36.66, 47.87), Math.toRadians(-36.37))
                 .splineTo(Vector2d(56.99, 57.75), Math.toRadians(45.00))
-                .setReversed(false)
                 .build()
 
         // SLIDES

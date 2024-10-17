@@ -138,7 +138,7 @@ class Meet_0_BackUp : LinearOpMode() {
                     autoRotateUpToggle = false
                 }
             }
-            else if (rj>0 && slideHorLength > -2) {
+            else if (rj>0 && slideHorLength > -5) {
                 rotateMotor.targetPosition = -200
                 rotateMotor.power = rj/3
                 rotateTarget = 0

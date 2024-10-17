@@ -77,7 +77,7 @@ class Meet_0_BackUp : LinearOpMode() {
             val x = gamepad1.left_stick_x.toDouble()
             val rx = gamepad1.right_stick_x.toDouble()
             val lj = gamepad2.left_stick_y.toDouble()
-            val rj = -gamepad2.right_stick_y.toDouble()
+            val rj = gamepad2.right_stick_y.toDouble()
 
             //MOVEMENT
             FL.power = (y + x + rx)/speedDiv
@@ -113,13 +113,13 @@ class Meet_0_BackUp : LinearOpMode() {
             if (slideMotor.currentPosition > -500){
                 rotateServo.position = rotateServoMid
             }
-            else if (currentGamepad2.y&& !previousGamepad2.y) {
+            else if (currentGamepad2.x&& !previousGamepad2.x) {
                 rotateServo.position = rotateServoLong
             }
-            else if (currentGamepad2.a&& !previousGamepad2.a) {
+            else if (currentGamepad2.b&& !previousGamepad2.b) {
                 rotateServo.position = rotateServoShort
             }
-            else if (currentGamepad2.b&& !previousGamepad2.b){
+            else if (currentGamepad2.a&& !previousGamepad2.a){
                 rotateServo.position = rotateServoMid
             }
 
@@ -185,11 +185,11 @@ class Meet_0_BackUp : LinearOpMode() {
             }
             else if (lj<0 && slideHorLength < 42 && slideHorLength >-2) {
                 slideMotor.targetPosition = -4000
-                slideMotor.power = -lj/2
+                slideMotor.power = -lj/1.5
                 slideTarget = 0
             } else if (lj>0) {
                 slideMotor.targetPosition = 0
-                slideMotor.power = -lj/2
+                slideMotor.power = -lj/1.5
                 slideTarget = 0
             } else {
                 if (slideTarget == 0) {

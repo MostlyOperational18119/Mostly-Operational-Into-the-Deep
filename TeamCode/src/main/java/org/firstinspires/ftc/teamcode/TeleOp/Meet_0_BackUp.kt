@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo
 import kotlin.math.PI
 import kotlin.math.cos
 
-@TeleOp(name = "BACKUP_TELEOP", group = "AAAAAA")
+@TeleOp(name = "MEET 0 TELEOP", group = "AAAAAA")
 class Meet_0_BackUp : LinearOpMode() {
     override fun runOpMode () {
         telemetry.addData("Status", "Initialized")
@@ -48,20 +48,17 @@ class Meet_0_BackUp : LinearOpMode() {
         FR.direction = DcMotorSimple.Direction.REVERSE
 
         val rotateMotor = hardwareMap.get(DcMotor::class.java, "motorRotate")
-        rotateMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
         rotateMotor.targetPosition = 0
-        rotateMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION)
+        rotateMotor.mode = DcMotor.RunMode.RUN_TO_POSITION
         rotateMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
 
         val slideMotor = hardwareMap.get(DcMotor::class.java, "motorSlide")
-        slideMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
         slideMotor.targetPosition = 0
-        slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION)
+        slideMotor.mode = DcMotor.RunMode.RUN_TO_POSITION
         slideMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
 
         val clawServo = hardwareMap.get(CRServo::class.java, "clawServo")
         val rotateServo = hardwareMap.get(Servo::class.java, "rotateServo")
-
 
         waitForStart()
 
@@ -78,6 +75,19 @@ class Meet_0_BackUp : LinearOpMode() {
             val rx = gamepad1.right_stick_x.toDouble()
             val lj = gamepad2.left_stick_y.toDouble()
             val rj = gamepad2.right_stick_y.toDouble()
+
+            //RESET MOTORS
+            if (currentGamepad1.b&& !previousGamepad1.b) {
+                rotateMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+                rotateMotor.targetPosition = 0
+                rotateMotor.mode = DcMotor.RunMode.RUN_TO_POSITION
+                rotateMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+
+                slideMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+                slideMotor.targetPosition = 0
+                slideMotor.mode = DcMotor.RunMode.RUN_TO_POSITION
+                slideMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+            }
 
             //MOVEMENT
             FL.power = (y + x + rx)/speedDiv
@@ -123,22 +133,12 @@ class Meet_0_BackUp : LinearOpMode() {
                 rotateServo.position = rotateServoMid
             }
 
-            if (currentGamepad1.x&& !previousGamepad1.x) {
-                autoRotateUpToggle = true
-            }
-            //ROTATE
-            if (autoRotateUpToggle){
-                rotateMotor.targetPosition = 20
-                rotateMotor.power = -1.0
+//            if (currentGamepad1.x&& !previousGamepad1.x) {
+//                autoRotateUpToggle = true
+//            }
 
-                if (currentGamepad1.x&& !previousGamepad1.x){
-                    autoRotateUpToggle = false
-                }
-                if (rotateMotor.currentPosition <20){
-                    autoRotateUpToggle = false
-                }
-            }
-            else if (rj>0 && slideHorLength > -5) {
+            //ROTATE
+            if (rj>0 && slideHorLength > -5) {
                 rotateMotor.targetPosition = -200
                 rotateMotor.power = rj/3
                 rotateTarget = 0
@@ -153,37 +153,15 @@ class Meet_0_BackUp : LinearOpMode() {
                 }
             }
 
-            if (currentGamepad1.y&& !previousGamepad1.y) {
-                autoSlideDownToggle = true
-            }
-            if (currentGamepad1.a&& !previousGamepad1.a) {
-                autoSlideUpToggle = true
-            }
+//            if (currentGamepad1.y&& !previousGamepad1.y) {
+//                autoSlideDownToggle = true
+//            }
+//            if (currentGamepad1.a&& !previousGamepad1.a) {
+//                autoSlideUpToggle = true
+//            }
 
             //SLIDES
-            if (autoSlideDownToggle){
-                slideMotor.targetPosition = 0
-                slideMotor.power = -1.0
-
-                if (currentGamepad1.y&& !previousGamepad1.y){
-                    autoSlideDownToggle = false
-                }
-                if (slideMotor.currentPosition <20){
-                    autoSlideDownToggle = false
-                }
-            }
-            else if (autoSlideUpToggle){
-                slideMotor.targetPosition = 3000
-                slideMotor.power = 1.0
-
-                if (currentGamepad1.a&& !previousGamepad1.a){
-                    autoSlideUpToggle = false
-                }
-                if (slideMotor.currentPosition <20){
-                    autoSlideUpToggle = false
-                }
-            }
-            else if (lj<0 && slideHorLength < 42 && slideHorLength >-2) {
+            if (lj<0 && slideHorLength < 42 && slideHorLength >-2) {
                 slideMotor.targetPosition = -4000
                 slideMotor.power = -lj/1.5
                 slideTarget = 0

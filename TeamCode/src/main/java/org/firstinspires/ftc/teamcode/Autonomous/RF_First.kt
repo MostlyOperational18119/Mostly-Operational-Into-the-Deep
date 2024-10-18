@@ -18,12 +18,10 @@ import java.util.Locale
 
 // Autonomous
 
-@Autonomous(name = "RB_FIRST", group = "B")
-class RB_First : DriveMethods() {
-    override fun runOpMode() {
-        // Setup Odometry :)
-        val drive = SampleMecanumDrive(hardwareMap)
 
+@Autonomous(name = "RF_FIRST", group = "Linear Opmode")
+class RF_First : DriveMethods() {
+    override fun runOpMode() {
         val rotateMotor = hardwareMap.get(DcMotor::class.java, "motorRotate")
         rotateMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
         rotateMotor.targetPosition = 0
@@ -40,17 +38,16 @@ class RB_First : DriveMethods() {
         val rotateServo = hardwareMap.get(Servo::class.java, "rotateServo")
 
         rotateServo.position =  0.2
+        // Setup Odometry :)
 
-        drive.poseEstimate = Pose2d(-34.09, -63.19, Math.toRadians(90.00))
+        val drive = SampleMecanumDrive(hardwareMap)
+        drive.poseEstimate = Pose2d(9.0, -63.19, Math.toRadians(90.00))
         // Setup up the trajectory sequence (drive path)
         val traj1: TrajectorySequence? =
-            drive.trajectorySequenceBuilder(Pose2d(-34.09, -63.19, Math.toRadians(90.00)))
-                .splineTo(Vector2d(-39.64, -47.68), Math.toRadians(144.20))
-                .splineTo(Vector2d(-58.26, -57.64), Math.toRadians(225.00))
+            drive.trajectorySequenceBuilder(Pose2d(9.0, -63.19, Math.toRadians(90.00)))
+                .forward(1.0)
+                .strafeRight(30.0)
                 .build()
-
-
-
 
         // Tell the User the Robot has been initialized
         telemetry.addData("Status", "Initialized")
@@ -66,23 +63,6 @@ class RB_First : DriveMethods() {
         telemetry.update()
         drive.followTrajectorySequence(traj1)
 
-        slideMotor.targetPosition = -2000
-        slideMotor.power = -0.5
-        rotateMotor.targetPosition = 20
-        rotateMotor.power = 0.5
-        sleep(2000)
-        rotateMotor.targetPosition = 50
-        rotateMotor.power = 0.5
-        sleep(2000)
-        clawServo.power = -1.0
-        sleep(1000)
-        clawServo.power = 0.0
-        rotateMotor.targetPosition = -50
-        rotateMotor.power = -0.5
-        sleep(1000)
-        slideMotor.targetPosition = 0
-        slideMotor.power = 0.5
-
         while (opModeIsActive() && !isStopRequested) {
             drive.update()
         }
@@ -96,6 +76,6 @@ class RB_First : DriveMethods() {
         )
         telemetry.update()
         poseStorage.currentPose = drive.poseEstimate
-        colorSide = "red"
+        colorSide = "blue"
     }
 }

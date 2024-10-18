@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.TeleOp
 
 import com.acmerobotics.roadrunner.geometry.Vector2d
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.CRServo
@@ -21,6 +22,7 @@ enum class DRIVE_STATE{
 }
 
 @TeleOp(name = "GOATED_TELEOP 0", group = "BBBB")
+@Disabled
 class Meet_0_FUTURE : LinearOpMode() {
     override fun runOpMode () {
         telemetry.addData("Status", "Initialized")

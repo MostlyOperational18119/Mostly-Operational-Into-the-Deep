@@ -19,7 +19,7 @@ import java.util.Locale
 // Autonomous
 
 
-@Autonomous(name = "FirstAuto", group = "Linear Opmode")
+@Autonomous(name = "BB_FIRST", group = "Linear Opmode")
 class BB_First : DriveMethods() {
     override fun runOpMode() {
         val rotateMotor = hardwareMap.get(DcMotor::class.java, "motorRotate")

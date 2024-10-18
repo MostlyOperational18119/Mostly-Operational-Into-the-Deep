@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.Servo
 import kotlin.math.*
 
 @TeleOp(name = "RohanProject", group = "Z")
+@Disabled
 class RohanJamesProject : LinearOpMode() {
     override fun runOpMode () {
 

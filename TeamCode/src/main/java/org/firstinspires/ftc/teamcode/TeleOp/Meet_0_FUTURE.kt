@@ -15,7 +15,6 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
 import kotlin.math.PI
 import kotlin.math.cos
 
-
 enum class DRIVE_STATE{
     MANUAL,
     AUTONOMOUS
@@ -42,10 +41,10 @@ class Meet_0_FUTURE : LinearOpMode() {
         //ODOMETRY
         val drive = SampleMecanumDriveCancelable(hardwareMap)
         drive.poseEstimate = poseStorage.currentPose
-        var redBoxVector = Vector2d(-58.26, -57.64)
-        var redBoxHeading = Math.toRadians(225.00)
-        var blueBoxVector = Vector2d(56.99, 57.75)
-        var blueBoxHeading = Math.toRadians(45.00)
+        val redBoxVector = Vector2d(-58.26, -57.64)
+        val redBoxHeading = Math.toRadians(225.00)
+        val blueBoxVector = Vector2d(56.99, 57.75)
+        val blueBoxHeading = Math.toRadians(45.00)
 
         //TOGGLES
         var rightintakeToggle = false
@@ -55,10 +54,10 @@ class Meet_0_FUTURE : LinearOpMode() {
         var autoSlideUpToggle = false
 
         //GAME PADS
-        val currentGamepad1: Gamepad = Gamepad()
-        val currentGamepad2: Gamepad = Gamepad()
-        val previousGamepad1: Gamepad = Gamepad()
-        val previousGamepad2: Gamepad = Gamepad()
+        val currentGamepad1 = Gamepad()
+        val currentGamepad2 = Gamepad()
+        val previousGamepad1 = Gamepad()
+        val previousGamepad2 = Gamepad()
 
         //MOTORS
         val FL = hardwareMap.get(DcMotor::class.java, "motorFL")
@@ -71,34 +70,33 @@ class Meet_0_FUTURE : LinearOpMode() {
         val rotateMotor = hardwareMap.get(DcMotor::class.java, "motorRotate")
         rotateMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
         rotateMotor.targetPosition = 0
-        rotateMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION)
+        rotateMotor.mode = DcMotor.RunMode.RUN_TO_POSITION
         rotateMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
 
         val slideMotor = hardwareMap.get(DcMotor::class.java, "motorSlide")
         slideMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
         slideMotor.targetPosition = 0
-        slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION)
+        slideMotor.mode = DcMotor.RunMode.RUN_TO_POSITION
         slideMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
 
         val clawServo = hardwareMap.get(CRServo::class.java, "clawServo")
         val rotateServo = hardwareMap.get(Servo::class.java, "rotateServo")
 
-
         waitForStart()
 
         while(opModeIsActive()) {
             //GAMEPADS
-            previousGamepad1.copy(currentGamepad1);
-            previousGamepad2.copy(currentGamepad2);
-            currentGamepad1.copy(gamepad1);
-            currentGamepad2.copy(gamepad2);
+            previousGamepad1.copy(currentGamepad1)
+            previousGamepad2.copy(currentGamepad2)
+            currentGamepad1.copy(gamepad1)
+            currentGamepad2.copy(gamepad2)
 
             //INPUT
             val y = -gamepad1.left_stick_y.toDouble() // Remember, Y stick is reversed!
             val x = gamepad1.left_stick_x.toDouble()
             val rx = gamepad1.right_stick_x.toDouble()
             val lj = gamepad2.left_stick_y.toDouble()
-            val rj = gamepad2.right_stick_y.toDouble()
+            val rj = -gamepad2.right_stick_y.toDouble()
 
             var drivePosition = drive.poseEstimate
 
@@ -171,11 +169,9 @@ class Meet_0_FUTURE : LinearOpMode() {
                         rotateMotor.targetPosition = 1250
                         rotateMotor.power = -rj/3
                         rotateTarget = 0
-                    } else {
-                        if (rotateTarget == 0) {
-                            rotateMotor.targetPosition = rotateMotor.currentPosition
-                            rotateTarget = rotateMotor.currentPosition
-                        }
+                    } else if (rotateTarget == 0) {
+                        rotateMotor.targetPosition = rotateMotor.currentPosition
+                        rotateTarget = rotateMotor.currentPosition
                     }
 
                     if (currentGamepad1.y&& !previousGamepad1.y) {

@@ -20,9 +20,9 @@ class Meet_0_BackUp : LinearOpMode() {
         var rotateTarget = 0
         var slideTarget = 0
         val speedDiv = 2
-        val rotateServoMid = 0.2
-        val rotateServoLong = 0.4
-        val rotateServoShort = 0.0
+        val rotateServoMid = 0.11
+        val rotateServoRight = 0.0
+        val rotateServoLeft = 0.25
         var slideInches = 12.0
         var angle = 0.0
         var slideHorLength = 0.0
@@ -49,11 +49,13 @@ class Meet_0_BackUp : LinearOpMode() {
 
         val rotateMotor = hardwareMap.get(DcMotor::class.java, "motorRotate")
         rotateMotor.targetPosition = 0
+        rotateMotor.power = 0.0
         rotateMotor.mode = DcMotor.RunMode.RUN_TO_POSITION
         rotateMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
 
         val slideMotor = hardwareMap.get(DcMotor::class.java, "motorSlide")
         slideMotor.targetPosition = 0
+        slideMotor.power = 0.0
         slideMotor.mode = DcMotor.RunMode.RUN_TO_POSITION
         slideMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
 
@@ -124,10 +126,10 @@ class Meet_0_BackUp : LinearOpMode() {
                 rotateServo.position = rotateServoMid
             }
             else if (currentGamepad2.x&& !previousGamepad2.x) {
-                rotateServo.position = rotateServoLong
+                rotateServo.position = rotateServoRight
             }
             else if (currentGamepad2.b&& !previousGamepad2.b) {
-                rotateServo.position = rotateServoShort
+                rotateServo.position = rotateServoLeft
             }
             else if (currentGamepad2.a&& !previousGamepad2.a){
                 rotateServo.position = rotateServoMid
@@ -138,8 +140,8 @@ class Meet_0_BackUp : LinearOpMode() {
 //            }
 
             //ROTATE
-            if (rj>0 && slideHorLength > -5) {
-                rotateMotor.targetPosition = -200
+            if (rj>0 && slideHorLength > -3) {
+                rotateMotor.targetPosition = 0
                 rotateMotor.power = rj/3
                 rotateTarget = 0
             } else if (rj<0 && slideHorLength < 42) {

@@ -25,28 +25,28 @@ class RB_First : DriveMethods() {
         val drive = SampleMecanumDrive(hardwareMap)
 
         val rotateMotor = hardwareMap.get(DcMotor::class.java, "motorRotate")
-        rotateMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
-        rotateMotor.targetPosition = 0
-        rotateMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION)
+        rotateMotor.targetPosition = 300
+        rotateMotor.power = 0.5
+        rotateMotor.mode = DcMotor.RunMode.RUN_TO_POSITION
         rotateMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
 
         val slideMotor = hardwareMap.get(DcMotor::class.java, "motorSlide")
-        slideMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
         slideMotor.targetPosition = 0
-        slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION)
+        slideMotor.power = 0.0
+        slideMotor.mode = DcMotor.RunMode.RUN_TO_POSITION
         slideMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
 
         val clawServo = hardwareMap.get(CRServo::class.java, "clawServo")
         val rotateServo = hardwareMap.get(Servo::class.java, "rotateServo")
 
-        rotateServo.position =  0.2
+        rotateServo.position =  0.11
 
         drive.poseEstimate = Pose2d(-34.09, -63.19, Math.toRadians(90.00))
         // Setup up the trajectory sequence (drive path)
         val traj1: TrajectorySequence? =
             drive.trajectorySequenceBuilder(Pose2d(-34.09, -63.19, Math.toRadians(90.00)))
                 .splineTo(Vector2d(-39.64, -47.68), Math.toRadians(144.20))
-                .splineTo(Vector2d(-58.26, -57.64), Math.toRadians(225.00))
+                .splineTo(Vector2d(-58.26, -57.0), Math.toRadians(225.00))
                 .build()
 
 
@@ -68,20 +68,23 @@ class RB_First : DriveMethods() {
 
         slideMotor.targetPosition = -2000
         slideMotor.power = -0.5
-        rotateMotor.targetPosition = 20
+        rotateMotor.targetPosition = 150
         rotateMotor.power = 0.5
         sleep(2000)
-        rotateMotor.targetPosition = 50
+        rotateMotor.targetPosition = 300
         rotateMotor.power = 0.5
-        sleep(2000)
+        sleep(1000)
         clawServo.power = -1.0
         sleep(1000)
         clawServo.power = 0.0
-        rotateMotor.targetPosition = -50
+        rotateMotor.targetPosition = 150
         rotateMotor.power = -0.5
-        sleep(1000)
+        sleep(5000)
         slideMotor.targetPosition = 0
         slideMotor.power = 0.5
+        sleep(5000)
+        rotateMotor.targetPosition = 200
+        rotateMotor.power = 0.5
 
         while (opModeIsActive() && !isStopRequested) {
             drive.update()

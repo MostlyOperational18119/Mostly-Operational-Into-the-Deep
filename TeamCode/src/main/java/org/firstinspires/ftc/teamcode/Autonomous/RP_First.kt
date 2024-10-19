@@ -1,10 +1,7 @@
 package org.firstinspires.ftc.teamcode.Autonomous.NoSplineAuto
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
-import com.acmerobotics.roadrunner.geometry.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
-import com.qualcomm.robotcore.eventloop.opmode.Disabled
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.CRServo
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.Servo
@@ -19,32 +16,32 @@ import java.util.Locale
 // Autonomous
 
 
-@Autonomous(name = "BF_FIRST", group = "Linear Opmode")
-class BF_First : DriveMethods() {
+@Autonomous(name = "RP_FIRST", group = "Linear Opmode")
+class RP_First : DriveMethods() {
     override fun runOpMode() {
         val rotateMotor = hardwareMap.get(DcMotor::class.java, "motorRotate")
-        rotateMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
-        rotateMotor.targetPosition = 0
-        rotateMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION)
+        rotateMotor.targetPosition = 300
+        rotateMotor.power = 0.5
+        rotateMotor.mode = DcMotor.RunMode.RUN_TO_POSITION
         rotateMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
 
         val slideMotor = hardwareMap.get(DcMotor::class.java, "motorSlide")
-        slideMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
         slideMotor.targetPosition = 0
-        slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION)
+        slideMotor.power = 0.0
+        slideMotor.mode = DcMotor.RunMode.RUN_TO_POSITION
         slideMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
 
         val clawServo = hardwareMap.get(CRServo::class.java, "clawServo")
         val rotateServo = hardwareMap.get(Servo::class.java, "rotateServo")
 
-        rotateServo.position =  0.2
+        rotateServo.position =  0.11
         // Setup Odometry :)
 
         val drive = SampleMecanumDrive(hardwareMap)
-        drive.poseEstimate = Pose2d(-9.0, 62.88, Math.toRadians(-90.00))
+        drive.poseEstimate = Pose2d(9.0, -63.19, Math.toRadians(90.00))
         // Setup up the trajectory sequence (drive path)
         val traj1: TrajectorySequence? =
-            drive.trajectorySequenceBuilder(Pose2d(-9.0, 62.88, Math.toRadians(-90.00)))
+            drive.trajectorySequenceBuilder(Pose2d(9.0, -63.19, Math.toRadians(90.00)))
                 .forward(1.0)
                 .strafeRight(30.0)
                 .build()

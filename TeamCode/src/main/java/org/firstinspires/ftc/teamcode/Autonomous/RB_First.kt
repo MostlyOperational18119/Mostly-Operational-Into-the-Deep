@@ -83,7 +83,7 @@ class RB_First : DriveMethods() {
         slideMotor.targetPosition = 0
         slideMotor.power = 0.5
         sleep(5000)
-        rotateMotor.targetPosition = 200
+        rotateMotor.targetPosition = 1500
         rotateMotor.power = 0.5
 
         while (opModeIsActive() && !isStopRequested) {

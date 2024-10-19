@@ -140,12 +140,13 @@ class Meet_0_BackUp : LinearOpMode() {
 //            }
 
             //ROTATE
+
             if (rj>0 && slideHorLength > -3) {
                 rotateMotor.targetPosition = 0
                 rotateMotor.power = rj/3
                 rotateTarget = 0
             } else if (rj<0 && slideHorLength < 42) {
-                rotateMotor.targetPosition = 1250
+                rotateMotor.targetPosition = 1450
                 rotateMotor.power = -rj/3
                 rotateTarget = 0
             } else {

@@ -68,16 +68,16 @@ class RB_First : DriveMethods() {
 
         slideMotor.targetPosition = -2000
         slideMotor.power = -0.5
-        rotateMotor.targetPosition = 150
+        rotateMotor.targetPosition = 75
         rotateMotor.power = 0.5
         sleep(2000)
-        rotateMotor.targetPosition = 300
+        rotateMotor.targetPosition = 200
         rotateMotor.power = 0.5
         sleep(1000)
         clawServo.power = -1.0
         sleep(1000)
         clawServo.power = 0.0
-        rotateMotor.targetPosition = 150
+        rotateMotor.targetPosition = 100
         rotateMotor.power = -0.5
         sleep(5000)
         slideMotor.targetPosition = 0

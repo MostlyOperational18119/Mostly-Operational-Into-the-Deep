@@ -12,8 +12,6 @@ import com.qualcomm.robotcore.hardware.Servo
 import org.firstinspires.ftc.teamcode.Autonomous.poseStorage
 import org.firstinspires.ftc.teamcode.Autonomous.poseStorage.colorSide
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDriveCancelable
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
-import kotlin.math.PI
 import kotlin.math.cos
 
 enum class DRIVE_STATE{
@@ -21,7 +19,7 @@ enum class DRIVE_STATE{
     AUTONOMOUS
 }
 
-@TeleOp(name = "GOATED_TELEOP 0", group = "BBBB")
+@TeleOp(name = "Future Teleop", group = "BBBB")
 @Disabled
 class Meet_0_FUTURE : LinearOpMode() {
     override fun runOpMode () {
@@ -166,14 +164,11 @@ class Meet_0_FUTURE : LinearOpMode() {
                     else if (rj>0 && slideHorLength > -2) {
                         rotateMotor.targetPosition = -200
                         rotateMotor.power = rj/3
-                        rotateTarget = 0
                     } else if (rj<0 && slideHorLength < 42) {
                         rotateMotor.targetPosition = 1250
                         rotateMotor.power = -rj/3
-                        rotateTarget = 0
-                    } else if (rotateTarget == 0) {
+                    } else{
                         rotateMotor.targetPosition = rotateMotor.currentPosition
-                        rotateTarget = rotateMotor.currentPosition
                     }
 
                     if (currentGamepad1.y&& !previousGamepad1.y) {
@@ -209,16 +204,11 @@ class Meet_0_FUTURE : LinearOpMode() {
                     else if (lj<0 && slideHorLength < 42 && slideHorLength >-2) {
                         slideMotor.targetPosition = -4000
                         slideMotor.power = -lj/2
-                        slideTarget = 0
                     } else if (lj>0) {
                         slideMotor.targetPosition = 0
                         slideMotor.power = -lj/2
-                        slideTarget = 0
                     } else {
-                        if (slideTarget == 0) {
-                            slideMotor.targetPosition = slideMotor.currentPosition
-                            slideTarget = slideMotor.currentPosition
-                        }
+                        slideMotor.targetPosition = slideMotor.currentPosition
                     }
 
                     //AUTONOMOUS MOVEMENT

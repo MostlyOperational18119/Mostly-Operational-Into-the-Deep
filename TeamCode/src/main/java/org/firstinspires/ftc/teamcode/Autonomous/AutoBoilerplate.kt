@@ -3,20 +3,54 @@
 package org.firstinspires.ftc.teamcode.Autonomous
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
+import com.qualcomm.robotcore.hardware.HardwareMap
 import com.qualcomm.robotcore.util.ElapsedTime
+import com.qualcomm.robotcore.util.ThreadPool
 import org.firstinspires.ftc.teamcode.DriveMethods
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
 import java.util.Locale
+import java.util.concurrent.ExecutorService
 
-abstract class AutoBoilerplateMulti: DriveMethods() {
+enum class AutoActionType {
+    Drive,
+    Function
+}
+
+class AutoAction {
+    val autoActionType: AutoActionType
+    val eta: Double
+    val trajectorySequence: TrajectorySequence?
+    val callbackFunction: ((HardwareMap) -> Unit)?
+
+    constructor(constructorTrajectorySequence: TrajectorySequence) {
+        autoActionType = AutoActionType.Drive
+        eta = constructorTrajectorySequence.duration()
+        trajectorySequence = constructorTrajectorySequence
+        callbackFunction = null
+    }
+
+    constructor(duration: Double, callback: (HardwareMap) -> Unit) {
+        autoActionType = AutoActionType.Function
+        eta = duration
+        trajectorySequence = null
+        callbackFunction = callback
+    }
+}
+
+abstract class AutoBoilerplate: DriveMethods() {
+    private fun spawnFunctionThread(threadPool: ExecutorService, callback: (HardwareMap) -> (Unit)) {
+        TODO("Actually spawn the thread, haven't done that yet :(")
+    }
+
     override fun runOpMode() {
         val drive = SampleMecanumDrive(hardwareMap)
 
         val trajectorySequences = getAutoTrajectorySequences(drive, startPose)
         var totalDuration = 0.0
         var sequenceNumber = 0
-        trajectorySequences.forEach { totalDuration += it.duration() }
+        val threadPool = ThreadPool.newFixedThreadPool(1, "AutoBoilerplateMulti.runOpMode().threadPool")
+        trajectorySequences.forEach { totalDuration += it.eta }
         telemetry.addLine("Init complete, got trajectorySequence")
         telemetry.update()
 
@@ -26,7 +60,14 @@ abstract class AutoBoilerplateMulti: DriveMethods() {
         // It better not be empty
         assert(trajectorySequences.isNotEmpty())
 
-        drive.followTrajectorySequenceAsync(trajectorySequences[0])
+        {
+            val autoAction = trajectorySequences[0]
+            if (autoAction.autoActionType == AutoActionType.Drive) {
+                drive.followTrajectorySequenceAsync(autoAction.trajectorySequence)
+            } else {
+                spawnFunctionThread(threadPool, autoAction.callbackFunction!!)
+            }
+        }
         timer.reset()
         sequenceTimer.reset()
 
@@ -35,7 +76,12 @@ abstract class AutoBoilerplateMulti: DriveMethods() {
 
             if (!drive.isBusy) {
                 sequenceNumber++
-                drive.followTrajectorySequenceAsync(trajectorySequences[sequenceNumber])
+                val autoAction = trajectorySequences[sequenceNumber]
+                if (autoAction.autoActionType == AutoActionType.Drive) {
+                    drive.followTrajectorySequenceAsync(autoAction.trajectorySequence)
+                } else {
+                    spawnFunctionThread(threadPool, autoAction.callbackFunction!!)
+                }
                 sequenceTimer.reset()
             }
 
@@ -67,7 +113,7 @@ abstract class AutoBoilerplateMulti: DriveMethods() {
                     "Trajectory sequence %d of %d, (%.2f% complete)",
                     sequenceNumber+1,
                     trajectorySequences.size,
-                    sequenceTimer.seconds() / trajectorySequences[sequenceNumber].duration()
+                    sequenceTimer.seconds() / trajectorySequences[sequenceNumber].eta
                 )
             )
 
@@ -76,5 +122,5 @@ abstract class AutoBoilerplateMulti: DriveMethods() {
     }
 
     abstract val startPose: Pose2d
-    abstract fun getAutoTrajectorySequences(drive: SampleMecanumDrive, startPose2d: Pose2d): ArrayList<TrajectorySequence>
+    abstract fun getAutoTrajectorySequences(drive: SampleMecanumDrive, startPose2d: Pose2d): ArrayList<AutoAction>
 }

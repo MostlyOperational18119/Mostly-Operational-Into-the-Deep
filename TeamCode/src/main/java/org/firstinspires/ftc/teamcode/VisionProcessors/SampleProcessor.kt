@@ -15,6 +15,7 @@ import org.opencv.core.Rect
 import org.opencv.core.Scalar
 import org.opencv.core.Size
 import org.opencv.imgproc.Imgproc
+import kotlin.math.roundToInt
 
 
 data class OpenCVResults(val detections: ArrayList<OpenCVDetections>)
@@ -34,7 +35,6 @@ class SampleProcessor : VisionProcessor {
     }
 
     override fun processFrame(frame: Mat?, captureTimeNanos: Long): Any {
-        // Convert to HSV :)
         val srcHSV    =  Mat()
         val matRed    =  Mat()
         val matBlue   =  Mat()
@@ -68,12 +68,12 @@ class SampleProcessor : VisionProcessor {
     }
 
     private fun makeGraphicsRect(rect: Rect, scaleBmpPxToCanvasPx: Float): Rect {
-        val left = Math.round(rect.x * scaleBmpPxToCanvasPx).toInt()
-        val top = Math.round(rect.y * scaleBmpPxToCanvasPx).toInt()
-        val right = (left + Math.round(rect.width * scaleBmpPxToCanvasPx)).toInt()
-        val bottom = (top + Math.round(rect.height * scaleBmpPxToCanvasPx)).toInt()
+        val left = rect.x * scaleBmpPxToCanvasPx
+        val top = rect.y * scaleBmpPxToCanvasPx
+        val right = left + (rect.width * scaleBmpPxToCanvasPx)
+        val bottom = top + (rect.height * scaleBmpPxToCanvasPx)
 
-        return Rect(left, top, right, bottom)
+        return Rect(left.roundToInt(), top.roundToInt(), right.roundToInt(), bottom.roundToInt())
     }
 
     override fun onDrawFrame(
@@ -123,11 +123,19 @@ class SampleProcessor : VisionProcessor {
             if (pointsList.size == 4) {
                 val x = ((pointsList[0].x + pointsList[1].x + pointsList[2].x + pointsList[3].x) / 4).toInt()
                 val y = ((pointsList[0].y + pointsList[1].y + pointsList[2].y + pointsList[3].y) / 4).toInt()
-                val rotation = 0.0 // TODO: FIND ROTATION USING POINTS
+
+                val generalizedPoint0 = Point(doubleArrayOf((pointsList[0].x - x), (pointsList[0].y - y)))
+                val generalizedPoint1 = Point(doubleArrayOf((pointsList[1].x - x), (pointsList[1].y - y)))
+                val generalizedPoint2 = Point(doubleArrayOf((pointsList[2].x - x), (pointsList[2].y - y)))
+                val generalizedPoint3 = Point(doubleArrayOf((pointsList[3].x - x), (pointsList[3].y - y)))
+
+                val rotation = 0.0
                 val detection = OpenCVDetections(x, y, rotation, colour, pointsList)
 
                 results.add(detection)
             }
+
+            it.release()
         }
 
         hierarchy.release()

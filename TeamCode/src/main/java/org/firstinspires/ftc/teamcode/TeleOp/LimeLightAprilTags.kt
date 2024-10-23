@@ -1,3 +1,5 @@
+@file:Suppress("PackageName")
+
 package org.firstinspires.ftc.teamcode.TeleOp
 
 import com.qualcomm.hardware.limelightvision.Limelight3A
@@ -9,7 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.IMU
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
 
-
+@Suppress("Unused", "SpellCheckingInspection")
 @TeleOp(name = "LimeLightAprilTags")
 @Disabled
 class LimeLightAprilTags : LinearOpMode() {
@@ -23,7 +25,7 @@ class LimeLightAprilTags : LinearOpMode() {
 
         val orientationOnRobot = RevHubOrientationOnRobot(logoDirection, usbDirection)
         imu.initialize(IMU.Parameters(orientationOnRobot))
-        imu.resetYaw();
+        imu.resetYaw()
 
         telemetry.addLine("Initialized")
         telemetry.update()
@@ -33,9 +35,9 @@ class LimeLightAprilTags : LinearOpMode() {
         limelight3A.start()
         //switch to April Tag pipeline
         if(!limelight3A.pipelineSwitch(1)) {
-            telemetry.addLine("Pipeline switch failed");
+            telemetry.addLine("Pipeline switch failed")
             telemetry.update()
-            sleep(2000);
+            sleep(2000)
         }
         while (opModeIsActive()) {
 //            telemetry.addData("Limelight status: ", limelight3A.status)
@@ -47,7 +49,7 @@ class LimeLightAprilTags : LinearOpMode() {
 //            }
 
             val orientation = imu.robotYawPitchRollAngles
-            val angularVelocity = imu.getRobotAngularVelocity(AngleUnit.DEGREES)
+//            val angularVelocity = imu.getRobotAngularVelocity(AngleUnit.DEGREES)
 
             limelight3A.updateRobotOrientation(orientation.getYaw(AngleUnit.DEGREES))
             telemetry.addData(
@@ -56,9 +58,9 @@ class LimeLightAprilTags : LinearOpMode() {
                 orientation.getYaw(AngleUnit.DEGREES)
             )
 
-            val latestResult = limelight3A.latestResult;
-            val pose = latestResult.botpose_MT2;
-            telemetry.addLine("Bot Pose: $pose");
+            val latestResult = limelight3A.latestResult
+            val pose = latestResult.botpose_MT2
+            telemetry.addLine("Bot Pose: $pose")
 
 //            telemetry.addData("Pitch (X)", "%.2f Deg.", orientation.getPitch(AngleUnit.DEGREES))
 //            telemetry.addData("Roll (Y)", "%.2f Deg.\n", orientation.getRoll(AngleUnit.DEGREES))

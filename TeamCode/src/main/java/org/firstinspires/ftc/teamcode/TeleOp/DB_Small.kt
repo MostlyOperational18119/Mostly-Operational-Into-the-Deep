@@ -1,3 +1,5 @@
+@file:Suppress("PackageName")
+
 package org.firstinspires.ftc.teamcode.TeleOp
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
@@ -6,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.Gamepad
 import com.qualcomm.robotcore.hardware.Servo
 
+@Suppress("Unused", "SpellCheckingInspection", "ClassName")
 @TeleOp(name = "DB_SMALL", group = "AAAAAAA")
 class DB_Small : LinearOpMode(){
     override fun runOpMode() {
@@ -22,7 +25,6 @@ class DB_Small : LinearOpMode(){
         val stopPos = .9
         val clawOpen = 0.3
         val clawClose = 0.55
-        var contPow = 0.0
 
         //TOGGLES
         var leftArmToggle = false
@@ -46,10 +48,10 @@ class DB_Small : LinearOpMode(){
         waitForStart()
         while(opModeIsActive()) {
             //GAMEPADS
-            previousGamepad1.copy(currentGamepad1);
-            previousGamepad2.copy(currentGamepad2);
-            currentGamepad1.copy(gamepad1);
-            currentGamepad2.copy(gamepad2);
+            previousGamepad1.copy(currentGamepad1)
+            previousGamepad2.copy(currentGamepad2)
+            currentGamepad1.copy(gamepad1)
+            currentGamepad2.copy(gamepad2)
 
             //INPUTS
             val leftY = gamepad1.left_stick_y.toDouble()

@@ -1,3 +1,5 @@
+@file:Suppress("PackageName")
+
 package org.firstinspires.ftc.teamcode.TeleOp
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
@@ -18,7 +20,7 @@ class OdometryInTeleOp : LinearOpMode() {
     enum class DRIVE_STATE{
         MANUAL,
         AUTONOMOUS
-    };
+    }
     override fun runOpMode() {
         val drive = SampleMecanumDrive(hardwareMap)
         val processor = AprilTagProcessor.easyCreateWithDefaults()!!
@@ -36,10 +38,10 @@ class OdometryInTeleOp : LinearOpMode() {
         waitForStart()
 
         while (opModeIsActive()) {
-            previousGamepad1.copy(currentGamepad1);
-            previousGamepad2.copy(currentGamepad2);
-            currentGamepad1.copy(gamepad1);
-            currentGamepad2.copy(gamepad2);
+            previousGamepad1.copy(currentGamepad1)
+            previousGamepad2.copy(currentGamepad2)
+            currentGamepad1.copy(gamepad1)
+            currentGamepad2.copy(gamepad2)
             if (!drive.isBusy) {
                 val leftY = -gamepad1.left_stick_y.toDouble()
                 val leftX = -gamepad1.left_stick_x.toDouble()

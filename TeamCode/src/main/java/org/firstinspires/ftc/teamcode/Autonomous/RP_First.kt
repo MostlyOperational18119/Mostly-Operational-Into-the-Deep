@@ -1,4 +1,6 @@
-package org.firstinspires.ftc.teamcode.Autonomous.NoSplineAuto
+@file:Suppress("PackageName")
+
+package org.firstinspires.ftc.teamcode.Autonomous
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
@@ -17,6 +19,7 @@ import java.util.Locale
 
 
 @Autonomous(name = "RP_FIRST", group = "Linear Opmode")
+@Suppress("Unused", "ClassName", "SpellCheckingInspection")
 class RP_First : DriveMethods() {
     override fun runOpMode() {
         val rotateMotor = hardwareMap.get(DcMotor::class.java, "motorRotate")

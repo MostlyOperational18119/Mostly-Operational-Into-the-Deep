@@ -1,3 +1,5 @@
+@file:Suppress("PackageName")
+
 package org.firstinspires.ftc.teamcode.TeleOp
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
@@ -7,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx
 import org.firstinspires.ftc.teamcode.util.Encoder
 import java.util.Locale
 
+@Suppress("Unused")
 @TeleOp(name = "EncoderTest")
 @Disabled
 class EncoderTest : LinearOpMode() {

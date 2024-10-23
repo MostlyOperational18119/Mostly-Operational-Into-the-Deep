@@ -1,14 +1,13 @@
-package org.firstinspires.ftc.teamcode.Autonomous.NoSplineAuto
+@file:Suppress("PackageName")
+
+package org.firstinspires.ftc.teamcode.Autonomous
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
-import com.qualcomm.robotcore.eventloop.opmode.Disabled
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.CRServo
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.Servo
-import org.firstinspires.ftc.teamcode.Autonomous.poseStorage
 import org.firstinspires.ftc.teamcode.Autonomous.poseStorage.colorSide
 import org.firstinspires.ftc.teamcode.DriveMethods
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive
@@ -20,6 +19,7 @@ import java.util.Locale
 
 
 @Autonomous(name = "BB_FIRST", group = "Linear Opmode")
+@Suppress("Unused", "ClassName", "SpellCheckingInspection")
 class BB_First : DriveMethods() {
     override fun runOpMode() {
         val rotateMotor = hardwareMap.get(DcMotor::class.java, "motorRotate")

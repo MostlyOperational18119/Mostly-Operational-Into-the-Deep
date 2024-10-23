@@ -13,9 +13,9 @@ import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.sin
 
-@Suppress("Unused", "SpellCheckingInspection")
-@TeleOp(name = "FieldCentricTeleOp")
-class FieldCentricTeleOp : LinearOpMode() {
+@TeleOp
+@Suppress("Unused", "ClassName", "SpellCheckingInspection")
+class FieldCentricMecanumTeleOp : LinearOpMode() {
     @Throws(InterruptedException::class)
     override fun runOpMode() {
 

@@ -1,4 +1,6 @@
-package org.firstinspires.ftc.teamcode.Autonomous.NoSplineAuto
+@file:Suppress("PackageName")
+
+package org.firstinspires.ftc.teamcode.Autonomous
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
@@ -19,6 +21,7 @@ import java.util.Locale
 // Autonomous
 
 @Autonomous(name = "RB_FIRST", group = "B")
+@Suppress("Unused", "ClassName", "SpellCheckingInspection")
 class RB_First : DriveMethods() {
     override fun runOpMode() {
         // Setup Odometry :)

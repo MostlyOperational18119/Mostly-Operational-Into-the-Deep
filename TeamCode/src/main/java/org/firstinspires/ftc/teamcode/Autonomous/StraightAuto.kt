@@ -13,9 +13,9 @@ import java.util.Locale
 
 // Autonomous
 
-@Autonomous(name = "Straight", group = "B")
-@Disabled
-class Stest : DriveMethods() {
+@Suppress("Unused", "SpellCheckingInspection")
+@Autonomous(name = "Straight Auto", group = "B")
+class StraightAuto : DriveMethods() {
     override fun runOpMode() {
         // Setup Odometry :)
         val drive = SampleMecanumDrive(hardwareMap)

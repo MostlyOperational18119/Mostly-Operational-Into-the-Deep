@@ -1,4 +1,6 @@
-package org.firstinspires.ftc.teamcode.Autonomous.NoSplineAuto
+@file:Suppress("PackageName")
+
+package org.firstinspires.ftc.teamcode.Autonomous
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous

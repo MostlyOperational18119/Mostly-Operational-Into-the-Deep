@@ -47,6 +47,30 @@ class RB_First : DriveMethods() {
             drive.trajectorySequenceBuilder(Pose2d(-34.09, -63.19, Math.toRadians(90.00)))
                 .splineTo(Vector2d(-39.64, -47.68), Math.toRadians(144.20))
                 .splineTo(Vector2d(-58.26, -57.0), Math.toRadians(225.00))
+                .waitSeconds(.25)
+                .addDisplacementMarker {
+                    slideMotor.targetPosition = -2000
+                    slideMotor.power = -0.5
+                    rotateMotor.targetPosition = 75
+                    rotateMotor.power = 0.5
+                    sleep(2000)
+                    rotateMotor.targetPosition = 200
+                    rotateMotor.power = 0.5
+                    sleep(1000)
+                    clawServo.power = -1.0
+                    sleep(1000)
+                    clawServo.power = 0.0
+                    rotateMotor.targetPosition = 100
+                    rotateMotor.power = -0.5
+                    sleep(2000)
+                    slideMotor.targetPosition = 0
+                    slideMotor.power = 0.5
+                    //sleep(2000)
+                    //rotateMotor.targetPosition = 1500
+                    //rotateMotor.power = 0.5
+                }
+                .waitSeconds(0.25)
+
                 .build()
 
 
@@ -65,26 +89,6 @@ class RB_First : DriveMethods() {
         telemetry.addLine("not stopped")
         telemetry.update()
         drive.followTrajectorySequence(traj1)
-
-        slideMotor.targetPosition = -2000
-        slideMotor.power = -0.5
-        rotateMotor.targetPosition = 75
-        rotateMotor.power = 0.5
-        sleep(2000)
-        rotateMotor.targetPosition = 200
-        rotateMotor.power = 0.5
-        sleep(1000)
-        clawServo.power = -1.0
-        sleep(1000)
-        clawServo.power = 0.0
-        rotateMotor.targetPosition = 100
-        rotateMotor.power = -0.5
-        sleep(5000)
-        slideMotor.targetPosition = 0
-        slideMotor.power = 0.5
-        sleep(5000)
-        rotateMotor.targetPosition = 1500
-        rotateMotor.power = 0.5
 
         while (opModeIsActive() && !isStopRequested) {
             drive.update()

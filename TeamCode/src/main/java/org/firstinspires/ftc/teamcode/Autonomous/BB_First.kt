@@ -47,6 +47,28 @@ class BB_First : DriveMethods() {
             drive.trajectorySequenceBuilder(Pose2d(33.82, 62.88, Math.toRadians(-90.00)))
                 .splineTo(Vector2d(36.66, 47.87), Math.toRadians(-36.37))
                 .splineTo(Vector2d(56.99, 56.5), Math.toRadians(45.00))
+                .waitSeconds(.25)
+                .addDisplacementMarker {
+                    slideMotor.targetPosition = -2000
+                    slideMotor.power = -0.5
+                    rotateMotor.targetPosition = 75
+                    rotateMotor.power = 0.5
+                    sleep(2000)
+                    rotateMotor.targetPosition = 200
+                    rotateMotor.power = 0.5
+                    sleep(1000)
+                    clawServo.power = -1.0
+                    sleep(1000)
+                    clawServo.power = 0.0
+                    rotateMotor.targetPosition = 100
+                    rotateMotor.power = -0.5
+                    sleep(2000)
+                    slideMotor.targetPosition = 0
+                    slideMotor.power = 0.5
+                    sleep(2000)
+                    rotateMotor.targetPosition = 1300
+                    rotateMotor.power = 0.5
+                }
                 .build()
 
         // SLIDES
@@ -65,26 +87,6 @@ class BB_First : DriveMethods() {
         telemetry.addLine("not stopped")
         telemetry.update()
         drive.followTrajectorySequence(traj1)
-
-        slideMotor.targetPosition = -2000
-        slideMotor.power = -0.5
-        rotateMotor.targetPosition = 75
-        rotateMotor.power = 0.5
-        sleep(2000)
-        rotateMotor.targetPosition = 200
-        rotateMotor.power = 0.5
-        sleep(1000)
-        clawServo.power = -1.0
-        sleep(1000)
-        clawServo.power = 0.0
-        rotateMotor.targetPosition = 100
-        rotateMotor.power = -0.5
-        sleep(5000)
-        slideMotor.targetPosition = 0
-        slideMotor.power = 0.5
-        sleep(5000)
-        rotateMotor.targetPosition = 1300
-        rotateMotor.power = 0.5
 
 
         while (opModeIsActive() && !isStopRequested) {

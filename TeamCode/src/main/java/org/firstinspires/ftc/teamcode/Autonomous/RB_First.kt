@@ -63,12 +63,21 @@ class RB_First : DriveMethods() {
                     rotateMotor.targetPosition = 100
                     rotateMotor.power = -0.5
                     sleep(2000)
-                    slideMotor.targetPosition = 0
-                    slideMotor.power = 0.5
                     //sleep(2000)
                     //rotateMotor.targetPosition = 1500
                     //rotateMotor.power = 0.5
                 }
+                .setReversed(true)
+                .splineTo(Vector2d(-35.91, -31.73), Math.toRadians(90.00))
+                .splineTo(Vector2d(-45.21, -13.68), Math.toRadians(170.00))
+                .lineToConstantHeading(Vector2d(-52.81, -60.98))
+                .lineTo(Vector2d(-44.83, -15.96))
+                .lineTo(Vector2d(-54.90, -15.96))
+                .lineToConstantHeading(Vector2d(-60.03, -59.27))
+                .lineTo(Vector2d(-53.38, -15.96))
+                .splineTo(Vector2d(-62.69, -12.54), Math.toRadians(180.00))
+                .lineToConstantHeading(Vector2d(-63.07, -54.71))
+                .setReversed(false)
                 .waitSeconds(0.25)
 
                 .build()

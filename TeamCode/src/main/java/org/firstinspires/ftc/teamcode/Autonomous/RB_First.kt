@@ -47,26 +47,10 @@ class RB_First : DriveMethods() {
             drive.trajectorySequenceBuilder(Pose2d(-34.09, -63.19, Math.toRadians(90.00)))
                 .splineTo(Vector2d(-39.64, -47.68), Math.toRadians(144.20))
                 .splineTo(Vector2d(-58.26, -57.0), Math.toRadians(225.00))
-                .waitSeconds(.25)
-                .addDisplacementMarker {
-                    slideMotor.targetPosition = -2000
-                    slideMotor.power = -0.5
-                    rotateMotor.targetPosition = 75
-                    rotateMotor.power = 0.5
-                    sleep(2000)
-                    rotateMotor.targetPosition = 200
-                    rotateMotor.power = 0.5
-                    sleep(1000)
-                    clawServo.power = -1.0
-                    sleep(1000)
-                    clawServo.power = 0.0
-                    rotateMotor.targetPosition = 100
-                    rotateMotor.power = -0.5
-                    sleep(2000)
-                    //sleep(2000)
-                    //rotateMotor.targetPosition = 1500
-                    //rotateMotor.power = 0.5
-                }
+                .build()
+
+        val traj2: TrajectorySequence?=
+            drive.trajectorySequenceBuilder(Pose2d(-58.26,-57.0, Math.toRadians(225.0)))
                 .setReversed(true)
                 .splineTo(Vector2d(-35.91, -31.73), Math.toRadians(90.00))
                 .splineTo(Vector2d(-45.21, -13.68), Math.toRadians(170.00))
@@ -79,10 +63,7 @@ class RB_First : DriveMethods() {
                 .lineToConstantHeading(Vector2d(-63.07, -54.71))
                 .setReversed(false)
                 .waitSeconds(0.25)
-
                 .build()
-
-
 
 
         // Tell the User the Robot has been initialized
@@ -98,6 +79,24 @@ class RB_First : DriveMethods() {
         telemetry.addLine("not stopped")
         telemetry.update()
         drive.followTrajectorySequence(traj1)
+
+        slideMotor.targetPosition = -2000
+        slideMotor.power = -0.5
+        rotateMotor.targetPosition = 75
+        rotateMotor.power = 0.5
+        sleep(2000)
+        rotateMotor.targetPosition = 200
+        rotateMotor.power = 0.5
+        sleep(1000)
+        clawServo.power = -1.0
+        sleep(1000)
+        clawServo.power = 0.0
+        rotateMotor.targetPosition = 100
+        rotateMotor.power = -0.5
+        sleep(2000)
+        slideMotor.targetPosition = 0
+        slideMotor.power = 0.5
+        drive.followTrajectorySequence(traj2)
 
         while (opModeIsActive() && !isStopRequested) {
             drive.update()

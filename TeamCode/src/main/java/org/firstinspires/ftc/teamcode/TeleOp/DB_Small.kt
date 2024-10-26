@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Gamepad
 import com.qualcomm.robotcore.hardware.Servo
 
 @TeleOp(name = "DB_SMALL", group = "AAAAAAA")
-class DB_Small : LinearOpMode(){
+class  cccccDB_Small : LinearOpMode(){
     override fun runOpMode() {
         val right = hardwareMap.get(DcMotor::class.java, "rightwheel")
         val left = hardwareMap.get(DcMotor::class.java, "leftwheel")

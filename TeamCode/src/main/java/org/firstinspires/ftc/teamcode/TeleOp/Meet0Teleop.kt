@@ -11,7 +11,7 @@ import kotlin.math.PI
 import kotlin.math.cos
 
 @TeleOp(name = "MEET 0 TELEOP", group = "AAAAAA")
-class Meet_0_BackUp : LinearOpMode() {
+class Meet0Teleop : LinearOpMode() {
     override fun runOpMode () {
         telemetry.addData("Status", "Initialized")
         telemetry.update()
@@ -19,10 +19,12 @@ class Meet_0_BackUp : LinearOpMode() {
         //VARIABLES
         var rotateTarget = 0
         var slideTarget = 0
-        val speedDiv = 2
+        var speedDiv = 2
         val rotateServoMid = 0.11
         val rotateServoRight = 0.0
         val rotateServoLeft = 0.25
+        var rotateDiv = 3
+        var slideDiv = 1.5
         var slideInches = 12.0
         var angle = 0.0
         var slideHorLength = 0.0
@@ -30,15 +32,15 @@ class Meet_0_BackUp : LinearOpMode() {
         //TOGGLES
         var rightintakeToggle = false
         var leftintakeToggle = false
-        var autoRotateUpToggle = false
-        var autoSlideDownToggle = false
-        var autoSlideUpToggle = false
+//        var autoRotateUpToggle = false
+//        var autoSlideDownToggle = false
+//        var autoSlideUpToggle = false
 
         //GAME PADS
-        val currentGamepad1: Gamepad = Gamepad()
-        val currentGamepad2: Gamepad = Gamepad()
-        val previousGamepad1: Gamepad = Gamepad()
-        val previousGamepad2: Gamepad = Gamepad()
+        val currentGamepad1 = Gamepad()
+        val currentGamepad2 = Gamepad()
+        val previousGamepad1 = Gamepad()
+        val previousGamepad2= Gamepad()
 
         val FL = hardwareMap.get(DcMotor::class.java, "motorFL")
         val BL = hardwareMap.get(DcMotor::class.java, "motorBL")
@@ -66,10 +68,10 @@ class Meet_0_BackUp : LinearOpMode() {
 
         while(opModeIsActive()) {
             //GAMEPADS
-            previousGamepad1.copy(currentGamepad1);
-            previousGamepad2.copy(currentGamepad2);
-            currentGamepad1.copy(gamepad1);
-            currentGamepad2.copy(gamepad2);
+            previousGamepad1.copy(currentGamepad1)
+            previousGamepad2.copy(currentGamepad2)
+            currentGamepad1.copy(gamepad1)
+            currentGamepad2.copy(gamepad2)
 
             //INPUT
             val y = -gamepad1.left_stick_y.toDouble() // Remember, Y stick is reversed!
@@ -96,6 +98,17 @@ class Meet_0_BackUp : LinearOpMode() {
             BL.power = (y - x + rx)/speedDiv
             FR.power = (y - x - rx)/speedDiv
             BR.power = (y + x - rx)/speedDiv
+
+            //SPEED DIV CHANGING
+            if (gamepad1.left_trigger > 0.1){
+                speedDiv = 3
+            }
+            else if (gamepad1.right_trigger > 0.1){
+                speedDiv= 1
+            }
+            else {
+                speedDiv = 2
+            }
 
             //TRIG
             slideInches = -slideMotor.currentPosition / 100.0 + 13.5
@@ -131,6 +144,12 @@ class Meet_0_BackUp : LinearOpMode() {
             else if (currentGamepad2.b&& !previousGamepad2.b) {
                 rotateServo.position = rotateServoLeft
             }
+            else if (currentGamepad2.dpad_left&& !previousGamepad2.dpad_left) {
+                rotateServo.position+=0.1
+            }
+            else if (currentGamepad2.dpad_right&& !previousGamepad2.dpad_right) {
+                rotateServo.position-=0.1
+            }
             else if (currentGamepad2.a&& !previousGamepad2.a){
                 rotateServo.position = rotateServoMid
             }
@@ -140,20 +159,26 @@ class Meet_0_BackUp : LinearOpMode() {
 //            }
 
             //ROTATE
-
             if (rj>0 && slideHorLength > -3) {
                 rotateMotor.targetPosition = 0
-                rotateMotor.power = rj/3
+                rotateMotor.power = rj/rotateDiv
                 rotateTarget = 0
             } else if (rj<0 && slideHorLength < 42) {
                 rotateMotor.targetPosition = 1450
-                rotateMotor.power = -rj/3
+                rotateMotor.power = -rj/rotateDiv
                 rotateTarget = 0
             } else {
                 if (rotateTarget == 0) {
                     rotateMotor.targetPosition = rotateMotor.currentPosition
                     rotateTarget = rotateMotor.currentPosition
                 }
+            }
+
+            //ROTATE SPEED CHANGING
+            if (gamepad1.right_trigger > 0.1) {
+                rotateDiv = 5
+            }else {
+                rotateDiv = 3
             }
 
 //            if (currentGamepad1.y&& !previousGamepad1.y) {
@@ -165,18 +190,24 @@ class Meet_0_BackUp : LinearOpMode() {
 
             //SLIDES
             if (lj<0 && slideHorLength < 42 && slideHorLength >-2) {
-                slideMotor.targetPosition = -4000
-                slideMotor.power = -lj/1.5
+                slideMotor.targetPosition = -4100
+                slideMotor.power = -lj/slideDiv
                 slideTarget = 0
             } else if (lj>0) {
                 slideMotor.targetPosition = 0
-                slideMotor.power = -lj/1.5
+                slideMotor.power = -lj/slideDiv
                 slideTarget = 0
             } else {
                 if (slideTarget == 0) {
                     slideMotor.targetPosition = slideMotor.currentPosition
                     slideTarget = slideMotor.currentPosition
                 }
+            }
+
+            if (gamepad2.right_trigger > 0.1){
+                slideDiv = 1.0
+            } else {
+                slideDiv = 1.5
             }
 
             //TELEMETRY

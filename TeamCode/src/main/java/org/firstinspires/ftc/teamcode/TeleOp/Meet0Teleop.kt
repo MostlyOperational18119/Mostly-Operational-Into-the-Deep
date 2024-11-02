@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo
 import kotlin.math.PI
 import kotlin.math.cos
 
-@TeleOp(name = "MEET 0 TELEOP", group = "AAAAAA")
+@TeleOp(name = "MEET 1 TELEOP (\uD83D\uDC37)", group = "AAAAAA")
 class Meet0Teleop : LinearOpMode() {
     override fun runOpMode () {
         telemetry.addData("Status", "Initialized")
@@ -114,7 +114,7 @@ class Meet0Teleop : LinearOpMode() {
             slideInches = -slideMotor.currentPosition / 100.0 + 13.5
             angle = 90 - ((90/800.0)*rotateMotor.currentPosition)
             angle = angle * Math.PI / 180
-            slideHorLength = cos(angle) * slideInches +5
+            slideHorLength = cos(Math.abs(angle)) * slideInches +5
 
             //CLAW SERVO
             if (currentGamepad2.right_bumper&& !previousGamepad2.right_bumper){
@@ -138,10 +138,10 @@ class Meet0Teleop : LinearOpMode() {
             if (slideMotor.currentPosition > -500){
                 rotateServo.position = rotateServoMid
             }
-            else if (currentGamepad2.x&& !previousGamepad2.x) {
+            else if (currentGamepad2.b&& !previousGamepad2.b) {
                 rotateServo.position = rotateServoRight
             }
-            else if (currentGamepad2.b&& !previousGamepad2.b) {
+            else if (currentGamepad2.x&& !previousGamepad2.x) {
                 rotateServo.position = rotateServoLeft
             }
             else if (currentGamepad2.dpad_left&& !previousGamepad2.dpad_left) {
@@ -189,13 +189,13 @@ class Meet0Teleop : LinearOpMode() {
 //            }
 
             //SLIDES
-            if (lj<0 && slideHorLength < 42 && slideHorLength >-2) {
+            if (lj<0 && slideHorLength <= 42 && slideHorLength >= -2) {
                 slideMotor.targetPosition = -4100
                 slideMotor.power = -lj/slideDiv
                 slideTarget = 0
             } else if (lj>0) {
                 slideMotor.targetPosition = 0
-                slideMotor.power = -lj/slideDiv
+                slideMotor.power = lj/slideDiv
                 slideTarget = 0
             } else {
                 if (slideTarget == 0) {
@@ -204,6 +204,10 @@ class Meet0Teleop : LinearOpMode() {
                 }
             }
 
+            if (angle >= -20 && angle <= 5 && slideHorLength > 35) {
+                slideMotor.targetPosition = 0
+                slideMotor.power = lj/slideDiv
+            }
             if (gamepad2.right_trigger > 0.1){
                 slideDiv = 1.0
             } else {

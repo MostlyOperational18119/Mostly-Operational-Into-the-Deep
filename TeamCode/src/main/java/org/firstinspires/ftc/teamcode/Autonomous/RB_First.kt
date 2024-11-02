@@ -54,11 +54,11 @@ class RB_First : DriveMethods() {
                 .setReversed(true)
                 .lineToLinearHeading(Pose2d(-20.0,-45.0, Math.toRadians(135.0)))
                 .setReversed(false)
-                .splineTo(Vector2d(-33.64, -37.09), Math.toRadians(135.20))
+                .splineTo(Vector2d(-31.64, -37.09), Math.toRadians(135.20))
                 .build()
 
         val traj3: TrajectorySequence? =
-            drive.trajectorySequenceBuilder(Pose2d(-33.64, -37.09, Math.toRadians(135.20)))
+            drive.trajectorySequenceBuilder(Pose2d(-31.64, -37.09, Math.toRadians(135.20)))
                 .lineTo(Vector2d(-39.5, -37.09))
                 .build()
 
@@ -150,9 +150,9 @@ class RB_First : DriveMethods() {
         sleep(1000)
         rotateMotor.targetPosition = 200
         rotateMotor.power = 1.0
-        sleep(1500)
+        sleep(2000)
         clawServo.power = -1.0
-        sleep(500)
+        sleep(1500)
         clawServo.power = 0.0
         rotateMotor.targetPosition = 100
         rotateMotor.power = -1.0

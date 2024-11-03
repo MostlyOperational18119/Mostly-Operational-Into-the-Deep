@@ -42,6 +42,7 @@ class Meet0Teleop : LinearOpMode() {
         val previousGamepad1 = Gamepad()
         val previousGamepad2= Gamepad()
 
+        //Defining Motors/Servos
         val FL = hardwareMap.get(DcMotor::class.java, "motorFL")
         val BL = hardwareMap.get(DcMotor::class.java, "motorBL")
         val FR = hardwareMap.get(DcMotor::class.java, "motorFR")
@@ -81,6 +82,7 @@ class Meet0Teleop : LinearOpMode() {
             val rj = gamepad2.right_stick_y.toDouble()
 
             //RESET MOTORS
+            //Basically if you click b then everything will reset the encoders to current pos.
             if (currentGamepad1.b&& !previousGamepad1.b) {
                 rotateMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
                 rotateMotor.targetPosition = 0
@@ -100,6 +102,7 @@ class Meet0Teleop : LinearOpMode() {
             BR.power = (y + x - rx)/speedDiv
 
             //SPEED DIV CHANGING
+            //If they click certain buttons then the speed div will change.
             if (gamepad1.left_trigger > 0.1){
                 speedDiv = 3
             }
@@ -111,12 +114,20 @@ class Meet0Teleop : LinearOpMode() {
             }
 
             //TRIG
+            //Trigonometry for getting the length of the horizontal slide.
+
+            //This gets length of slide
             slideInches = -slideMotor.currentPosition / 100.0 + 13.5
+            //This gets angle in degrees
             angle = 90 - ((90/800.0)*rotateMotor.currentPosition)
+            //Changes it to radians
             angle = angle * Math.PI / 180
+            //Uses cos time hypotenuse to get length of horizontal.
             slideHorLength = cos(Math.abs(angle)) * slideInches +5
 
             //CLAW SERVO
+            //If you click either bumper, it will turn off the other and change the one that you are on
+            //This allows for easy toggling between the 3 states.
             if (currentGamepad2.right_bumper&& !previousGamepad2.right_bumper){
                 rightintakeToggle = !rightintakeToggle
                 leftintakeToggle = false
@@ -126,6 +137,7 @@ class Meet0Teleop : LinearOpMode() {
                 rightintakeToggle = false
             }
 
+            //Uses the toggles made before to change the power of the claw servo
             if (rightintakeToggle) {
                 clawServo?.power = 1.0
             }
@@ -135,15 +147,19 @@ class Meet0Teleop : LinearOpMode() {
             else { clawServo?.power = 0.0 }
 
             //ROTATE SERVO
+
+            //the rotate servo only moves when the slide encoder if more than certain threshold since it will hit slide
             if (slideMotor.currentPosition > -500){
                 rotateServo.position = rotateServoMid
             }
+            //For each button, it will just set the positon of the servo to the preset positions.
             else if (currentGamepad2.b&& !previousGamepad2.b) {
                 rotateServo.position = rotateServoRight
             }
             else if (currentGamepad2.x&& !previousGamepad2.x) {
                 rotateServo.position = rotateServoLeft
             }
+            //If the driver wants to tweak the angle they can do so.
             else if (currentGamepad2.dpad_left&& !previousGamepad2.dpad_left) {
                 rotateServo.position+=0.1
             }
@@ -159,15 +175,23 @@ class Meet0Teleop : LinearOpMode() {
 //            }
 
             //ROTATE
+
+            //If the horizontal length of the slides is greater than -3, so it is not backward, then we can move the rotation back
+            //This sets the target to 0, but only moves when we give the power.
             if (rj>0 && slideHorLength > -3) {
                 rotateMotor.targetPosition = 0
                 rotateMotor.power = rj/rotateDiv
                 rotateTarget = 0
-            } else if (rj<0 && slideHorLength < 42) {
+            }
+            //If the horizontal length of the slides is less than 42, so it is not too forward, then we can move the rotation forward
+            //This sets the target to 1450, but only moves when we give the power.
+            else if (rj<0 && slideHorLength < 42) {
                 rotateMotor.targetPosition = 1450
                 rotateMotor.power = -rj/rotateDiv
                 rotateTarget = 0
-            } else {
+            }
+            //Makes sure that the rotation does not move when we move the joysticks.
+            else {
                 if (rotateTarget == 0) {
                     rotateMotor.targetPosition = rotateMotor.currentPosition
                     rotateTarget = rotateMotor.currentPosition
@@ -175,6 +199,7 @@ class Meet0Teleop : LinearOpMode() {
             }
 
             //ROTATE SPEED CHANGING
+            //If you click the button, the rotation div will change.
             if (gamepad1.right_trigger > 0.1) {
                 rotateDiv = 5
             }else {
@@ -189,25 +214,36 @@ class Meet0Teleop : LinearOpMode() {
 //            }
 
             //SLIDES
+            //If the horizontal length of the slides is greater than -2 and less than 42
+            //It is not too far extended so we can further extend.
+            //This sets the target to -4100, but only moves when we give the power.
             if (lj<0 && slideHorLength <= 42 && slideHorLength >= -2) {
                 slideMotor.targetPosition = -4100
                 slideMotor.power = -lj/slideDiv
                 slideTarget = 0
-            } else if (lj>0) {
+            }
+            //If you move the slide down, then it will lower. The negativity of power does not matter.
+            //This sets the target to 0, but only moves when we give the power.
+            else if (lj>0) {
                 slideMotor.targetPosition = 0
                 slideMotor.power = lj/slideDiv
                 slideTarget = 0
-            } else {
+            }
+            //Makes sure that the rotation does not move when we move the joysticks.
+            else {
                 if (slideTarget == 0) {
                     slideMotor.targetPosition = slideMotor.currentPosition
                     slideTarget = slideMotor.currentPosition
                 }
             }
 
+            //IDK WTF ALEX DID THIS FOR
             if (angle >= -20 && angle <= 5 && slideHorLength > 35) {
                 slideMotor.targetPosition = 0
                 slideMotor.power = lj/slideDiv
             }
+
+            //Changing speed div for slides based on input from drivers.
             if (gamepad2.right_trigger > 0.1){
                 slideDiv = 1.0
             } else {

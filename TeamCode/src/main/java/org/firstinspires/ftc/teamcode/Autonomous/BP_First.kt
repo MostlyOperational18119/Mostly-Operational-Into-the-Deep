@@ -7,9 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.hardware.CRServo
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.Servo
-import org.firstinspires.ftc.teamcode.Autonomous.poseStorage
 import org.firstinspires.ftc.teamcode.Autonomous.poseStorage.colorSide
-import org.firstinspires.ftc.teamcode.DriveMethods
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
 import java.util.Locale
@@ -18,8 +16,25 @@ import java.util.Locale
 // Autonomous
 
 
+@Suppress("ClassName", "Unused", "SpellCheckingInspection")
 @Autonomous(name = "BP_FIRST", group = "Linear Opmode")
-class BP_First : DriveMethods() {
+class BP_First() : AutoBoilerplate() {
+    override val startPose = Pose2d(-9.0, 62.88, Math.toRadians(-90.00))
+    override fun getAutoTrajectorySequences(
+        drive: SampleMecanumDrive,
+        startPose2d: Pose2d
+    ): ArrayList<AutoAction> {
+        val autoActions = ArrayList<AutoAction>()
+
+//        autoActions.add(
+//            AutoAction(DeviceActionTarget())
+//        )
+
+
+
+        return autoActions
+    }
+
     override fun runOpMode() {
         val rotateMotor = hardwareMap.get(DcMotor::class.java, "motorRotate")
         rotateMotor.targetPosition = 300
@@ -36,7 +51,7 @@ class BP_First : DriveMethods() {
         val clawServo = hardwareMap.get(CRServo::class.java, "clawServo")
         val rotateServo = hardwareMap.get(Servo::class.java, "rotateServo")
 
-        rotateServo.position =  0.11
+        rotateServo.position = 0.11
         // Setup Odometry :)
 
         val drive = SampleMecanumDrive(hardwareMap)

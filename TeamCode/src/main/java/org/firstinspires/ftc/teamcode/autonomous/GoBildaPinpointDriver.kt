@@ -19,7 +19,7 @@
  *   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *   SOFTWARE.
  */
-package org.firstinspires.ftc.teamcode.Autonomous
+package org.firstinspires.ftc.teamcode.autonomous
 
 import com.qualcomm.hardware.lynx.LynxI2cDeviceSynch
 import com.qualcomm.robotcore.hardware.HardwareDevice.Manufacturer
@@ -32,12 +32,11 @@ import com.qualcomm.robotcore.util.TypeConversion
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D
-import org.firstinspires.ftc.teamcode.Autonomous.GoBildaPinpointDriver.DeviceStatus
-import org.firstinspires.ftc.teamcode.Autonomous.GoBildaPinpointDriver.GoBildaOdometryPods
-import org.firstinspires.ftc.teamcode.Autonomous.GoBildaPinpointDriver.readData
+import org.firstinspires.ftc.teamcode.autonomous.GoBildaPinpointDriver.DeviceStatus
+import org.firstinspires.ftc.teamcode.autonomous.GoBildaPinpointDriver.GoBildaOdometryPods
+import org.firstinspires.ftc.teamcode.autonomous.GoBildaPinpointDriver.readData
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-import java.util.Arrays
 
 @I2cDeviceType
 @DeviceProperties(
@@ -59,7 +58,7 @@ class GoBildaPinpointDriver(deviceClient: I2cDeviceSynchSimple?, deviceClientIsO
     private var hVelocity = 0f
 
     init {
-        this.deviceClient!!.setI2cAddress(I2cAddr.create7bit(DEFAULT_ADDRESS.toInt()))
+        this.deviceClient!!.i2cAddress = I2cAddr.create7bit(DEFAULT_ADDRESS.toInt())
         super.registerArmingStateCallback(false)
     }
 
@@ -80,7 +79,7 @@ class GoBildaPinpointDriver(deviceClient: I2cDeviceSynchSimple?, deviceClientIsO
 
 
     //Register map of the i2c device
-    private enum class Register(bVal: Int) {
+    private enum class Register(val bVal: Int) {
         DEVICE_ID(1),
         DEVICE_VERSION(2),
         DEVICE_STATUS(3),
@@ -100,15 +99,10 @@ class GoBildaPinpointDriver(deviceClient: I2cDeviceSynchSimple?, deviceClientIsO
         YAW_SCALAR(17),
         BULK_READ(18);
 
-        val bVal: Int
-
-        init {
-            this.bVal = bVal
-        }
     }
 
     //Device Status enum that captures the current fault condition of the device
-    enum class DeviceStatus(status: Int) {
+    enum class DeviceStatus(val status: Int) {
         NOT_READY(0),
         READY(1),
         CALIBRATING(1 shl 1),
@@ -117,11 +111,6 @@ class GoBildaPinpointDriver(deviceClient: I2cDeviceSynchSimple?, deviceClientIsO
         FAULT_NO_PODS_DETECTED(1 shl 2 or (1 shl 3)),
         FAULT_IMU_RUNAWAY(1 shl 4);
 
-        val status: Int
-
-        init {
-            this.status = status
-        }
     }
 
     //enum that captures the direction the encoders are set to
@@ -247,19 +236,19 @@ class GoBildaPinpointDriver(deviceClient: I2cDeviceSynchSimple?, deviceClientIsO
     fun update() {
         val bArr = deviceClient!!.read(Register.BULK_READ.bVal, 40)
         deviceStatus =
-            TypeConversion.byteArrayToInt(Arrays.copyOfRange(bArr, 0, 4), ByteOrder.LITTLE_ENDIAN)
+            TypeConversion.byteArrayToInt(bArr.copyOfRange(0, 4), ByteOrder.LITTLE_ENDIAN)
         loopTime =
-            TypeConversion.byteArrayToInt(Arrays.copyOfRange(bArr, 4, 8), ByteOrder.LITTLE_ENDIAN)
+            TypeConversion.byteArrayToInt(bArr.copyOfRange(4, 8), ByteOrder.LITTLE_ENDIAN)
         xEncoderValue =
-            TypeConversion.byteArrayToInt(Arrays.copyOfRange(bArr, 8, 12), ByteOrder.LITTLE_ENDIAN)
+            TypeConversion.byteArrayToInt(bArr.copyOfRange(8, 12), ByteOrder.LITTLE_ENDIAN)
         yEncoderValue =
-            TypeConversion.byteArrayToInt(Arrays.copyOfRange(bArr, 12, 16), ByteOrder.LITTLE_ENDIAN)
-        xPosition = byteArrayToFloat(Arrays.copyOfRange(bArr, 16, 20), ByteOrder.LITTLE_ENDIAN)
-        yPosition = byteArrayToFloat(Arrays.copyOfRange(bArr, 20, 24), ByteOrder.LITTLE_ENDIAN)
-        hOrientation = byteArrayToFloat(Arrays.copyOfRange(bArr, 24, 28), ByteOrder.LITTLE_ENDIAN)
-        xVelocity = byteArrayToFloat(Arrays.copyOfRange(bArr, 28, 32), ByteOrder.LITTLE_ENDIAN)
-        yVelocity = byteArrayToFloat(Arrays.copyOfRange(bArr, 32, 36), ByteOrder.LITTLE_ENDIAN)
-        hVelocity = byteArrayToFloat(Arrays.copyOfRange(bArr, 36, 40), ByteOrder.LITTLE_ENDIAN)
+            TypeConversion.byteArrayToInt(bArr.copyOfRange(12, 16), ByteOrder.LITTLE_ENDIAN)
+        xPosition = byteArrayToFloat(bArr.copyOfRange( 16, 20), ByteOrder.LITTLE_ENDIAN)
+        yPosition = byteArrayToFloat(bArr.copyOfRange(20, 24), ByteOrder.LITTLE_ENDIAN)
+        hOrientation = byteArrayToFloat(bArr.copyOfRange(24, 28), ByteOrder.LITTLE_ENDIAN)
+        xVelocity = byteArrayToFloat(bArr.copyOfRange(28, 32), ByteOrder.LITTLE_ENDIAN)
+        yVelocity = byteArrayToFloat(bArr.copyOfRange(32, 36), ByteOrder.LITTLE_ENDIAN)
+        hVelocity = byteArrayToFloat(bArr.copyOfRange(36, 40), ByteOrder.LITTLE_ENDIAN)
     }
 
     /**

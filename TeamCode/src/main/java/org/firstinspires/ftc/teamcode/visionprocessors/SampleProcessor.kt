@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.VisionProcessors
+package org.firstinspires.ftc.teamcode.visionprocessors
 
 import android.graphics.Canvas
 import android.graphics.Color

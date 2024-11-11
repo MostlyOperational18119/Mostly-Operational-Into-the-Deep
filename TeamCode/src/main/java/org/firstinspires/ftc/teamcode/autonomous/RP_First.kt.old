@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Autonomous.NoSplineAuto
+package org.firstinspires.ftc.teamcode.autonomous
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
@@ -10,18 +10,15 @@ import org.firstinspires.ftc.teamcode.Autonomous.PoseStorage
 import org.firstinspires.ftc.teamcode.Autonomous.PoseStorage.colorSide
 import org.firstinspires.ftc.teamcode.DriveMethods
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
 import java.util.Locale
 
 
 // Autonomous
 
-@Autonomous(name = "RB_BACKUP", group = "B")
-class RB_Backup : DriveMethods() {
-    override fun runOpMode() {
-        // Setup Odometry :)
-        val drive = SampleMecanumDrive(hardwareMap)
 
+@Autonomous(name = "RP_FIRST", group = "Linear Opmode")
+class RP_First : DriveMethods() {
+    override fun runOpMode() {
         val rotateMotor = hardwareMap.get(DcMotor::class.java, "motorRotate")
         rotateMotor.targetPosition = 300
         rotateMotor.power = 0.5
@@ -38,31 +35,24 @@ class RB_Backup : DriveMethods() {
         val rotateServo = hardwareMap.get(Servo::class.java, "rotateServo")
 
         rotateServo.position =  0.11
+        // Setup Odometry :)
 
-        drive.poseEstimate = Pose2d(-34.09, -63.19, Math.toRadians(90.00))
+        val drive = SampleMecanumDrive(hardwareMap)
+        drive.poseEstimate = Pose2d(9.0, -63.19, Math.toRadians(90.00))
         // Setup up the trajectory sequence (drive path)
-        val traj1: TrajectorySequence? =
-            drive.trajectorySequenceBuilder(Pose2d(-34.09, -63.19, Math.toRadians(90.00)))
-                .splineTo(Vector2d(-39.64, -47.68), Math.toRadians(144.20))
-                .splineTo(Vector2d(-58.26, -57.0), Math.toRadians(225.00))
-                .build()
 
-        val traj2: TrajectorySequence?=
-            drive.trajectorySequenceBuilder(Pose2d(-58.26,-57.0, Math.toRadians(225.0)))
-                .setReversed(true)
-                .splineTo(Vector2d(-35.91, -31.73), Math.toRadians(90.00))
-                .splineTo(Vector2d(-45.21, -13.68), Math.toRadians(170.00))
-                .lineToConstantHeading(Vector2d(-52.81, -60.98))
-                .lineTo(Vector2d(-44.83, -15.96))
-                .lineTo(Vector2d(-54.90, -15.96))
-                .lineToConstantHeading(Vector2d(-60.03, -59.27))
-                .lineTo(Vector2d(-53.38, -15.96))
-                .splineTo(Vector2d(-62.69, -12.54), Math.toRadians(180.00))
-                .lineToConstantHeading(Vector2d(-63.07, -54.71))
-                .setReversed(false)
-                .waitSeconds(0.25)
-                .build()
 
+        val traj1 =
+            drive.trajectorySequenceBuilder(Pose2d(13.28, -61.23, Math.toRadians(90.00)))
+                .UNSTABLE_addTemporalMarkerOffset(11.90) {}
+                .splineTo(Vector2d(31.13, -35.11), Math.toRadians(0.00))
+                .splineTo(Vector2d(49.87, -8.85), Math.toRadians(1.91))
+                .lineTo(Vector2d(54.30, -8.70))
+                .lineTo(Vector2d(50.61, -59.75))
+                .lineTo(Vector2d(51.05, -11.95))
+                .lineTo(Vector2d(62.41, -9.74))
+                .lineTo(Vector2d(61.52, -58.87))
+                .build()
 
         // Tell the User the Robot has been initialized
         telemetry.addData("Status", "Initialized")
@@ -78,24 +68,6 @@ class RB_Backup : DriveMethods() {
         telemetry.update()
         drive.followTrajectorySequence(traj1)
 
-        slideMotor.targetPosition = -2000
-        slideMotor.power = -0.5
-        rotateMotor.targetPosition = 75
-        rotateMotor.power = 0.5
-        sleep(2000)
-        rotateMotor.targetPosition = 200
-        rotateMotor.power = 0.5
-        sleep(1000)
-        clawServo.power = -1.0
-        sleep(1000)
-        clawServo.power = 0.0
-        rotateMotor.targetPosition = 100
-        rotateMotor.power = -0.5
-        sleep(2000)
-        slideMotor.targetPosition = 0
-        slideMotor.power = 0.5
-        drive.followTrajectorySequence(traj2)
-
         while (opModeIsActive() && !isStopRequested) {
             drive.update()
         }
@@ -109,6 +81,6 @@ class RB_Backup : DriveMethods() {
         )
         telemetry.update()
         PoseStorage.currentPose = drive.poseEstimate
-        colorSide = "red"
+        colorSide = "blue"
     }
 }

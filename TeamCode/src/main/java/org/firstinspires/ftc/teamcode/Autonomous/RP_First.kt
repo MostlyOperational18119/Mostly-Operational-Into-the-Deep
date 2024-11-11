@@ -6,11 +6,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.hardware.CRServo
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.Servo
-import org.firstinspires.ftc.teamcode.Autonomous.poseStorage
-import org.firstinspires.ftc.teamcode.Autonomous.poseStorage.colorSide
+import org.firstinspires.ftc.teamcode.Autonomous.PoseStorage
+import org.firstinspires.ftc.teamcode.Autonomous.PoseStorage.colorSide
 import org.firstinspires.ftc.teamcode.DriveMethods
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
 import java.util.Locale
 
 
@@ -81,7 +80,7 @@ class RP_First : DriveMethods() {
             String.format(Locale.ENGLISH, "X: %f, Y: %f, and Rotation: %f", x, y, heading)
         )
         telemetry.update()
-        poseStorage.currentPose = drive.poseEstimate
+        PoseStorage.currentPose = drive.poseEstimate
         colorSide = "blue"
     }
 }

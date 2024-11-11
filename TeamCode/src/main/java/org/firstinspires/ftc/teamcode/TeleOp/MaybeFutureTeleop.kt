@@ -9,8 +9,8 @@ import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.Gamepad
 import com.qualcomm.robotcore.hardware.Servo
-import org.firstinspires.ftc.teamcode.Autonomous.poseStorage
-import org.firstinspires.ftc.teamcode.Autonomous.poseStorage.colorSide
+import org.firstinspires.ftc.teamcode.Autonomous.PoseStorage
+import org.firstinspires.ftc.teamcode.Autonomous.PoseStorage.colorSide
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDriveCancelable
 import kotlin.math.cos
 
@@ -40,7 +40,7 @@ class Meet_0_FUTURE : LinearOpMode() {
 
         //ODOMETRY
         val drive = SampleMecanumDriveCancelable(hardwareMap)
-        drive.poseEstimate = poseStorage.currentPose
+        drive.poseEstimate = PoseStorage.currentPose
         val redBoxVector = Vector2d(-58.26, -57.64)
         val redBoxHeading = Math.toRadians(225.00)
         val blueBoxVector = Vector2d(56.99, 57.75)

@@ -9,15 +9,27 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 
 public class MeepMeepTesting {
     public static void main(String[] args) {
-        MeepMeep meepMeep = new MeepMeep(800);
-        Pose2d startPose = new Pose2d(-34.09, -63.19, Math.toRadians(90.00));
+        MeepMeep meepMeep = new MeepMeep(600);
+        Pose2d startPose = new Pose2d(-34.09, -63.19, Math.toRadians(-90.00));
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(startPose)
-                        .splineTo(new Vector2d(-39.64, -47.68), Math.toRadians(144.20))
-                        .splineTo(new Vector2d(-57.26, -57.64), Math.toRadians(225.00))
+                        .setReversed(true)
+                        .lineToConstantHeading(new Vector2d(-10.04, -34.01))
+                        .setReversed(false)
+                        .splineTo(new Vector2d(-47.87, -39.89), Math.toRadians(90.00))
+                        .setReversed(true)
+                        .lineToLinearHeading(new Pose2d(-55.0, -55.0, Math.toRadians(45.00)))
+                        .back(2)
+                        .setReversed(false)
+                        .lineToLinearHeading(new Pose2d(-57.75, -38.37, Math.toRadians(88.83)))
+                        .setReversed(true)
+                        .lineToLinearHeading(new Pose2d(-55.0, -55.0, Math.toRadians(45.00)))
+                        .back(2)
+                        .setReversed(false)
+
                         .build());
 
 

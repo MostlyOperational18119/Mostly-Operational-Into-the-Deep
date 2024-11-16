@@ -10,7 +10,6 @@ import org.firstinspires.ftc.teamcode.Autonomous.poseStorage
 import org.firstinspires.ftc.teamcode.Autonomous.poseStorage.colorSide
 import org.firstinspires.ftc.teamcode.DriveMethods
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
 import java.util.Locale
 
 
@@ -18,7 +17,7 @@ import java.util.Locale
 
 
 @Autonomous(name = "RP_FIRST", group = "Linear Opmode")
-class RP_First : DriveMethods() {
+class RP_MEET_1 : DriveMethods() {
     override fun runOpMode() {
         val rotateMotor = hardwareMap.get(DcMotor::class.java, "motorRotate")
         rotateMotor.targetPosition = 300

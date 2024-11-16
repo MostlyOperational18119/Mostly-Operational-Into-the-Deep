@@ -1,27 +1,30 @@
-package org.firstinspires.ftc.teamcode
+package org.firstinspires.ftc.teamcode.TeleOp.Projects
 
+import com.qualcomm.hardware.limelightvision.Limelight3A
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.IMU
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
+import org.firstinspires.ftc.teamcode.DriveMethods
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.sin
 
-@TeleOp
+@TeleOp(name = "LimeLightSampleDetector")
 @Disabled
-class FieldCentricMecanumTeleOp : LinearOpMode() {
+class LimeLightSampleDetector : DriveMethods() {
     @Throws(InterruptedException::class)
     override fun runOpMode() {
-
         val frontLeftMotor = hardwareMap.dcMotor["motorFL"]
         val backLeftMotor = hardwareMap.dcMotor["motorBL"]
         val frontRightMotor = hardwareMap.dcMotor["motorFR"]
         val backRightMotor = hardwareMap.dcMotor["motorBR"]
+
+        val limelight = hardwareMap.get(Limelight3A::class.java, "limelight")
+        val pipelineIndex = 0
 
         frontRightMotor.direction = DcMotorSimple.Direction.REVERSE
         backRightMotor.direction = DcMotorSimple.Direction.REVERSE
@@ -41,6 +44,9 @@ class FieldCentricMecanumTeleOp : LinearOpMode() {
         waitForStart()
 
         if (isStopRequested) return
+
+        limelight.pipelineSwitch(pipelineIndex)
+        limelight.start()
 
         while (opModeIsActive()) {
             val y = -gamepad1.left_stick_y.toDouble() // Remember, Y stick value is reversed
@@ -75,6 +81,23 @@ class FieldCentricMecanumTeleOp : LinearOpMode() {
             backLeftMotor.power = backLeftPower
             frontRightMotor.power = frontRightPower
             backRightMotor.power = backRightPower
+
+            val llResult = limelight.latestResult
+
+            if (llResult != null && llResult.isValid) {
+                val llColorResults = llResult.colorResults
+                if (llColorResults.isNotEmpty()) {
+                    gamepad1.rumble(100)
+                    telemetry.addData("Limelight color results", llColorResults)
+                } else {
+                    telemetry.addLine("No limelight color results :(")
+                }
+            }
+
+            telemetry.update()
         }
+
+        // OpMode's done, bye Limelight
+        limelight.stop()
     }
 }

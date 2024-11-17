@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.CRServo
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.Servo
 import org.firstinspires.ftc.teamcode.Autonomous.poseStorage
-import org.firstinspires.ftc.teamcode.Autonomous.poseStorage.colorSide
 import org.firstinspires.ftc.teamcode.DriveMethods
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
@@ -16,8 +15,8 @@ import java.util.Locale
 
 // Autonomous
 
-@Autonomous(name = "RB_FIRST", group = "B")
-class RB_MEET_2 : DriveMethods() {
+@Autonomous(name = "BASKET_Meet2", group = "B")
+class BASKET_MEET_2 : DriveMethods() {
     override fun runOpMode() {
         // Setup Odometry :)
         val drive = SampleMecanumDrive(hardwareMap)
@@ -184,6 +183,5 @@ class RB_MEET_2 : DriveMethods() {
         )
         telemetry.update()
         poseStorage.currentPose = drive.poseEstimate
-        colorSide = "red"
     }
 }

@@ -12,7 +12,7 @@ import kotlin.math.abs
 import kotlin.math.exp
 
 @TeleOp(name = "Meet2TeleOp")
-class Meet2TeleOp : LinearOpMode() {
+class Meet2TeleOp :LinearOpMode() {
     //Function that Initializes all the motors
     fun setMotorModeEncoder(motor: DcMotor) {
         motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER

@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.hardware.CRServo
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.Servo
-import org.firstinspires.ftc.teamcode.Autonomous.PoseStorage.colorSide
+//import org.firstinspires.ftc.teamcode.Autonomous.PoseStorage.colorSide
 import org.firstinspires.ftc.teamcode.DriveMethods
 import org.firstinspires.ftc.teamcode.autonomous.PoseStorage
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive
@@ -180,6 +180,6 @@ class RB_First : DriveMethods() {
         )
         telemetry.update()
         PoseStorage.currentPose = drive.poseEstimate
-        colorSide = "red"
+        //colorSide = "red"
     }
 }

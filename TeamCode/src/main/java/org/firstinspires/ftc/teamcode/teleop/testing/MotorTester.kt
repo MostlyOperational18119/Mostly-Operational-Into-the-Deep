@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple
 
 @TeleOp(name = "MotorTester", group = "ZZZZZZZZZ")
 class MotorTester : LinearOpMode() {
-    override fun runOpMode () {
+    override fun runOpMode() {
         telemetry.addData("Status", "Initialized")
         telemetry.update()
 
@@ -19,7 +19,7 @@ class MotorTester : LinearOpMode() {
         FR.direction = DcMotorSimple.Direction.REVERSE
 
         waitForStart()
-        while(opModeIsActive()) {
+        while (opModeIsActive()) {
             var leftX = gamepad1.left_stick_x.toDouble()
             var leftY = -gamepad1.left_stick_y.toDouble()
             var rightX = gamepad1.right_stick_x.toDouble()
@@ -30,13 +30,13 @@ class MotorTester : LinearOpMode() {
             BR?.power = (leftY + leftX - rightX)
 
 
-            telemetry.addData("BL Power: ",  BL.power)
-            telemetry.addData("BR Power:  ",  BR.power)
-            telemetry.addData("FL Power: ",  FL.power)
-            telemetry.addData("FR Power:  ",  FR.power)
-            telemetry.addData("Left Stick Y:  ",  gamepad1.left_stick_y)
-            telemetry.addData("Left Stick X:  ",  gamepad1.left_stick_x)
-            telemetry.addData("Right Stick X:  ",  gamepad1.right_stick_x)
+            telemetry.addData("BL Power: ", BL.power)
+            telemetry.addData("BR Power:  ", BR.power)
+            telemetry.addData("FL Power: ", FL.power)
+            telemetry.addData("FR Power:  ", FR.power)
+            telemetry.addData("Left Stick Y:  ", gamepad1.left_stick_y)
+            telemetry.addData("Left Stick X:  ", gamepad1.left_stick_x)
+            telemetry.addData("Right Stick X:  ", gamepad1.right_stick_x)
             telemetry.addLine("OpMode is active")
             telemetry.update()
         }

@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.DcMotor
 
-abstract class DriveMethods: LinearOpMode() {
+abstract class DriveMethods : LinearOpMode() {
     var motorFL: DcMotor? = null
     var motorFR: DcMotor? = null
     var motorBL: DcMotor? = null

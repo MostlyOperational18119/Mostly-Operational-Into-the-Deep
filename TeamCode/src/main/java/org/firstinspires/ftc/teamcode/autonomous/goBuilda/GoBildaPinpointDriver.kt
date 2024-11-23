@@ -240,7 +240,7 @@ class GoBildaPinpointDriver(deviceClient: I2cDeviceSynchSimple?, deviceClientIsO
             TypeConversion.byteArrayToInt(bArr.copyOfRange(8, 12), ByteOrder.LITTLE_ENDIAN)
         yEncoderValue =
             TypeConversion.byteArrayToInt(bArr.copyOfRange(12, 16), ByteOrder.LITTLE_ENDIAN)
-        xPosition = byteArrayToFloat(bArr.copyOfRange( 16, 20), ByteOrder.LITTLE_ENDIAN)
+        xPosition = byteArrayToFloat(bArr.copyOfRange(16, 20), ByteOrder.LITTLE_ENDIAN)
         yPosition = byteArrayToFloat(bArr.copyOfRange(20, 24), ByteOrder.LITTLE_ENDIAN)
         hOrientation = byteArrayToFloat(bArr.copyOfRange(24, 28), ByteOrder.LITTLE_ENDIAN)
         xVelocity = byteArrayToFloat(bArr.copyOfRange(28, 32), ByteOrder.LITTLE_ENDIAN)
@@ -556,7 +556,8 @@ class GoBildaPinpointDriver(deviceClient: I2cDeviceSynchSimple?, deviceClientIsO
 
 
     companion object {
-        private const val goBILDA_SWINGARM_POD = 13.26291192f //ticks-per-mm for the goBILDA Swingarm Pod
+        private const val goBILDA_SWINGARM_POD =
+            13.26291192f //ticks-per-mm for the goBILDA Swingarm Pod
         private const val goBILDA_4_BAR_POD = 19.89436789f //ticks-per-mm for the goBILDA 4-Bar Pod
 
         //i2c address of the device

@@ -23,7 +23,13 @@ enum class SampleColour {
     RED, BLUE, YELLOW
 }
 
-data class OpenCVDetections(val x: Int, val y: Int, val rotation: Double, val colour: SampleColour, val pointsList: List<Point>)
+data class OpenCVDetections(
+    val x: Int,
+    val y: Int,
+    val rotation: Double,
+    val colour: SampleColour,
+    val pointsList: List<Point>
+)
 
 class SampleProcessor : VisionProcessor {
     private var enabledColours: List<Boolean> = listOf(true, true, true) // Red, blue, yellow
@@ -35,11 +41,11 @@ class SampleProcessor : VisionProcessor {
 
     override fun processFrame(frame: Mat?, captureTimeNanos: Long): Any {
         // Convert to HSV :)
-        val srcHSV    =  Mat()
-        val matRed    =  Mat()
-        val matBlue   =  Mat()
-        val matYellow =  Mat()
-        val results   =  OpenCVResults(ArrayList())
+        val srcHSV = Mat()
+        val matRed = Mat()
+        val matBlue = Mat()
+        val matYellow = Mat()
+        val results = OpenCVResults(ArrayList())
         Imgproc.GaussianBlur(frame, frame, Size(5.0, 5.0), 0.0)
         Imgproc.cvtColor(frame, srcHSV, Imgproc.COLOR_BGR2HSV)
 
@@ -108,7 +114,13 @@ class SampleProcessor : VisionProcessor {
         val results = ArrayList<OpenCVDetections>()
         val contours: List<MatOfPoint> = ArrayList()
         val hierarchy = Mat()
-        Imgproc.findContours(mat, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE)
+        Imgproc.findContours(
+            mat,
+            contours,
+            hierarchy,
+            Imgproc.RETR_EXTERNAL,
+            Imgproc.CHAIN_APPROX_SIMPLE
+        )
 
         contours.forEach {
             val cont2f = MatOfPoint2f()
@@ -121,8 +133,10 @@ class SampleProcessor : VisionProcessor {
             val pointsList = approx.toList()
 
             if (pointsList.size == 4) {
-                val x = ((pointsList[0].x + pointsList[1].x + pointsList[2].x + pointsList[3].x) / 4).toInt()
-                val y = ((pointsList[0].y + pointsList[1].y + pointsList[2].y + pointsList[3].y) / 4).toInt()
+                val x =
+                    ((pointsList[0].x + pointsList[1].x + pointsList[2].x + pointsList[3].x) / 4).toInt()
+                val y =
+                    ((pointsList[0].y + pointsList[1].y + pointsList[2].y + pointsList[3].y) / 4).toInt()
                 val rotation = 0.0 // TODO: FIND ROTATION USING POINTS
                 val detection = OpenCVDetections(x, y, rotation, colour, pointsList)
 

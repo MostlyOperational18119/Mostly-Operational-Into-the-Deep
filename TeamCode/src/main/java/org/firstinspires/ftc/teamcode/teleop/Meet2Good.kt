@@ -13,7 +13,7 @@ import kotlin.math.abs
 import kotlin.math.exp
 
 @TeleOp(name = "Meet2Good")
-class Meet2Good :LinearOpMode() {
+class Meet2Good : LinearOpMode() {
     //Function that Initializes all the motors
     override fun runOpMode() {
         fun setMotorModeEncoder(motor: DcMotor) {
@@ -76,7 +76,7 @@ class Meet2Good :LinearOpMode() {
             if (currentGamepad2.dpad_down && !previousGamepad2.dpad_down) {
                 Target = 100
             }
-            if (currentGamepad2.dpad_left && !previousGamepad2.dpad_left){
+            if (currentGamepad2.dpad_left && !previousGamepad2.dpad_left) {
                 Target = 1000
             }
             if (currentGamepad2.dpad_up && !previousGamepad2.dpad_up) {
@@ -84,7 +84,8 @@ class Meet2Good :LinearOpMode() {
             }
 
             if (slideVerticalMotor.currentPosition <= Target) {
-                slideVerticalMotor.power = ((2 / (1 + (exp(-(Target - slideVerticalMotor.currentPosition).toDouble() / MagicEquationSpeed)))) - 1) * (MagicEquationMax)
+                slideVerticalMotor.power =
+                    ((2 / (1 + (exp(-(Target - slideVerticalMotor.currentPosition).toDouble() / MagicEquationSpeed)))) - 1) * (MagicEquationMax)
             } else {
                 slideVerticalMotor.power = -0.05
             }

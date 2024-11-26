@@ -67,13 +67,13 @@ class BASKET_MEET_2 : DriveMethods() {
                 .build()
 
         val traj2: TrajectorySequence? =
-            drive.trajectorySequenceBuilder(Pose2d(-10.4,-34.01, Math.toRadians(-90.0)))
+            drive.trajectorySequenceBuilder(Pose2d(-10.4, -34.01, Math.toRadians(-90.0)))
                 .setReversed(false)
                 .splineTo(Vector2d(-47.87, -39.89), Math.toRadians(90.00))
                 .build()
 
         val traj3: TrajectorySequence? =
-            drive.trajectorySequenceBuilder(Pose2d(-47.87,-39.89, Math.toRadians(90.0)))
+            drive.trajectorySequenceBuilder(Pose2d(-47.87, -39.89, Math.toRadians(90.0)))
                 .setReversed(true)
                 .lineToLinearHeading(Pose2d(-55.0, -55.0, Math.toRadians(45.00)))
                 .build()
@@ -90,14 +90,14 @@ class BASKET_MEET_2 : DriveMethods() {
                 .build()
 
 
-        val traj6: TrajectorySequence?=
-            drive.trajectorySequenceBuilder(Pose2d(-57.75,-38.37, Math.toRadians(90.0)))
+        val traj6: TrajectorySequence? =
+            drive.trajectorySequenceBuilder(Pose2d(-57.75, -38.37, Math.toRadians(90.0)))
                 .setReversed(true)
                 .lineToLinearHeading(Pose2d(-55.0, -55.0, Math.toRadians(45.00)))
                 .build()
 
-        val traj7: TrajectorySequence?=
-            drive.trajectorySequenceBuilder(Pose2d(-55.0,-55.0, Math.toRadians(45.0)))
+        val traj7: TrajectorySequence? =
+            drive.trajectorySequenceBuilder(Pose2d(-55.0, -55.0, Math.toRadians(45.0)))
                 .back(2.0)
                 .setReversed(false)
                 .build()
@@ -128,7 +128,7 @@ class BASKET_MEET_2 : DriveMethods() {
         sleep(200)
         clawServo.position = clawOpen
         sleep(200)
-        slideVerticalMotor.targetPosition = specimenUp+50
+        slideVerticalMotor.targetPosition = specimenUp + 50
         slideVerticalMotor.power = 1.0
         sleep(100)
         slideVerticalMotor.targetPosition = 0

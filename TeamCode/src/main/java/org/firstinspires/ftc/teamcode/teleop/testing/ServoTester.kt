@@ -2,27 +2,48 @@ package org.firstinspires.ftc.teamcode.teleop.testing
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import com.qualcomm.robotcore.hardware.CRServo
+import com.qualcomm.robotcore.hardware.Gamepad
 import com.qualcomm.robotcore.hardware.Servo
 
 @TeleOp(name = "ServoPositionTester", group = "Basic Chassis")
 class ServoTester : LinearOpMode() {
     override fun runOpMode() {
-        val Servo = hardwareMap.get(Servo::class.java, "clawRotate")
+        //val Servo1 = hardwareMap.get(CRServo::class.java, "intakeServo")
+        val Servo1 = hardwareMap.get(Servo::class.java, "clawServo")
 
         telemetry.addData("Status", "Initialized")
         telemetry.update()
+
         waitForStart()
+
         telemetry.addData("Status", "Running")
+
+        val currentGamepad1 = Gamepad()
+        val currentGamepad2 = Gamepad()
+        val previousGamepad1 = Gamepad()
+        val previousGamepad2 = Gamepad()
+
         while (opModeIsActive()) {
-            if (gamepad1.a) {
-                Servo.position += 0.05;
-                sleep(100)
-            } else if (gamepad1.b) {
-                Servo.position -= 0.05;
-                sleep(100)
+            previousGamepad1.copy(currentGamepad1)
+            previousGamepad2.copy(currentGamepad2)
+            currentGamepad1.copy(gamepad1)
+            currentGamepad2.copy(gamepad2)
+
+            if (currentGamepad1.a && !previousGamepad1.a) {
+                Servo1.position += 0.05;
+                //Servo1.power = 1.0
+            } else if (currentGamepad1.b && !previousGamepad1.b) {
+                Servo1.position -= 0.05;
+                //Servo1.power = -1.0
             }
-            val servoPosition = Servo.position;
-            telemetry.addLine("servo position: $servoPosition")
+            //else if (currentGamepad1.x && !previousGamepad1.x){
+                //Servo1.power = 0.0
+            //}
+
+
+            telemetry.addData("Servo1 position:", Servo1.position)
+            //telemetry.addData("Servo1 power:", Servo1.power)
             telemetry.update()
 
         }

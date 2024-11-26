@@ -7,12 +7,12 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.Gamepad
 import com.qualcomm.robotcore.hardware.Servo
 
-@TeleOp(name = "DB_BIG", group="AAAAAAAA")
-class DoernbecherTeleOp: LinearOpMode() {
+@TeleOp(name = "DB_BIG", group = "AAAAAAAA")
+class DoernbecherTeleOp : LinearOpMode() {
     override fun runOpMode() {
         val motorFL = hardwareMap.get(DcMotor::class.java, "motorFL")
         val motorFR = hardwareMap.get(DcMotor::class.java, "motorFR")
-        motorFR.direction=DcMotorSimple.Direction.REVERSE
+        motorFR.direction = DcMotorSimple.Direction.REVERSE
         val motorBL = hardwareMap.get(DcMotor::class.java, "motorBL")
         val motorBR = hardwareMap.get(DcMotor::class.java, "motorBR")
 
@@ -56,18 +56,24 @@ class DoernbecherTeleOp: LinearOpMode() {
                 aimMotor.power = 0.1
                 sleep(80)
                 aimMotor.power = 0.0
-            }else if (currentGamepad1.dpad_up) {
-                aimMotor.power =- 0.2
+            } else if (currentGamepad1.dpad_up) {
+                aimMotor.power = -0.2
                 sleep(80)
                 aimMotor.power = 0.0
             }
 
             //TOGGLES ON/OFF
-            if (currentGamepad1.b&& !previousGamepad1.b){ armToggle = !armToggle }
+            if (currentGamepad1.b && !previousGamepad1.b) {
+                armToggle = !armToggle
+            }
 
             //AIRPLANE SERVO
-            if (armToggle){ airplaneServo.position = lowerServoPosition }
-            if (!armToggle){ airplaneServo.position = highestServoPosition }
+            if (armToggle) {
+                airplaneServo.position = lowerServoPosition
+            }
+            if (!armToggle) {
+                airplaneServo.position = highestServoPosition
+            }
 
             //TELEMETRY
             telemetry.addData("Status", "Running")

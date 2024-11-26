@@ -29,7 +29,6 @@ class Meet2Good :LinearOpMode() {
         HorizontalFloor
     }
 
-    //Function that Initializes all the motors
     override fun runOpMode() {
         telemetry.addLine(when ((0..49).random()) {
             1 -> "good luck buddy"

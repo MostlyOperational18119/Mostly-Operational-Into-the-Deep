@@ -32,7 +32,7 @@ class LimeLightAprilTags : LinearOpMode() {
 
         limelight3A.start()
         //switch to April Tag pipeline
-        if(!limelight3A.pipelineSwitch(1)) {
+        if (!limelight3A.pipelineSwitch(1)) {
             telemetry.addLine("Pipeline switch failed");
             telemetry.update()
             sleep(2000);

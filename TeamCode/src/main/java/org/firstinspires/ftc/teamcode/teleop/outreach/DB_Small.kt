@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Gamepad
 import com.qualcomm.robotcore.hardware.Servo
 
 @TeleOp(name = "DB_SMALL", group = "AAAAAAA")
-class  cccccDB_Small : LinearOpMode(){
+class cccccDB_Small : LinearOpMode() {
     override fun runOpMode() {
         val right = hardwareMap.get(DcMotor::class.java, "rightwheel")
         val left = hardwareMap.get(DcMotor::class.java, "leftwheel")
@@ -44,7 +44,7 @@ class  cccccDB_Small : LinearOpMode(){
         rotate.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
 
         waitForStart()
-        while(opModeIsActive()) {
+        while (opModeIsActive()) {
             //GAMEPADS
             previousGamepad1.copy(currentGamepad1);
             previousGamepad2.copy(currentGamepad2);
@@ -60,14 +60,26 @@ class  cccccDB_Small : LinearOpMode(){
             left.power = (leftY + rightx) / speedDiv
 
             //Reset Purple
-            if (currentGamepad1.b&& !previousGamepad1.b){ leftArmToggle = !leftArmToggle }
-            if (currentGamepad1.x&& !previousGamepad1.x){ rightArmToggle = !rightArmToggle }
+            if (currentGamepad1.b && !previousGamepad1.b) {
+                leftArmToggle = !leftArmToggle
+            }
+            if (currentGamepad1.x && !previousGamepad1.x) {
+                rightArmToggle = !rightArmToggle
+            }
 
             //MOVE SERVOS
-            if(!leftArmToggle) { launcher.position = startPos }  //Right Reset
-            if(leftArmToggle) { launcher.position = stopPos }    //Right Launch
-            if(rightArmToggle) { claw.position = clawOpen }      //Left Up
-            if(!rightArmToggle) { claw.position = clawClose }    //Left Down
+            if (!leftArmToggle) {
+                launcher.position = startPos
+            }  //Right Reset
+            if (leftArmToggle) {
+                launcher.position = stopPos
+            }    //Right Launch
+            if (rightArmToggle) {
+                claw.position = clawOpen
+            }      //Left Up
+            if (!rightArmToggle) {
+                claw.position = clawClose
+            }    //Left Down
 
             //ROTATION
             if (gamepad1.dpad_down && rotate.targetPosition < -10) {

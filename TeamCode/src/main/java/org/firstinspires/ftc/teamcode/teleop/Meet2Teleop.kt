@@ -12,7 +12,7 @@ import kotlin.math.abs
 import kotlin.math.exp
 
 @TeleOp(name = "Meet2TeleOp")
-class Meet2TeleOp :LinearOpMode() {
+class Meet2TeleOp : LinearOpMode() {
     //Function that Initializes all the motors
     fun setMotorModeEncoder(motor: DcMotor) {
         motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
@@ -24,11 +24,11 @@ class Meet2TeleOp :LinearOpMode() {
     //Function that does all the power control
     fun powerControl(motor: DcMotor, target: Int) {
         //If the equation gives a power too low, just set it to 0.3
-        if (abs(-((2 / (1 + (exp(-(target - motor.currentPosition).toDouble() / MagicEquationSpeed)))) - 1) * (MagicEquationMax)) < 0.3){
+        if (abs(-((2 / (1 + (exp(-(target - motor.currentPosition).toDouble() / MagicEquationSpeed)))) - 1) * (MagicEquationMax)) < 0.3) {
             motor.power = 0.3
-        }
-        else {
-            motor.power = -((2 / (1 + (exp(-(target - motor.currentPosition).toDouble() / MagicEquationSpeed)))) - 1) * (MagicEquationMax)
+        } else {
+            motor.power =
+                -((2 / (1 + (exp(-(target - motor.currentPosition).toDouble() / MagicEquationSpeed)))) - 1) * (MagicEquationMax)
         }
     }
 
@@ -106,33 +106,34 @@ class Meet2TeleOp :LinearOpMode() {
             if (currentGamepad2.dpad_down && !previousGamepad2.dpad_down) {
                 verticalSlideToggle = VerticalSlideTarget.Floor
             }
-            if (currentGamepad2.dpad_left && !previousGamepad2.dpad_left){
+            if (currentGamepad2.dpad_left && !previousGamepad2.dpad_left) {
                 verticalSlideToggle = VerticalSlideTarget.Low
             }
             if (currentGamepad2.dpad_up && !previousGamepad2.dpad_up) {
                 verticalSlideToggle = VerticalSlideTarget.High
             }
-            if (currentGamepad2.dpad_right && !previousGamepad2.dpad_right){
+            if (currentGamepad2.dpad_right && !previousGamepad2.dpad_right) {
                 verticalSlideToggle = VerticalSlideTarget.Manual
             }
 
             when (verticalSlideToggle) {
                 VerticalSlideTarget.Manual -> {
-                    slideVerticalMotor.power = (leftY2/3)
+                    slideVerticalMotor.power = (leftY2 / 3)
                     slideVerticalMotor.currentPosition
                 }
 
                 VerticalSlideTarget.Floor -> {
                     slideVerticalMotor.targetPosition = VerticalSlideFloor
                     powerControl(slideVerticalMotor, VerticalSlideFloor)
-                    if (slideVerticalMotor.currentPosition == VerticalSlideFloor){
+                    if (slideVerticalMotor.currentPosition == VerticalSlideFloor) {
                         verticalSlideToggle = VerticalSlideTarget.Manual
                     }
                 }
+
                 VerticalSlideTarget.Low -> {
                     slideVerticalMotor.targetPosition = VerticalSlideLow
                     powerControl(slideVerticalMotor, VerticalSlideLow)
-                    if (slideVerticalMotor.currentPosition == VerticalSlideLow){
+                    if (slideVerticalMotor.currentPosition == VerticalSlideLow) {
                         verticalSlideToggle = VerticalSlideTarget.Manual
                     }
                 }
@@ -140,14 +141,14 @@ class Meet2TeleOp :LinearOpMode() {
                 VerticalSlideTarget.High -> {
                     slideVerticalMotor.targetPosition = VerticalSlideHigh
                     powerControl(slideVerticalMotor, VerticalSlideHigh)
-                    if (slideVerticalMotor.currentPosition == VerticalSlideHigh){
+                    if (slideVerticalMotor.currentPosition == VerticalSlideHigh) {
                         verticalSlideToggle = VerticalSlideTarget.Manual
                     }
                 }
             }
 
             //Horizontal Motor
-            slideHorizontalMotor.targetPosition += rightY2.toInt()*5
+            slideHorizontalMotor.targetPosition += rightY2.toInt() * 5
             slideHorizontalMotor.power = 0.3
 
 
@@ -188,7 +189,7 @@ enum class VerticalSlideTarget {
     Manual
 }
 
-enum class DRIVE_STATE{
+enum class DRIVE_STATE {
     MANUAL,
     AUTONOMOUS
 };

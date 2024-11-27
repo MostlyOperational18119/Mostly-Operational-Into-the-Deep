@@ -101,7 +101,7 @@ class OutreachBotBig : LinearOpMode() {
     }
 
     companion object {
-        const val LauncherServoReadyPosition = 0.05
-        const val LauncherServoLaunchPosition = 0.01
+        const val LauncherServoReadyPosition = 0.04 // Press B
+        const val LauncherServoLaunchPosition = 0.01 // Press A
     }
 }

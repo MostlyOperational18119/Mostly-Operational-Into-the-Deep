@@ -11,36 +11,46 @@ class BabyBotAuto : LinearOpMode() {
         val launcherArm = hardwareMap.dcMotor["launcherArm"]
 
         val launcher = hardwareMap.servo["launcher"]
+        val clawRotation = hardwareMap.servo["clawRotation"]
 
-        right.power = 0.5
-        left.power = 0.5
+        clawRotation.position = 0.3
+        launcher.position = 0.6
 
-        sleep(1000)
-
-        right.power = 0.5
-        left.power = -0.5
-
-        sleep(1000)
+        waitForStart()
 
         right.power = -0.5
         left.power = -0.5
+        sleep(1000)
 
+        right.power = 0.5
+        left.power = -0.5
+        sleep(950)
+
+        right.power = 0.5
+        left.power = 0.5
+        sleep(1000)
+
+        right.power = 0.5
+        left.power = -0.5
+        sleep(950)
+
+        right.power = -0.5
+        left.power = -0.5
         sleep(1000)
 
         right.power = 0.0
         left.power = 0.0
-
         sleep(1000)
 
-        launcherArm.power = -0.1
-
-        sleep(500)
+        launcherArm.power = -0.3
+        sleep(400)
 
         launcherArm.power = 0.0
-
         sleep(2000)
 
         launcher.position = 0.86
+
+        sleep(400)
 
     }
 }

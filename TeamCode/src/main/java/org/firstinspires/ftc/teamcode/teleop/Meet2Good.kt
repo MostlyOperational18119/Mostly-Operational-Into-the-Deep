@@ -25,12 +25,13 @@ class Meet2Good :LinearOpMode() {
         Manual
     }
     enum class automaticTransferState {
-        Manual,
-        HorizontalFloor
+        Pickup,
+        Transfer
     }
+    enum class
 
-    override fun runOpMode() {
-        telemetry.addLine(when ((0..49).random()) {
+    override override fun runOpMode() {
+        telemetry.addLine(when ((0..50).random()) {
             1 -> "good luck buddy"
             2 -> "\"what spectrum?\""
             3 -> "MostlyOp >>> AHoT"
@@ -79,6 +80,7 @@ class Meet2Good :LinearOpMode() {
             46 -> "with Text_IO; use Text_IO;\nprocedure hello is\nbegin\n\tPut_Line(\"Hello world!\");\nend hello;\n"
             47 -> ">++++++++[<+++++++++>-]<.>++++[<+++++++>-]<+.+++++++..+++.>>++++++[<+++++++>-]<++.------------.>++++++[<+++++++++>-]<+.<.+++.------.--------.>>>++++[<++++++++>-]<+."
             48 -> "main = putStrLn \"Hello, World!\""
+            49 -> "https://lhohq.info"
             else -> "Why did we add these?"
         })
         telemetry.update()
@@ -121,21 +123,22 @@ class Meet2Good :LinearOpMode() {
 //        setMotorModeEncoder(tapeMeasureRotateMotor)
 
         // Servos
-        val clawRotateRest = 0.72
-        val clawRotateUpright = 0.55
-        val clawRotateOut = 0.2
+        val clawRotateRest = 0.56
+        val clawRotateUpRight = 0.42
+        val clawRotateOut = 0.0
         val intakeInPower = 1.0
         val intakeOutPower = -1.0
         val transferDownPos = 0.57
-        val transferUpPos = 0.23
+        val transferMidPos = 0.4
+        val transferUpPos = 0.22
         val clawServoOpen = 0.13
         val clawServoClosed = 0.23
 
         val intakeServo = hardwareMap.crservo["intakeServo"]
         val clawServo = hardwareMap.servo["clawServo"]
         val transferServo = hardwareMap.servo["transferServo"]
-        val clawRotateServo = hardwareMap.servo["clawRotate"]
-        clawRotateServo.position = clawRotateRest
+        val clawRotateServo = hardwareMap.servo["rotateServo"]
+        clawRotateServo.position = clawRotateUpRight
         val hangPusher = hardwareMap.servo["hangPusher"] // Linear servo
 
         //VARIABLES
@@ -148,13 +151,16 @@ class Meet2Good :LinearOpMode() {
         val MagicEquationSpeed = 2000
         val MagicEquationMax = 0.1
         var speedDiv = 2
+        var DoOnceThingy = 1
+        var moveRotateServo = false
 
         var Target = 0
         var horizontalSlideToggle = horizontalSlideState.Manual
         var verticalSlideToggle = verticalSlideState.Manual
-        var automatedTransferToggle = automaticTransferState.Manual
+        var automatedTransferToggle = automaticTransferState.Pickup
         var intakeInToggle = false
         var intakeOutToggle = false
+        var SingleRunCheck = false
 
         //ROADRUNNER
         val drive = SampleMecanumDrive(hardwareMap)
@@ -199,22 +205,39 @@ class Meet2Good :LinearOpMode() {
                 setMotorModeEncoder(hangerMotor)
             }
 
+            //HANGING
+            if (currentGamepad2.a && !previousGamepad2.a) {
+                hangPusher.position = 0.00 //linear position here
+                sleep(3000)
+                hangerMotor.targetPosition = 100 //motor pos here
+            }
+
+//          if (gamepad1.left_trigger >= 0.2) {
+//              tapeMeasureRotateMotor.power = 1.0
+//          } else if (gamepad1.right_trigger >= 0.2) {
+//              tapeMeasureRotateMotor.power = -1.0
+//          } else {
+//              tapeMeasureRotateMotor.power = 0.0
+//          }
+
             //TRANSFER TOGGLES
-            if (currentGamepad1.dpad_left&& !previousGamepad1.dpad_left){ automatedTransferToggle = automaticTransferState.HorizontalFloor }
-
             when (automatedTransferToggle) {
-                automaticTransferState.Manual -> {
+                automaticTransferState.Pickup -> {
+                    //TRANSFER
+                    if (currentGamepad2.b && !previousGamepad2.b){ automatedTransferToggle = automaticTransferState.Transfer }
 
-                    //ROTATESERVO
-                    if (gamepad2.right_trigger > 0.5){
-                        clawRotateServo.position = clawRotateOut
+                    //INTAKE SERVO
+                    if (currentGamepad2.right_bumper&& !previousGamepad2.right_bumper){
+                        intakeInToggle = !intakeInToggle
+                        intakeOutToggle = false
                     }
-                    if (gamepad2.left_trigger > 0.5){
-                        clawRotateServo.position = clawRotateRest
+                    if (currentGamepad2.left_bumper&& !previousGamepad2.left_bumper){
+                        intakeOutToggle = !intakeOutToggle
+                        intakeInToggle = false
                     }
-                    if (gamepad2.left_bumper){
-                        clawRotateServo.position = clawRotateUpright
-                    }
+                    if (intakeInToggle) { intakeServo?.power = 1.0 }
+                    else if (intakeOutToggle) { intakeServo?.power = -1.0 }
+                    else { intakeServo?.power = 0.0 }
 
                     //CLAW SERVO
                     if (gamepad1.right_trigger > 0.5){
@@ -224,29 +247,63 @@ class Meet2Good :LinearOpMode() {
                         clawServo.position = clawServoOpen
                     }
 
-                    //INTAKE SERVO
-//                    if (currentGamepad1.right_bumper&& !previousGamepad1.right_bumper){
-//                        intakeInToggle = !intakeInToggle
-//                        intakeOutToggle = false
-//                    }
-//                    if (currentGamepad1.left_bumper&& !previousGamepad1.left_bumper){
-//                        intakeOutToggle = !intakeOutToggle
-//                        intakeInToggle = false
-//                    }
-//                    if (intakeInToggle) { intakeServo?.power = 1.0 }
-//                    else if (intakeOutToggle) { intakeServo?.power = -1.0 }
-//                    else { intakeServo?.power = 0.0 }
+                    //ROTATE SERVO
+                    if (gamepad2.right_trigger > 0.5){
+                        clawRotateServo.position = clawRotateOut
+                    }
+                    if (gamepad2.left_trigger > 0.5){
+                        clawRotateServo.position = clawRotateUpRight
+                    }
 
                     //TRANSFER SERVO
                     if (currentGamepad1.right_bumper&& !previousGamepad1.right_bumper){
                         transferServo.position = transferDownPos
                     }
                     if (currentGamepad1.left_bumper&& !previousGamepad1.left_bumper){
-                        transferServo.position = transferUpPos
+                        transferServo.position = transferMidPos
                     }
 
+                    //HORIZONTAL MOTOR
+                    if (currentGamepad2.y && !previousGamepad2.y) {
+                        horizontalSlideToggle = horizontalSlideState.Floor
+                    }
+                    if (currentGamepad2.x && !previousGamepad2.x) {
+                       horizontalSlideToggle = horizontalSlideState.Extend
+                    }
 
-                    //SLIDES
+                    when (horizontalSlideToggle) {
+                        horizontalSlideState.Manual -> {
+                            if (leftY2 > 0.0 && slideHorizontalMotor.currentPosition < 2000) {
+                                slideHorizontalMotor.targetPosition = 2000
+                                slideHorizontalMotor.power = leftY2 / 1.5
+                            } else if (leftY2 < 0.0 && slideHorizontalMotor.currentPosition > 0) {
+                                slideHorizontalMotor.targetPosition = 0
+                                slideHorizontalMotor.power = leftY2 / 1.5
+                            } else {
+                                slideHorizontalMotor.targetPosition =
+                                    slideHorizontalMotor.currentPosition
+                                slideHorizontalMotor.power = 0.1
+                            }
+                        }
+
+                        horizontalSlideState.Floor -> {
+                            slideHorizontalMotor.targetPosition = 0
+                            slideHorizontalMotor.power = -0.8
+                            if (abs(slideHorizontalMotor.currentPosition) < 50) {
+                                horizontalSlideToggle = horizontalSlideState.Manual
+                            }
+                        }
+
+                        horizontalSlideState.Extend -> {
+                            slideHorizontalMotor.targetPosition = HorizontalSlideExtend
+                            slideHorizontalMotor.power = 0.8
+                            if (abs(slideVerticalMotor.currentPosition - HorizontalSlideExtend) < 50) {
+                                horizontalSlideToggle = horizontalSlideState.Manual
+                            }
+                        }
+                    }
+
+                    //VERTICAl SLIDE
                     if (currentGamepad2.dpad_down && !previousGamepad2.dpad_down) {
                         verticalSlideToggle = verticalSlideState.Floor
                     }
@@ -272,7 +329,7 @@ class Meet2Good :LinearOpMode() {
                             } else {
                                 slideVerticalMotor.targetPosition =
                                     slideVerticalMotor.currentPosition
-                                slideVerticalMotor.power = 0.2
+                                slideVerticalMotor.power = 0.5
                             }
                         }
 
@@ -312,67 +369,50 @@ class Meet2Good :LinearOpMode() {
                             }
                         }
                     }
-
-                    //HANGING
-                    if (currentGamepad2.a && !previousGamepad2.a) {
-                        hangPusher.position = 0.00 //linear position here
-                        sleep(3000)
-                        hangerMotor.targetPosition = 100 //motor pos here
-                    }
-
-//                    if (gamepad1.left_trigger >= 0.2) {
-//                        tapeMeasureRotateMotor.power = 1.0
-//                    } else if (gamepad1.right_trigger >= 0.2) {
-//                        tapeMeasureRotateMotor.power = -1.0
-//                    } else {
-//                        tapeMeasureRotateMotor.power = 0.0
-//                    }
-
-
-                    //HORIZONTAL MOTOR
-                    if (currentGamepad2.y && !previousGamepad2.y) {
-                        horizontalSlideToggle = horizontalSlideState.Floor
-                    }
-                    if (currentGamepad2.x && !previousGamepad2.x) {
-                        horizontalSlideToggle = horizontalSlideState.Extend
-                    }
-
-                    when (horizontalSlideToggle) {
-                        horizontalSlideState.Manual -> {
-                            if (leftY2 > 0.0 && slideHorizontalMotor.currentPosition < 2000) {
-                                slideHorizontalMotor.targetPosition = 2000
-                                slideHorizontalMotor.power = leftY2 / 2
-                            } else if (leftY2 < 0.0 && slideHorizontalMotor.currentPosition > 0) {
-                                slideHorizontalMotor.targetPosition = 0
-                                slideHorizontalMotor.power = leftY2 / 2
-                            } else {
-                                slideHorizontalMotor.targetPosition =
-                                    slideHorizontalMotor.currentPosition
-                                slideHorizontalMotor.power = 0.1
-                            }
-                        }
-
-                        horizontalSlideState.Floor -> {
-                            slideHorizontalMotor.targetPosition = 0
-                            slideHorizontalMotor.power = -0.8
-                            if (abs(slideHorizontalMotor.currentPosition) < 50) {
-                                horizontalSlideToggle = horizontalSlideState.Manual
-                            }
-                        }
-
-                        horizontalSlideState.Extend -> {
-                            slideHorizontalMotor.targetPosition = HorizontalSlideExtend
-                            slideHorizontalMotor.power = 0.8
-                            if (abs(slideVerticalMotor.currentPosition - HorizontalSlideExtend) < 50) {
-                                horizontalSlideToggle = horizontalSlideState.Manual
-                            }
-                        }
-                    }
                 }
-                automaticTransferState.HorizontalFloor ->{
+                automaticTransferState.Transfer ->{
+                    if (DoOnceThingy == 1) {
+                        intakeServo?.power = 0.0
+                        slideHorizontalMotor.targetPosition = 0
+                        slideHorizontalMotor.power = -0.8
+                        slideVerticalMotor.targetPosition = 400
+                        if (slideVerticalMotor.currentPosition > slideVerticalMotor.targetPosition) { slideVerticalMotor.power = 0.8 }
+                        else { slideVerticalMotor.power = -0.8 }
+                        transferServo.position = transferUpPos
+                        clawServo.position = clawServoOpen
+                        DoOnceThingy=2
+                    }
 
+                    if (slideVerticalMotor.currentPosition < 600){
+                        clawRotateServo.position = clawRotateRest
+                        moveRotateServo = true
+                    }
+
+                    if (moveRotateServo){
+                        sleep(750)
+                        slideVerticalMotor.targetPosition = 100
+                        if (slideVerticalMotor.currentPosition > slideVerticalMotor.targetPosition) { slideVerticalMotor.power = 0.8 }
+                        else { slideVerticalMotor.power = -0.8 }
+                        sleep(500)
+                        clawServo.position = clawServoClosed
+                        sleep(1000)
+                        slideVerticalMotor.targetPosition = 400
+                        slideVerticalMotor.power = 0.8
+                        sleep(400)
+                        clawRotateServo.position = clawRotateUpRight
+                        transferServo.position = transferDownPos
+                        sleep(500)
+                        moveRotateServo = false
+                        DoOnceThingy = 1
+                        intakeInToggle = false
+                        intakeOutToggle = false
+                        verticalSlideToggle = verticalSlideState.Manual
+                        horizontalSlideToggle = horizontalSlideState.Manual
+                        automatedTransferToggle = automaticTransferState.Pickup
+                    }
                 }
             }
+
 
             telemetry.addData("Vertical Slide Power: ", slideVerticalMotor.power)
             telemetry.addData("Vertical Slide Target: ", slideVerticalMotor.targetPosition)
@@ -382,7 +422,9 @@ class Meet2Good :LinearOpMode() {
             telemetry.addData("Horizontal Slide Position: ", slideHorizontalMotor.currentPosition)
             telemetry.addData("Tape Measure Motor: ", tapeMeasureRotateMotor.currentPosition)
             telemetry.addData("Rotate Servo Position: ", clawRotateServo.position)
-            telemetry.addData("stuff: ", -((2 / (1 + (exp(-(slideVerticalMotor.targetPosition -slideVerticalMotor.currentPosition).toDouble() / MagicEquationSpeed)))) - 1) * (MagicEquationMax))
+            telemetry.addData("Transfer Servo Position: ", transferServo.position)
+            telemetry.addData("Do Once thingy ", DoOnceThingy)
+            telemetry.addData("Move Servo Toggle", moveRotateServo)
             telemetry.addLine("OpMode is active")
             telemetry.update()
 

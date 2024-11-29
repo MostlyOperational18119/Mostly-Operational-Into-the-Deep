@@ -10,7 +10,8 @@ import com.qualcomm.robotcore.hardware.Servo
 class ServoTester : LinearOpMode() {
     override fun runOpMode() {
 
-        val Servo1 = hardwareMap.servo["launcherServo"]
+        val Servo1 = hardwareMap.servo["rotateServo"]
+        Servo1.position = 0.2
 
         telemetry.addData("Status", "Initialized")
         telemetry.update()
@@ -31,10 +32,10 @@ class ServoTester : LinearOpMode() {
             currentGamepad2.copy(gamepad2)
 
             if (currentGamepad1.a && !previousGamepad1.a) {
-                Servo1.position += 0.05;
+                Servo1.position += 0.02;
                 //Servo1.power = 1.0
             } else if (currentGamepad1.b && !previousGamepad1.b) {
-                Servo1.position -= 0.05;
+                Servo1.position -= 0.02;
                 //Servo1.power = -1.0
             }
             //else if (currentGamepad1.x && !previousGamepad1.x){

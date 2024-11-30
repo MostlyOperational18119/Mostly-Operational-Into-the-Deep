@@ -111,7 +111,7 @@ class Meet2Good :LinearOpMode() {
 //        setMotorModeEncoder(tapeMeasureRotateMotor)
 
         //SERVO POSITIONS
-        val clawRotateRest = 0.56
+        val clawRotateRest = 0.57
         val clawRotateUpRight = 0.42
         val clawRotateOut = 0.0
         val intakeInPower = 1.0
@@ -348,7 +348,7 @@ class Meet2Good :LinearOpMode() {
                     }
 
                     if (moveRotateServo){
-                        sleep(750)
+                        sleep(500)
                         slideVerticalMotor.targetPosition = 100
                         if (slideVerticalMotor.currentPosition > slideVerticalMotor.targetPosition) { slideVerticalMotor.power = 0.8 }
                         else { slideVerticalMotor.power = -0.8 }
@@ -357,10 +357,10 @@ class Meet2Good :LinearOpMode() {
                         sleep(500)
                         slideVerticalMotor.targetPosition = 1000
                         slideVerticalMotor.power = 0.8
-                        sleep(400)
+                        sleep(100)
                         clawRotateServo.position = clawRotateOut
                         transferServo.position = transferDownPos
-                        sleep(500)
+                        sleep(200)
                         moveRotateServo = false
                         singleRunCheck = 1
                         intakeInToggle = false

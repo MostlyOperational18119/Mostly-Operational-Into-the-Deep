@@ -1,9 +1,13 @@
 package org.firstinspires.ftc.teamcode.autonomous.outreach
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
+import com.qualcomm.robotcore.hardware.IMU
+import com.qualcomm.robotcore.hardware.ImuOrientationOnRobot
+import org.firstinspires.ftc.ftccommon.internal.manualcontrol.parameters.ImuParameters
 import org.firstinspires.ftc.teamcode.teleop.outreach.OutreachBotBig
 
 @Autonomous(name = "OutreachBotBigAuto")
@@ -16,6 +20,17 @@ class OutreachBotBigAuto : LinearOpMode() {
         val motorBR = hardwareMap.dcMotor["motorBR"]
 
         val launcherRotateMotor = hardwareMap.dcMotor["launcherRotateMotor"]
+
+        val imu = hardwareMap.get(IMU::class.java, "imu")
+
+        val imuParameters = IMU.Parameters(
+            RevHubOrientationOnRobot(
+                RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
+                RevHubOrientationOnRobot.UsbFacingDirection.UP
+            )
+        )
+
+        imu.initialize(imuParameters)
 
         // Set motor directions and mode
         motorFR.direction = DcMotorSimple.Direction.REVERSE
@@ -30,6 +45,8 @@ class OutreachBotBigAuto : LinearOpMode() {
         telemetry.update()
 
         waitForStart()
+
+        val robotRotation = imu.robotYawPitchRollAngles
 
         // Start of Auto
 

@@ -24,7 +24,7 @@ class BabyBotAuto : LinearOpMode() {
 
         right.power = 0.5
         left.power = -0.5
-        sleep(950)
+        sleep(850)
 
         right.power = 0.5
         left.power = 0.5
@@ -32,7 +32,7 @@ class BabyBotAuto : LinearOpMode() {
 
         right.power = 0.5
         left.power = -0.5
-        sleep(950)
+        sleep(850)
 
         right.power = -0.5
         left.power = -0.5
@@ -43,7 +43,7 @@ class BabyBotAuto : LinearOpMode() {
         sleep(1000)
 
         launcherArm.power = -0.3
-        sleep(400)
+        sleep(300)
 
         launcherArm.power = 0.0
         sleep(2000)

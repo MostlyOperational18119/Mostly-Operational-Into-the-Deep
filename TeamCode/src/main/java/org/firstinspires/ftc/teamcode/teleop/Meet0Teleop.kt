@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo
 import kotlin.math.PI
 import kotlin.math.cos
 
-@TeleOp(name = "MEET 1 TELEOP (\uD83D\uDC37)", group = "AAAAAA")
+@TeleOp(name = "MEET 1 TELEOP (\uD83D\uDC37)", group = "ZZZ")
 class Meet0Teleop : LinearOpMode() {
     override fun runOpMode() {
         telemetry.addData("Status", "Initialized")

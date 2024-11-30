@@ -16,6 +16,7 @@ class Meet2Good :LinearOpMode() {
     enum class VerticalSlideState { Floor, Low, High, Manual }
     enum class HorizontalSlideState { Floor, Extend, Manual }
     enum class AutomaticTransferState { Pickup, Transfer }
+    enum class AutomaticMovementState { Manual, Auto }
 
     override fun runOpMode() {
         telemetry.addLine(when ((0..50).random()) {
@@ -139,6 +140,7 @@ class Meet2Good :LinearOpMode() {
         var horizontalSlideToggle = HorizontalSlideState.Manual
         var verticalSlideToggle = VerticalSlideState.Manual
         var automatedTransferToggle = AutomaticTransferState.Pickup
+        var automatedMovementToggle = AutomaticMovementState.Manual
         var intakeInToggle = false
         var intakeOutToggle = false
 
@@ -171,11 +173,21 @@ class Meet2Good :LinearOpMode() {
             val leftY2 = -gamepad2.left_stick_y.toDouble()
             val rightY2 = -gamepad2.right_stick_y.toDouble()
 
-            //MOVE
-            motorFL.power = (leftY + leftX + rightX) / speedDiv
-            motorBL.power = (leftY - leftX + rightX) / speedDiv
-            motorFR.power = (leftY - leftX - rightX) / speedDiv
-            motorBR.power = (leftY + leftX - rightX) / speedDiv
+
+            when (automatedMovementToggle) {
+                AutomaticMovementState.Manual ->{
+                    //MOVE
+                    motorFL.power = (leftY + leftX + rightX) / speedDiv
+                    motorBL.power = (leftY - leftX + rightX) / speedDiv
+                    motorFR.power = (leftY - leftX - rightX) / speedDiv
+                    motorBR.power = (leftY + leftX - rightX) / speedDiv
+                }
+
+                AutomaticMovementState.Auto ->{
+
+                }
+            }
+
 
             //RESET
             if (controller1.b&& !previousController1.b) {

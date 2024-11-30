@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.Gamepad
 import com.qualcomm.robotcore.hardware.Servo
 import org.firstinspires.ftc.teamcode.DriveMethods
 
-class NewTeleop: DriveMethods() {
+class NewTeleop : DriveMethods() {
     override fun runOpMode() {
         val FL = hardwareMap.get(DcMotor::class.java, "motorFL")
         val BL = hardwareMap.get(DcMotor::class.java, "motorBL")
@@ -16,7 +16,7 @@ class NewTeleop: DriveMethods() {
         val currentGamepad1 = Gamepad()
         val currentGamepad2 = Gamepad()
         val previousGamepad1 = Gamepad()
-        val previousGamepad2= Gamepad()
+        val previousGamepad2 = Gamepad()
         val SlideHorizontal = hardwareMap.get(DcMotor::class.java, "SlideHorizontal")
         val SlideVertical = hardwareMap.get(DcMotor::class.java, "SlideVertical")
         val TapeMeasure = hardwareMap.get(DcMotor::class.java, "TapeMeasure")
@@ -39,7 +39,7 @@ class NewTeleop: DriveMethods() {
         var g2y = 0.00
 
 
-        while (opModeIsActive()){
+        while (opModeIsActive()) {
             previousGamepad1.copy(currentGamepad1)
             previousGamepad2.copy(currentGamepad2)
             currentGamepad1.copy(gamepad1)

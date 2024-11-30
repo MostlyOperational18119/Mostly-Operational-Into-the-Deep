@@ -13,48 +13,51 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
 import java.util.Locale
 
-
-// Autonomous
-
 @Autonomous(name = "BASKET_Meet2", group = "B")
 class BASKET_MEET_2 : DriveMethods() {
-    fun setMotorModeEncoder(motor: DcMotor) {
-        motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
-        motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-        motor.mode = DcMotor.RunMode.RUN_USING_ENCODER
-        motor.power = 0.0
-    }
-
     override fun runOpMode() {
-        // Setup Odometry :)
         val drive = SampleMecanumDrive(hardwareMap)
 
-        // Motors
-        val motorFL = hardwareMap.dcMotor["motorFL"]
-        val motorFR = hardwareMap.dcMotor["motorFR"]
-        val motorBL = hardwareMap.dcMotor["motorBL"]
-        val motorBR = hardwareMap.dcMotor["motorBR"]
+        fun setMotorModeEncoder(motor: DcMotor) {
+            motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+            motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+            motor.mode = DcMotor.RunMode.RUN_USING_ENCODER
+            motor.power = 0.0
+        }
+
+        fun setMotorModePosition(motor: DcMotor) {
+            motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+            motor.targetPosition = 0
+            motor.mode = DcMotor.RunMode.RUN_TO_POSITION
+            motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+        }
+
+        // MOTORS
         val slideVerticalMotor = hardwareMap.dcMotor["slideVertical"]
         val slideHorizontalMotor = hardwareMap.dcMotor["slideHorizontal"]
-        val tapeMeasureRotateMotor = hardwareMap.dcMotor["tapeMeasureRotateMotor"]
 
-        // Set motor modes
-        setMotorModeEncoder(slideVerticalMotor)
+        //MOTORS MODES
+        setMotorModePosition(slideVerticalMotor)
         slideVerticalMotor.direction = DcMotorSimple.Direction.REVERSE
-        setMotorModeEncoder(slideHorizontalMotor)
+        setMotorModePosition(slideHorizontalMotor)
+        slideHorizontalMotor.direction = DcMotorSimple.Direction.REVERSE
 
-        // Servos
-        val clawServo = hardwareMap.servo["clawServo"]
+        //Servos
+        val clawRotateRest = 0.56
+        val clawRotateUpRight = 0.42
+        val clawRotateOut = 0.0
+        val transferDownPos = 0.57
+        val transferMidPos = 0.4
+        val transferUpPos = 0.22
+        val clawServoOpen = 0.13
+        val clawServoClosed = 0.23
+
         val intakeServo = hardwareMap.crservo["intakeServo"]
-        val clawRotateServo = hardwareMap.servo["clawRotate"]
+        val clawServo = hardwareMap.servo["clawServo"]
+        val transferServo = hardwareMap.servo["transferServo"]
+        val clawRotateServo = hardwareMap.servo["rotateServo"]
+        clawRotateServo.position = clawRotateUpRight
         val hangPusher = hardwareMap.servo["hangPusher"]
-
-        val specimenUp = 2000
-        val specimenDown = 1900
-        val highBasket = 3000
-        val clawOpen = 0.5
-        val clawClose = 0.1
-        val extendReach = 2000
 
         drive.poseEstimate = Pose2d(-34.09, -63.19, Math.toRadians(-90.00))
         // Setup up the trajectory sequence (drive path)
@@ -67,39 +70,44 @@ class BASKET_MEET_2 : DriveMethods() {
                 .build()
 
         val traj2: TrajectorySequence? =
-            drive.trajectorySequenceBuilder(Pose2d(-10.4,-34.01, Math.toRadians(-90.0)))
+            drive.trajectorySequenceBuilder(Pose2d(-10.4, -34.01, Math.toRadians(-90.0)))
                 .setReversed(false)
                 .splineTo(Vector2d(-47.87, -39.89), Math.toRadians(90.00))
                 .build()
 
         val traj3: TrajectorySequence? =
-            drive.trajectorySequenceBuilder(Pose2d(-47.87,-39.89, Math.toRadians(90.0)))
+            drive.trajectorySequenceBuilder(Pose2d(-47.87, -39.89, Math.toRadians(90.0)))
                 .setReversed(true)
                 .lineToLinearHeading(Pose2d(-55.0, -55.0, Math.toRadians(45.00)))
                 .build()
 
         val traj4: TrajectorySequence? =
-            drive.trajectorySequenceBuilder(Pose2d(-55.0, -55.0, Math.toRadians(45.00)))
-                .back(2.0)
+            drive.trajectorySequenceBuilder(Pose2d(-50.0, -50.0, Math.toRadians(45.00)))
+                .back(5.0)
                 .build()
 
         val traj5: TrajectorySequence? =
-            drive.trajectorySequenceBuilder(Pose2d(-57.26, -57.26, Math.toRadians(225.00)))
+            drive.trajectorySequenceBuilder(Pose2d(-57.071, -57.071, Math.toRadians(225.00)))
                 .setReversed(false)
                 .lineToLinearHeading(Pose2d(-57.75, -38.37, Math.toRadians(90.0)))
                 .build()
 
 
-        val traj6: TrajectorySequence?=
-            drive.trajectorySequenceBuilder(Pose2d(-57.75,-38.37, Math.toRadians(90.0)))
+        val traj6: TrajectorySequence? =
+            drive.trajectorySequenceBuilder(Pose2d(-57.75, -38.37, Math.toRadians(90.0)))
                 .setReversed(true)
-                .lineToLinearHeading(Pose2d(-55.0, -55.0, Math.toRadians(45.00)))
+                .lineToLinearHeading(Pose2d(-50.0, -50.0, Math.toRadians(45.00)))
                 .build()
 
-        val traj7: TrajectorySequence?=
-            drive.trajectorySequenceBuilder(Pose2d(-55.0,-55.0, Math.toRadians(45.0)))
-                .back(2.0)
+        val traj7: TrajectorySequence? =
+            drive.trajectorySequenceBuilder(Pose2d(-50.0, -50.0, Math.toRadians(45.0)))
+                .back(5.0)
                 .setReversed(false)
+                .build()
+
+        val traj8: TrajectorySequence? =
+            drive.trajectorySequenceBuilder(Pose2d(-57.071, -57.071, Math.toRadians(45.0)))
+                .forward(2.0)
                 .build()
 
 
@@ -118,75 +126,118 @@ class BASKET_MEET_2 : DriveMethods() {
 
 
         //PLACE SPECIMEN ON HIGH BAR
-        slideVerticalMotor.targetPosition = specimenUp
+        slideVerticalMotor.targetPosition = 2000
         slideVerticalMotor.power = 1.0
 
         drive.followTrajectorySequence(traj1)
 
-        slideVerticalMotor.targetPosition = specimenDown
-        slideVerticalMotor.power = 1.0
+        slideVerticalMotor.targetPosition = 1800
+        slideVerticalMotor.power = -0.5
         sleep(200)
-        clawServo.position = clawOpen
+        clawServo.position = clawServoOpen
         sleep(200)
-        slideVerticalMotor.targetPosition = specimenUp+50
-        slideVerticalMotor.power = 1.0
-        sleep(100)
-        slideVerticalMotor.targetPosition = 0
+        slideVerticalMotor.targetPosition = 3000
         slideVerticalMotor.power = 0.5
+        sleep(100)
 
         //GO TO AND PICK UP FIRST SAMPLE
         drive.followTrajectorySequence(traj2)
+        slideVerticalMotor.targetPosition = 0
+        slideVerticalMotor.power = -0.8
 
-        slideVerticalMotor.targetPosition = extendReach
-        slideVerticalMotor.power = 1.0
-        sleep(1500)
+        slideHorizontalMotor.targetPosition = 1000
+        slideHorizontalMotor.power = 1.0
+        sleep(500)
         intakeServo.power = 1.0
         sleep(1000)
         intakeServo.power = 0.0
-        slideVerticalMotor.targetPosition = 0
-        slideVerticalMotor.power = 1.0
-        //TransferSystemGoes Here
+        slideHorizontalMotor.targetPosition = 0
+        slideHorizontalMotor.power = -1.0
+
+        //TRANSFER
+        slideVerticalMotor.targetPosition = 400
+        if (slideVerticalMotor.currentPosition > slideVerticalMotor.targetPosition) { slideVerticalMotor.power = 0.8 }
+        else { slideVerticalMotor.power = -0.8 }
+        transferServo.position = transferUpPos
+        clawServo.position = clawServoOpen
+        clawRotateServo.position = clawRotateRest
+        sleep(750)
+        slideVerticalMotor.targetPosition = 100
+        if (slideVerticalMotor.currentPosition > slideVerticalMotor.targetPosition) { slideVerticalMotor.power = 0.8 }
+        else { slideVerticalMotor.power = -0.8 }
+        sleep(500)
+        clawServo.position = clawServoClosed
+        sleep(500)
+        slideVerticalMotor.targetPosition = 1000
+        slideVerticalMotor.power = 0.8
+        sleep(400)
+        clawRotateServo.position = clawRotateOut
+        transferServo.position = transferDownPos
+        sleep(500)
 
         //MOVE TO HIGH BASKET AND PLACE SAMPLE
         drive.followTrajectorySequence(traj3)
 
-        slideVerticalMotor.targetPosition = highBasket
+        slideVerticalMotor.targetPosition = 3650
         slideVerticalMotor.power = 1.0
         sleep(1000)
 
+        //MOVE FORWARD SLIGHTLY
         drive.followTrajectorySequence(traj4)
 
-        clawServo.position = clawOpen
+        clawServo.position = clawServoOpen
         sleep(100)
-        slideVerticalMotor.targetPosition = 0
-        slideVerticalMotor.power = 0.5
-        sleep(500)
-
 
         //MOVE TO 2nd PIXEL AND PICK UP
         drive.followTrajectorySequence(traj5)
-
-        slideVerticalMotor.targetPosition = extendReach
-        slideVerticalMotor.power = 1.0
-        sleep(1500)
+        slideVerticalMotor.targetPosition = 0
+        slideVerticalMotor.power = -1.0
+        clawRotateServo.position = clawRotateRest
+        slideHorizontalMotor.targetPosition = 1000
+        slideHorizontalMotor.power = 1.0
+        sleep(500)
         intakeServo.power = 1.0
         sleep(1000)
         intakeServo.power = 0.0
-        slideVerticalMotor.targetPosition = 0
-        slideVerticalMotor.power = 1.0
-        //TransferSystemGoes Here
+        slideHorizontalMotor.targetPosition = 0
+        slideHorizontalMotor.power = -1.0
+
+        //TRANSFER
+        slideVerticalMotor.targetPosition = 400
+        if (slideVerticalMotor.currentPosition > slideVerticalMotor.targetPosition) { slideVerticalMotor.power = 0.8 }
+        else { slideVerticalMotor.power = -0.8 }
+        transferServo.position = transferUpPos
+        clawServo.position = clawServoOpen
+        clawRotateServo.position = clawRotateRest
+        sleep(750)
+        slideVerticalMotor.targetPosition = 100
+        if (slideVerticalMotor.currentPosition > slideVerticalMotor.targetPosition) { slideVerticalMotor.power = 0.8 }
+        else { slideVerticalMotor.power = -0.8 }
+        sleep(500)
+        clawServo.position = clawServoClosed
+        sleep(500)
+        slideVerticalMotor.targetPosition = 1000
+        slideVerticalMotor.power = 0.8
+        sleep(400)
+        clawRotateServo.position = clawRotateOut
+        transferServo.position = transferDownPos
+        sleep(500)
 
         //MOVE TO HIGH BASKET AND PLACE SECOND SAMPLE
         drive.followTrajectorySequence(traj6)
 
-        slideVerticalMotor.targetPosition = highBasket
+        slideVerticalMotor.targetPosition = 3650
         slideVerticalMotor.power = 1.0
         sleep(1000)
 
         drive.followTrajectorySequence(traj7)
 
-        clawServo.position = clawOpen
-        sleep(100)
+        clawServo.position = clawServoOpen
+        sleep(500)
+
+        drive.followTrajectorySequence(traj8)
+
+        clawRotateServo.position = clawRotateRest
         slideVerticalMotor.targetPosition = 0
         slideVerticalMotor.power = 0.5
         sleep(500)

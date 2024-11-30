@@ -37,7 +37,7 @@ class RB_First : DriveMethods() {
         val clawServo = hardwareMap.get(CRServo::class.java, "clawServo")
         val rotateServo = hardwareMap.get(Servo::class.java, "rotateServo")
 
-        rotateServo.position =  0.11
+        rotateServo.position = 0.11
 
         drive.poseEstimate = Pose2d(-34.09, -63.19, Math.toRadians(90.00))
         // Setup up the trajectory sequence (drive path)
@@ -48,9 +48,9 @@ class RB_First : DriveMethods() {
                 .build()
 
         val traj2: TrajectorySequence? =
-            drive.trajectorySequenceBuilder(Pose2d(-58.26,-57.0, Math.toRadians(225.0)))
+            drive.trajectorySequenceBuilder(Pose2d(-58.26, -57.0, Math.toRadians(225.0)))
                 .setReversed(true)
-                .lineToLinearHeading(Pose2d(-20.0,-45.0, Math.toRadians(135.0)))
+                .lineToLinearHeading(Pose2d(-20.0, -45.0, Math.toRadians(135.0)))
                 .setReversed(false)
                 .splineTo(Vector2d(-31.64, -37.09), Math.toRadians(135.20))
                 .build()
@@ -68,8 +68,8 @@ class RB_First : DriveMethods() {
                 .build()
 
 
-        val traj5: TrajectorySequence?=
-            drive.trajectorySequenceBuilder(Pose2d(-58.26,-57.0, Math.toRadians(225.0)))
+        val traj5: TrajectorySequence? =
+            drive.trajectorySequenceBuilder(Pose2d(-58.26, -57.0, Math.toRadians(225.0)))
                 .setReversed(true)
 //                .splineTo(Vector2d(-35.91, -31.73), Math.toRadians(90.00))
 //                .splineTo(Vector2d(-45.21, -13.68), Math.toRadians(170.00))

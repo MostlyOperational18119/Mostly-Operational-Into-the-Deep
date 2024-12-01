@@ -43,9 +43,9 @@ class BASKET_MEET_2 : DriveMethods() {
         slideHorizontalMotor.direction = DcMotorSimple.Direction.REVERSE
 
         //Servos
-        val clawRotateRest = 0.56
-        val clawRotateUpRight = 0.42
-        val clawRotateOut = 0.0
+        val clawRotateRest = 0.71
+        val clawRotateUpRight = 0.56
+        val clawRotateOut = 0.1
         val transferDownPos = 0.57
         val transferMidPos = 0.4
         val transferUpPos = 0.22
@@ -136,14 +136,14 @@ class BASKET_MEET_2 : DriveMethods() {
         sleep(200)
         clawServo.position = clawServoOpen
         sleep(200)
-        slideVerticalMotor.targetPosition = 3000
+        slideVerticalMotor.targetPosition = 2000
         slideVerticalMotor.power = 0.5
         sleep(100)
+        slideVerticalMotor.targetPosition = 0
+        slideVerticalMotor.power = -0.8
 
         //GO TO AND PICK UP FIRST SAMPLE
         drive.followTrajectorySequence(traj2)
-        slideVerticalMotor.targetPosition = 0
-        slideVerticalMotor.power = -0.8
 
         slideHorizontalMotor.targetPosition = 1000
         slideHorizontalMotor.power = 1.0

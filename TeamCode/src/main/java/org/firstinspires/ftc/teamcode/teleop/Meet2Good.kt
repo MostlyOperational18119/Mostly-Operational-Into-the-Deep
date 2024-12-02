@@ -149,9 +149,12 @@ class Meet2Good :LinearOpMode() {
         //ROADRUNNER
         val drive = SampleMecanumDrive(hardwareMap)
         drive.poseEstimate = PoseStorage.currentPose
-        val boxVector = Vector2d(-58.26, -57.64)
-        val boxHeading = Math.toRadians(225.00)
-        val boxPose = Pose2d(-58.26, -57.64, 225.0)
+        val basketVector = Vector2d(-58.26, -57.64)
+        val basketHeading = Math.toRadians(225.00)
+        //val basketPose = Pose2d(-58.26, -57.64, 225.0)
+        val barVector = Vector2d(-10.04, -34.01)
+        val barHeading = Math.toRadians(-90.00)
+        //val barPose = Pose2d(-10.04, -34.01, -90.0)
 
         //GAME PADS
         val controller1 = Gamepad()
@@ -175,7 +178,8 @@ class Meet2Good :LinearOpMode() {
             val leftY2 = -gamepad2.left_stick_y.toDouble()
             val rightY2 = -gamepad2.right_stick_y.toDouble()
 
-
+            //MOVEMENT + ODOMETRY
+            drive.update()
             when (automatedMovementToggle) {
                 AutomaticMovementState.Manual ->{
                     //MOVE
@@ -183,13 +187,27 @@ class Meet2Good :LinearOpMode() {
                     motorBL.power = (leftY - leftX + rightX) / speedDiv
                     motorFR.power = (leftY - leftX - rightX) / speedDiv
                     motorBR.power = (leftY + leftX - rightX) / speedDiv
+
+                    if (controller1.left_trigger>0.5) {
+                        val traj1 = drive.trajectoryBuilder(drive.poseEstimate)
+                            .splineTo(basketVector, basketHeading)
+                            .build()
+                        drive.followTrajectoryAsync(traj1)
+                        automatedMovementToggle = AutomaticMovementState.Auto
+                    }
+                    if (controller1.left_bumper) {
+                        val traj1 = drive.trajectoryBuilder(drive.poseEstimate)
+                            .splineTo(barVector, barHeading)
+                            .build()
+                        drive.followTrajectoryAsync(traj1)
+                        automatedMovementToggle = AutomaticMovementState.Auto
+                    }
                 }
 
                 AutomaticMovementState.Auto ->{
-
+                    if (!drive.isBusy) { automatedMovementToggle = AutomaticMovementState.Manual }
                 }
             }
-
 
             //RESET
             if (controller1.b&& !previousController1.b) {
@@ -383,6 +401,13 @@ class Meet2Good :LinearOpMode() {
                 }
             }
 
+            telemetry.addData("Odometry: ",
+                String.format(
+                    "Pose: %s, Velocity: %s",
+                    drive.poseEstimate.toString(),
+                    drive.getWheelVelocities().toString()
+                )
+            )
             telemetry.addData("Vertical Slide Power: ", slideVerticalMotor.power)
             telemetry.addData("Vertical Slide Target: ", slideVerticalMotor.targetPosition)
             telemetry.addData("Vertical Slide Position: ", slideVerticalMotor.currentPosition)
@@ -392,9 +417,8 @@ class Meet2Good :LinearOpMode() {
             telemetry.addData("Tape Measure Motor: ", tapeMeasureRotateMotor.currentPosition)
             telemetry.addData("Rotate Servo Position: ", clawRotateServo.position)
             telemetry.addData("Transfer Servo Position: ", transferServo.position)
-            telemetry.addData("Do Once thingy ", singleRunCheck)
-            telemetry.addData("Move Servo Toggle", moveRotateServo)
             telemetry.addLine("OpMode is active")
+
             telemetry.update()
         }
     }

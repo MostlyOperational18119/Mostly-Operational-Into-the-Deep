@@ -3,11 +3,12 @@ package org.firstinspires.ftc.teamcode.autonomous.OldAutonomous
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.CRServo
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.Servo
+import org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap
 //import org.firstinspires.ftc.teamcode.Autonomous.PoseStorage.colorSide
-import org.firstinspires.ftc.teamcode.DriveMethods
 import org.firstinspires.ftc.teamcode.autonomous.PoseStorage
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
@@ -17,7 +18,7 @@ import java.util.Locale
 // Autonomous
 
 @Autonomous(name = "RB_FIRST", group = "B")
-class RB_First : DriveMethods() {
+class RB_First : LinearOpMode() {
     override fun runOpMode() {
         // Setup Odometry :)
         val drive = SampleMecanumDrive(hardwareMap)

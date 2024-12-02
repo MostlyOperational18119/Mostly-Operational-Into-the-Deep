@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.teleop
 
 import android.transition.Slide
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.Gamepad
 import com.qualcomm.robotcore.hardware.Servo
-import org.firstinspires.ftc.teamcode.DriveMethods
+import org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap
 
-class NewTeleop : DriveMethods() {
+class NewTeleop : LinearOpMode() {
     override fun runOpMode() {
         val FL = hardwareMap.get(DcMotor::class.java, "motorFL")
         val BL = hardwareMap.get(DcMotor::class.java, "motorBL")

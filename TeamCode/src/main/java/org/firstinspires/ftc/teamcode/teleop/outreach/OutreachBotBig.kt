@@ -1,10 +1,16 @@
 package org.firstinspires.ftc.teamcode.teleop.outreach
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.Gamepad
+import com.qualcomm.robotcore.hardware.IMU
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation
 
 @TeleOp(name = "OutreachBotBig")
 class OutreachBotBig : LinearOpMode() {
@@ -30,6 +36,21 @@ class OutreachBotBig : LinearOpMode() {
         var currentGamepad1 = Gamepad()
         var previousGamepad1 = Gamepad()
 
+        // IMU
+        val imu = hardwareMap.get(IMU::class.java, "imu")
+
+        imu.initialize(
+            IMU.Parameters(
+                RevHubOrientationOnRobot(
+                    RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
+                    RevHubOrientationOnRobot.UsbFacingDirection.UP
+                )
+            )
+        )
+
+        // Orientation
+        var orientation: Orientation
+
         // Other variables
         val speedDiv = 2.0
         var rotateRunCounter = 0
@@ -47,6 +68,12 @@ class OutreachBotBig : LinearOpMode() {
             val gamepad1LeftY = -currentGamepad1.left_stick_y
             val gamepadLeftX = currentGamepad1.left_stick_x
             val gamepad1RightX = currentGamepad1.right_stick_x
+
+            orientation = imu.getRobotOrientation(
+                AxesReference.INTRINSIC,
+                AxesOrder.XYZ,
+                AngleUnit.DEGREES
+            )
 
             // Launch servo
             if (currentGamepad1.a && !previousGamepad1.a) {
@@ -94,6 +121,7 @@ class OutreachBotBig : LinearOpMode() {
             telemetry.addLine("Motor FR power: ${motorFR.power}")
             telemetry.addLine("Motor BL power: ${motorBL.power}")
             telemetry.addLine("Motor BR power: ${motorBR.power}")
+            telemetry.addLine("IMU: X: ${orientation.firstAngle}, Y: ${orientation.secondAngle}, Z: ${orientation.thirdAngle}")
             telemetry.update()
 
             sleep(30)

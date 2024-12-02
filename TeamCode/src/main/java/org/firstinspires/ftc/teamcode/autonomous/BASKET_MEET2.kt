@@ -3,18 +3,19 @@ package org.firstinspires.ftc.teamcode.autonomous
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.CRServo
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.Servo
+import org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap
 import org.firstinspires.ftc.teamcode.autonomous.PoseStorage
-import org.firstinspires.ftc.teamcode.DriveMethods
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
 import java.util.Locale
 
-@Autonomous(name = "BASKET_Meet2", group = "B")
-class BASKET_MEET_2 : DriveMethods() {
+@Autonomous(name = "BASKET_Meet2", group = "AAAA")
+class BASKET_MEET_2 : LinearOpMode() {
     override fun runOpMode() {
         val drive = SampleMecanumDrive(hardwareMap)
 
@@ -33,6 +34,10 @@ class BASKET_MEET_2 : DriveMethods() {
         }
 
         // MOTORS
+        val motorFL = hardwareMap.dcMotor["motorFL"]
+        val motorFR = hardwareMap.dcMotor["motorFR"]
+        val motorBL = hardwareMap.dcMotor["motorBL"]
+        val motorBR = hardwareMap.dcMotor["motorBR"]
         val slideVerticalMotor = hardwareMap.dcMotor["slideVertical"]
         val slideHorizontalMotor = hardwareMap.dcMotor["slideHorizontal"]
 

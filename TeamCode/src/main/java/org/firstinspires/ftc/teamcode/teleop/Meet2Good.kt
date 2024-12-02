@@ -13,7 +13,7 @@ import kotlin.math.abs
 
 @TeleOp(name = "Meet2Good\uD83E\uDD83\uD83E\uDD83", group = "Aardvark")
 class Meet2Good :LinearOpMode() {
-    enum class VerticalSlideState { Floor, Low, High, Manual }
+    enum class VerticalSlideState { Floor, Low, High, Manual, Bar }
     enum class HorizontalSlideState { Floor, Extend, Manual }
     enum class AutomaticTransferState { Pickup, Transfer }
     enum class AutomaticMovementState { Manual, Auto }
@@ -111,9 +111,11 @@ class Meet2Good :LinearOpMode() {
 //        setMotorModeEncoder(tapeMeasureRotateMotor)
 
         //SERVO POSITIONS
-        val clawRotateRest = 0.57
-        val clawRotateUpRight = 0.42
-        val clawRotateOut = 0.0
+        val clawRotateRest = 0.71
+        val clawRotateUpRight = 0.56
+        val clawWall = 0.24
+        val clawHorizontal = 0.18
+        val clawRotateOut = 0.1
         val intakeInPower = 1.0
         val intakeOutPower = -1.0
         val transferDownPos = 0.57
@@ -218,14 +220,14 @@ class Meet2Good :LinearOpMode() {
                     if (controller2.b && !previousController2.b){ automatedTransferToggle = AutomaticTransferState.Transfer }
 
                     //INTAKE SERVO
-                    if (controller2.right_bumper&& !previousController2.right_bumper){
+                    /*if (controller2.right_bumper&& !previousController2.right_bumper){
                         intakeInToggle = !intakeInToggle
                         intakeOutToggle = false
                     }
                     if (controller2.left_bumper&& !previousController2.left_bumper){
                         intakeOutToggle = !intakeOutToggle
                         intakeInToggle = false
-                    }
+                    }*/
                     if (intakeInToggle) { intakeServo?.power = intakeInPower }
                     else if (intakeOutToggle) { intakeServo?.power = intakeOutPower }
                     else { intakeServo?.power = 0.0 }
@@ -234,13 +236,14 @@ class Meet2Good :LinearOpMode() {
                     if (controller1.right_trigger > 0.5){ clawServo.position = clawServoClosed }
                     if (controller1.left_trigger  > 0.5){ clawServo.position = clawServoOpen }
 
-                    //ROTATE SERVO
-                    if (controller2.right_trigger > 0.5){ clawRotateServo.position = clawRotateOut }
-                    if (controller2.left_trigger  > 0.5){ clawRotateServo.position = clawRotateUpRight }
+                    if (controller2.dpad_left && !previousController2.dpad_left){clawRotateServo.position = clawWall}
+                    if (controller2.dpad_right && !previousController2.dpad_right){clawServo.position = clawRotateUpRight}
+                    if (controller2.dpad_down && !previousController2.dpad_down){ transferServo.position = transferDownPos }
+                    if (controller2.dpad_up  && !previousController2.dpad_up ){ transferServo.position = transferUpPos }
 
-                    //TRANSFER SERVO
-                    if (controller1.right_bumper && !previousController1.right_bumper){ transferServo.position = transferDownPos }
-                    if (controller1.left_bumper  && !previousController1.left_bumper ){ transferServo.position = transferMidPos }
+                    //ROTATE SERVO
+                    //if (controller2.right_trigger > 0.5){ clawRotateServo.position = clawRotateOut }
+                    //if (controller2.left_trigger  > 0.5){ clawRotateServo.position = clawRotateUpRight }
 
                     //HORIZONTAL MOTOR
                     if (controller2.y && !previousController2.y) {horizontalSlideToggle = HorizontalSlideState.Floor }
@@ -249,15 +252,17 @@ class Meet2Good :LinearOpMode() {
                     when (horizontalSlideToggle) {
                         HorizontalSlideState.Manual -> {
                             if (leftY2 > 0.0 && slideHorizontalMotor.currentPosition < horizontalSlideExtend) {
-                                slideHorizontalMotor.targetPosition = horizontalSlideExtend
-                                slideHorizontalMotor.power = leftY2 / 1.5
+                                slideHorizontalMotor.targetPosition = 2000
+                                slideHorizontalMotor.power = leftY2/1.5
                             } else if (leftY2 < 0.0 && slideHorizontalMotor.currentPosition > 0) {
                                 slideHorizontalMotor.targetPosition = 0
-                                slideHorizontalMotor.power = leftY2 / 1.5
-                            } else {
+                                slideHorizontalMotor.power = leftY2/1.5
+                            }
+                            else {
                                 slideHorizontalMotor.targetPosition = slideHorizontalMotor.currentPosition
                                 slideHorizontalMotor.power = 0.1
                             }
+
                         }
                         HorizontalSlideState.Floor -> {
                             slideHorizontalMotor.targetPosition = 0
@@ -276,23 +281,19 @@ class Meet2Good :LinearOpMode() {
                     }
 
                     //VERTICAL SLIDE
-                    if (controller2.dpad_down  && !previousController2.dpad_down) { verticalSlideToggle = VerticalSlideState.Floor }
-                    if (controller2.dpad_left  && !previousController2.dpad_left) { verticalSlideToggle = VerticalSlideState.Low   }
-                    if (controller2.dpad_up    && !previousController2.dpad_up)   { verticalSlideToggle = VerticalSlideState.High  }
-                    if (controller2.dpad_right && !previousController2.dpad_right){ verticalSlideToggle = VerticalSlideState.Manual}
+                    if (controller2.left_stick_button  && !previousController2.left_stick_button) { verticalSlideToggle = VerticalSlideState.Floor; clawRotateServo.position = clawRotateUpRight }
+                    if (controller2.right_bumper  && !previousController2.right_bumper) { verticalSlideToggle = VerticalSlideState.Low; clawRotateServo.position = clawHorizontal }
+                    if (controller2.right_trigger >= 0.5)   { verticalSlideToggle = VerticalSlideState.High; clawRotateServo.position = clawHorizontal }
+                    if (controller2.left_bumper && !previousController2.left_bumper){ verticalSlideToggle = VerticalSlideState.Bar; clawRotateServo.position = clawRotateUpRight}
 
                     when (verticalSlideToggle) {
                         VerticalSlideState.Manual -> {
                             if (rightY2 > 0.0 && slideVerticalMotor.currentPosition < verticalSlideHigh) {
-                                slideVerticalMotor.targetPosition = verticalSlideHigh
-                                slideVerticalMotor.power = rightY2 / 2
+                                slideVerticalMotor.targetPosition +=40
                             } else if (rightY2 < 0.0 && slideVerticalMotor.currentPosition > 0) {
-                                slideVerticalMotor.targetPosition = 0
-                                slideVerticalMotor.power = rightY2 / 2
-                            } else {
-                                slideVerticalMotor.targetPosition = slideVerticalMotor.currentPosition
-                                slideVerticalMotor.power = 0.8
+                                slideVerticalMotor.targetPosition -=40
                             }
+                            slideVerticalMotor.power = 1.0
                         }
                         VerticalSlideState.Floor -> {
                             slideVerticalMotor.targetPosition = 0
@@ -327,6 +328,17 @@ class Meet2Good :LinearOpMode() {
                                 verticalSlideToggle = VerticalSlideState.Manual
                             }
                         }
+                        VerticalSlideState.Bar -> {
+                            slideVerticalMotor.targetPosition = 1738
+                            if (slideVerticalMotor.targetPosition > slideVerticalMotor.currentPosition) {
+                                slideVerticalMotor.power = 0.8
+                            } else {
+                                slideVerticalMotor.power = -0.8
+                            }
+                            if (abs(slideVerticalMotor.currentPosition - verticalSlideHigh) < 20) {
+                                verticalSlideToggle = VerticalSlideState.Manual
+                            }
+                        }
                     }
                 }
                 AutomaticTransferState.Transfer ->{
@@ -349,7 +361,7 @@ class Meet2Good :LinearOpMode() {
 
                     if (moveRotateServo){
                         sleep(500)
-                        slideVerticalMotor.targetPosition = 100
+                        slideVerticalMotor.targetPosition = 80
                         if (slideVerticalMotor.currentPosition > slideVerticalMotor.targetPosition) { slideVerticalMotor.power = 0.8 }
                         else { slideVerticalMotor.power = -0.8 }
                         sleep(500)
@@ -359,7 +371,6 @@ class Meet2Good :LinearOpMode() {
                         slideVerticalMotor.power = 0.8
                         sleep(100)
                         clawRotateServo.position = clawRotateOut
-                        transferServo.position = transferDownPos
                         sleep(200)
                         moveRotateServo = false
                         singleRunCheck = 1

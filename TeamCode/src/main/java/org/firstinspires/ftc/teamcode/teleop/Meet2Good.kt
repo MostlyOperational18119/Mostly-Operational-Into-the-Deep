@@ -17,6 +17,7 @@ class Meet2Good :LinearOpMode() {
     enum class HorizontalSlideState { Floor, Extend, Manual }
     enum class AutomaticTransferState { Pickup, Transfer }
     enum class AutomaticMovementState { Manual, Auto }
+    enum class  HangStates { Up, Down, Reset, None}
 
     override fun runOpMode() {
         telemetry.addLine(when ((0..50).random()) {
@@ -144,6 +145,7 @@ class Meet2Good :LinearOpMode() {
         var verticalSlideToggle = VerticalSlideState.Manual
         var automatedTransferToggle = AutomaticTransferState.Pickup
         var automatedMovementToggle = AutomaticMovementState.Manual
+        var hangerState = HangStates.Reset
         var intakeInToggle = false
         var intakeOutToggle = false
 
@@ -262,8 +264,8 @@ class Meet2Good :LinearOpMode() {
                     if (controller1.right_trigger > 0.5){ clawServo.position = clawServoClosed }
                     if (controller1.left_trigger  > 0.5){ clawServo.position = clawServoOpen }
 
-                    if (controller1.x && !previousController1.x){hangerMotor.targetPosition = 2000; hangerMotor.power = 1.0}
-                    if (controller1.y && !previousController1.y){hangerMotor.targetPosition = 0; hangerMotor.power = -1.0}
+                    if (controller1.x && !previousController1.x){hangerMotor.targetPosition = 2000; hangerMotor.power = 0.2}
+                    if (controller1.y && !previousController1.y){hangerMotor.targetPosition = 0; hangerMotor.power = -0.2}
                     if (controller1.a && !previousController1.a){hangPusher.position = servoHangActive}
                     if (controller1.b && !previousController1.b){hangPusher.position = servoHangPassive}
 
@@ -308,6 +310,31 @@ class Meet2Good :LinearOpMode() {
                             if (abs(slideVerticalMotor.currentPosition - horizontalSlideExtend) < 50) {
                                 horizontalSlideToggle = HorizontalSlideState.Manual
                             }
+                        }
+                    }
+
+                    when (hangerState) {
+                        HangStates.None -> {
+                            hangerMotor.power = 0.0 //HangTouch
+                        }
+                        HangStates.Up -> {
+                            slideVerticalMotor.targetPosition = 5800
+                            if (slideVerticalMotor.targetPosition > slideVerticalMotor.currentPosition) {
+                                slideVerticalMotor.power = 1.0
+                            } else {
+                                slideVerticalMotor.power = -0.1
+                            }
+                        }
+                        HangStates.Down -> {
+                            slideVerticalMotor.targetPosition = 0
+                            if (slideVerticalMotor.targetPosition > slideVerticalMotor.currentPosition) {
+                                slideVerticalMotor.power = 0.1
+                            } else {
+                                slideVerticalMotor.power = -1.0
+                            }
+                        }
+                        HangStates.Reset -> {
+
                         }
                     }
 
@@ -421,6 +448,7 @@ class Meet2Good :LinearOpMode() {
                     drive.getWheelVelocities().toString()
                 )
             )
+            telemetry.addLine(hangerMotor.currentPosition.toString())
             telemetry.addData("Vertical Slide Power: ", slideVerticalMotor.power)
             telemetry.addData("Vertical Slide Target: ", slideVerticalMotor.targetPosition)
             telemetry.addData("Vertical Slide Position: ", slideVerticalMotor.currentPosition)

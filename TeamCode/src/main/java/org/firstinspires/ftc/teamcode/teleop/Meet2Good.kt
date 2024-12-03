@@ -7,12 +7,13 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.Gamepad
+import org.firstinspires.ftc.teamcode.DriveMethods
 import org.firstinspires.ftc.teamcode.autonomous.PoseStorage
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive
 import kotlin.math.abs
 
 @TeleOp(name = "Meet2Good\uD83E\uDD83\uD83E\uDD83", group = "Aardvark")
-class Meet2Good :LinearOpMode() {
+class Meet2Good : DriveMethods() {
     enum class VerticalSlideState { Floor, Low, High, Manual, Bar }
     enum class HorizontalSlideState { Floor, Extend, Manual }
     enum class AutomaticTransferState { Pickup, Transfer }
@@ -74,20 +75,6 @@ class Meet2Good :LinearOpMode() {
         })
         telemetry.update()
 
-        fun setMotorModeEncoder(motor: DcMotor) {
-            motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
-            motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-            motor.mode = DcMotor.RunMode.RUN_USING_ENCODER
-            motor.power = 0.0
-        }
-
-        fun setMotorModePosition(motor: DcMotor) {
-            motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
-            motor.targetPosition = 0
-            motor.mode = DcMotor.RunMode.RUN_TO_POSITION
-            motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-        }
-
         // MOTORS
         val motorFL = hardwareMap.dcMotor["motorFL"]
         val motorFR = hardwareMap.dcMotor["motorFR"]
@@ -111,20 +98,6 @@ class Meet2Good :LinearOpMode() {
         tapeMeasureRotateMotor.targetPosition = 0
 //        setMotorModeEncoder(grabberExtensionMotor)
 //        setMotorModeEncoder(tapeMeasureRotateMotor)
-
-        //SERVO POSITIONS
-        val clawRotateRest = 0.75
-        val clawRotateUpRight = 0.6
-        val clawRotateOut = 0.1
-        val clawRotateStraight = 0.2
-        val clawRotateWall = 0.28
-        val transferDownPos = 0.57
-        val servoHangActive = 0.44
-        val servoHangPassive = 0.3
-        val transferMidPos = 0.4
-        val transferUpPos = 0.20
-        val clawServoOpen = 0.13
-        val clawServoClosed = 0.26
 
         //SERVOS
         val intakeServo = hardwareMap.crservo["intakeServo"]
@@ -158,12 +131,6 @@ class Meet2Good :LinearOpMode() {
         val barVector = Vector2d(-10.04, -34.01)
         val barHeading = Math.toRadians(-90.00)
         //val barPose = Pose2d(-10.04, -34.01, -90.0)
-
-        //GAME PADS
-        val controller1 = Gamepad()
-        val controller2 = Gamepad()
-        val previousController1 = Gamepad()
-        val previousController2 = Gamepad()
 
         waitForStart()
 

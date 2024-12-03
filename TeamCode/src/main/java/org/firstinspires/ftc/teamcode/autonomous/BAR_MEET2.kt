@@ -6,28 +6,15 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
+import org.firstinspires.ftc.teamcode.DriveMethods
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive
 import java.util.Locale
 
 
 @Autonomous(name = "BAR_Meet2", group = "AAAA")
-class BAR_MEET2 : LinearOpMode() {
+class BAR_MEET2 : DriveMethods() {
     override fun runOpMode() {
         val drive = SampleMecanumDrive(hardwareMap)
-
-        fun setMotorModeEncoder(motor: DcMotor) {
-            motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
-            motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-            motor.mode = DcMotor.RunMode.RUN_USING_ENCODER
-            motor.power = 0.0
-        }
-
-        fun setMotorModePosition(motor: DcMotor) {
-            motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
-            motor.targetPosition = 0
-            motor.mode = DcMotor.RunMode.RUN_TO_POSITION
-            motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-        }
 
         // MOTORS
         val motorFL = hardwareMap.dcMotor["motorFL"]
@@ -44,18 +31,6 @@ class BAR_MEET2 : LinearOpMode() {
         slideHorizontalMotor.direction = DcMotorSimple.Direction.REVERSE
 
         //Servos
-        val clawRotateRest = 0.75
-        val clawRotateUpRight = 0.6
-        val clawRotateOut = 0.1
-        val clawRotateStraight = 0.2
-        val clawRotateWall = 0.28
-        val transferDownPos = 0.57
-        val transferMidPos = 0.4
-        val transferUpPos = 0.20
-        val clawServoOpen = 0.13
-        val clawServoClosed = 0.26
-
-
         val intakeServo = hardwareMap.crservo["intakeServo"]
         val clawServo = hardwareMap.servo["clawServo"]
         val transferServo = hardwareMap.servo["transferServo"]
@@ -65,11 +40,7 @@ class BAR_MEET2 : LinearOpMode() {
         val hangPusher = hardwareMap.servo["hangPusher"]
 
         drive.poseEstimate = Pose2d(12.08, -63.19, Math.toRadians(-90.00))
-        // Setup up the trajectory sequence (drive path)
-
-        //STILL NEED TO CONNECT EVERYTHING TOGETHER
-
-
+        
         val traj1 =
             drive.trajectorySequenceBuilder(Pose2d(12.08, -63.19, Math.toRadians(-90.00)))
                 .setReversed(true)

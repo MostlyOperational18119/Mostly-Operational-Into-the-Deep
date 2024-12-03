@@ -101,6 +101,7 @@ class Meet2Good :LinearOpMode() {
         motorBR.direction = DcMotorSimple.Direction.REVERSE
         motorFR.direction = DcMotorSimple.Direction.REVERSE
         setMotorModePosition(slideVerticalMotor)
+        setMotorModePosition(hangerMotor)
         slideVerticalMotor.direction = DcMotorSimple.Direction.REVERSE
         setMotorModePosition(slideHorizontalMotor)
         slideHorizontalMotor.direction = DcMotorSimple.Direction.REVERSE
@@ -111,18 +112,18 @@ class Meet2Good :LinearOpMode() {
 //        setMotorModeEncoder(tapeMeasureRotateMotor)
 
         //SERVO POSITIONS
-        val clawRotateRest = 0.71
-        val clawRotateUpRight = 0.56
-        val clawWall = 0.24
-        val clawHorizontal = 0.18
+        val clawRotateRest = 0.75
+        val clawRotateUpRight = 0.6
         val clawRotateOut = 0.1
-        val intakeInPower = 1.0
-        val intakeOutPower = -1.0
+        val clawRotateStraight = 0.2
+        val clawRotateWall = 0.28
         val transferDownPos = 0.57
+        val servoHangActive = 0.44
+        val servoHangPassive = 0.3
         val transferMidPos = 0.4
-        val transferUpPos = 0.22
+        val transferUpPos = 0.20
         val clawServoOpen = 0.13
-        val clawServoClosed = 0.23
+        val clawServoClosed = 0.26
 
         //SERVOS
         val intakeServo = hardwareMap.crservo["intakeServo"]
@@ -188,20 +189,22 @@ class Meet2Good :LinearOpMode() {
                     motorFR.power = (leftY - leftX - rightX) / speedDiv
                     motorBR.power = (leftY + leftX - rightX) / speedDiv
 
-                    if (controller1.left_trigger>0.5) {
-                        val traj1 = drive.trajectoryBuilder(drive.poseEstimate)
-                            .splineTo(basketVector, basketHeading)
-                            .build()
-                        drive.followTrajectoryAsync(traj1)
-                        automatedMovementToggle = AutomaticMovementState.Auto
-                    }
-                    if (controller1.left_bumper) {
-                        val traj1 = drive.trajectoryBuilder(drive.poseEstimate)
-                            .splineTo(barVector, barHeading)
-                            .build()
-                        drive.followTrajectoryAsync(traj1)
-                        automatedMovementToggle = AutomaticMovementState.Auto
-                    }
+//                    if (controller1.left_trigger>0.5) {
+//                        val traj1 =  drive.trajectorySequenceBuilder(drive.poseEstimate)
+//                            .setReversed(false)
+//                            .splineTo(basketVector, basketHeading)
+//                            .build()
+//                        drive.followTrajectorySequenceAsync(traj1)
+//                        automatedMovementToggle = AutomaticMovementState.Auto
+//                    }
+//                    if (controller1.left_bumper) {
+//                        val traj1 =  drive.trajectorySequenceBuilder(drive.poseEstimate)
+//                            .setReversed(false)
+//                            .splineTo(barVector, barHeading)
+//                            .build()
+//                        drive.followTrajectorySequenceAsync(traj1)
+//                        automatedMovementToggle = AutomaticMovementState.Auto
+//                    }
                 }
 
                 AutomaticMovementState.Auto ->{
@@ -235,26 +238,36 @@ class Meet2Good :LinearOpMode() {
             when (automatedTransferToggle) {
                 AutomaticTransferState.Pickup -> {
                     //TRANSFER TOGGLE
-                    if (controller2.b && !previousController2.b){ automatedTransferToggle = AutomaticTransferState.Transfer }
+                    //if (controller2.b && !previousController2.b){ automatedTransferToggle = AutomaticTransferState.Transfer }
 
                     //INTAKE SERVO
-                    /*if (controller2.right_bumper&& !previousController2.right_bumper){
+                    if (controller2.x&& !previousController2.x){
                         intakeInToggle = !intakeInToggle
                         intakeOutToggle = false
                     }
-                    if (controller2.left_bumper&& !previousController2.left_bumper){
+                    if (controller2.b&& !previousController2.b){
                         intakeOutToggle = !intakeOutToggle
                         intakeInToggle = false
-                    }*/
-                    if (intakeInToggle) { intakeServo?.power = intakeInPower }
-                    else if (intakeOutToggle) { intakeServo?.power = intakeOutPower }
+                    }
+                    if (intakeInToggle) { intakeServo?.power = 1.0 }
+                    else if (intakeOutToggle) { intakeServo?.power = -1.0 }
                     else { intakeServo?.power = 0.0 }
 
-                    //CLAW SERVO
+                    if (controller2.y && !previousController2.y && clawServo.position == clawServoOpen){clawServo.position = clawServoClosed} else if (controller2.y && !previousController2.y) {clawServo.position = clawServoOpen}
+                    if (controller2.a && !previousController2.a){ automatedTransferToggle = AutomaticTransferState.Transfer }
+
+                    if (leftY2 >= 0.2 || leftY2 <= -0.2){verticalSlideToggle = VerticalSlideState.Manual}
+
+                    //CLAW SERVO1
                     if (controller1.right_trigger > 0.5){ clawServo.position = clawServoClosed }
                     if (controller1.left_trigger  > 0.5){ clawServo.position = clawServoOpen }
 
-                    if (controller2.dpad_left && !previousController2.dpad_left){clawRotateServo.position = clawWall}
+                    if (controller1.x && !previousController1.x){hangerMotor.targetPosition = 2000; hangerMotor.power = 1.0}
+                    if (controller1.y && !previousController1.y){hangerMotor.targetPosition = 0; hangerMotor.power = -1.0}
+                    if (controller1.a && !previousController1.a){hangPusher.position = servoHangActive}
+                    if (controller1.b && !previousController1.b){hangPusher.position = servoHangPassive}
+
+                    if (controller2.dpad_left && !previousController2.dpad_left){clawRotateServo.position = clawRotateWall}
                     if (controller2.dpad_right && !previousController2.dpad_right){clawServo.position = clawRotateUpRight}
                     if (controller2.dpad_down && !previousController2.dpad_down){ transferServo.position = transferDownPos }
                     if (controller2.dpad_up  && !previousController2.dpad_up ){ transferServo.position = transferUpPos }
@@ -265,7 +278,7 @@ class Meet2Good :LinearOpMode() {
 
                     //HORIZONTAL MOTOR
                     if (controller2.y && !previousController2.y) {horizontalSlideToggle = HorizontalSlideState.Floor }
-                    if (controller2.x && !previousController2.x) {horizontalSlideToggle = HorizontalSlideState.Extend }
+                    //if (controller2.x && !previousController2.x) {horizontalSlideToggle = HorizontalSlideState.Extend }
 
                     when (horizontalSlideToggle) {
                         HorizontalSlideState.Manual -> {
@@ -300,8 +313,8 @@ class Meet2Good :LinearOpMode() {
 
                     //VERTICAL SLIDE
                     if (controller2.left_stick_button  && !previousController2.left_stick_button) { verticalSlideToggle = VerticalSlideState.Floor; clawRotateServo.position = clawRotateUpRight }
-                    if (controller2.right_bumper  && !previousController2.right_bumper) { verticalSlideToggle = VerticalSlideState.Low; clawRotateServo.position = clawHorizontal }
-                    if (controller2.right_trigger >= 0.5)   { verticalSlideToggle = VerticalSlideState.High; clawRotateServo.position = clawHorizontal }
+                    if (controller2.right_bumper  && !previousController2.right_bumper) { verticalSlideToggle = VerticalSlideState.Low; clawRotateServo.position = clawRotateStraight }
+                    if (controller2.right_trigger >= 0.5)   { verticalSlideToggle = VerticalSlideState.High; clawRotateServo.position = clawRotateStraight }
                     if (controller2.left_bumper && !previousController2.left_bumper){ verticalSlideToggle = VerticalSlideState.Bar; clawRotateServo.position = clawRotateUpRight}
 
                     when (verticalSlideToggle) {

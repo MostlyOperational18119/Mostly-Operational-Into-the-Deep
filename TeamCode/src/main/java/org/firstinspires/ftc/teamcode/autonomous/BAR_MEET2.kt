@@ -44,38 +44,42 @@ class BAR_MEET2 : LinearOpMode() {
         slideHorizontalMotor.direction = DcMotorSimple.Direction.REVERSE
 
         //Servos
-        val clawRotateRest = 0.71
-        val clawRotateUpRight = 0.56
+        val clawRotateRest = 0.75
+        val clawRotateUpRight = 0.6
         val clawRotateOut = 0.1
+        val clawRotateStraight = 0.2
+        val clawRotateWall = 0.28
         val transferDownPos = 0.57
         val transferMidPos = 0.4
-        val transferUpPos = 0.22
+        val transferUpPos = 0.20
         val clawServoOpen = 0.13
-        val clawServoClosed = 0.23
+        val clawServoClosed = 0.26
+
 
         val intakeServo = hardwareMap.crservo["intakeServo"]
         val clawServo = hardwareMap.servo["clawServo"]
         val transferServo = hardwareMap.servo["transferServo"]
+        transferServo.position = transferUpPos
         val clawRotateServo = hardwareMap.servo["rotateServo"]
         clawRotateServo.position = clawRotateUpRight
         val hangPusher = hardwareMap.servo["hangPusher"]
 
-        drive.poseEstimate = Pose2d(-34.09, -63.19, Math.toRadians(-90.00))
+        drive.poseEstimate = Pose2d(12.08, -63.19, Math.toRadians(-90.00))
         // Setup up the trajectory sequence (drive path)
 
         //STILL NEED TO CONNECT EVERYTHING TOGETHER
 
 
         val traj1 =
-            drive.trajectorySequenceBuilder(Pose2d(12.08, -65.91, Math.toRadians(90.00)))
-                .splineTo(Vector2d(9.33, -31.92), Math.toRadians(88.60))
+            drive.trajectorySequenceBuilder(Pose2d(12.08, -63.19, Math.toRadians(-90.00)))
                 .setReversed(true)
+                .splineTo(Vector2d(9.33, -42.4), Math.toRadians(90.0))
+                .setReversed(false)
                 .build()
 
         val traj2 =
-            drive.trajectorySequenceBuilder(drive.poseEstimate)
-                .lineTo(Vector2d(32.12, -46.46))
-                .setReversed(false)
+            drive.trajectorySequenceBuilder(Pose2d(9.33,-42.4 ,Math.toRadians(-90.0)))
+                .lineTo(Vector2d(32.12, -48.46))
                 .lineTo(Vector2d(37.42, -10.12))
                 .lineTo(Vector2d(47.44, -11.49))
                 .lineTo(Vector2d(48.62, -59.23))
@@ -86,13 +90,13 @@ class BAR_MEET2 : LinearOpMode() {
                 .build()
 
         val traj3 =
-            drive.trajectorySequenceBuilder(drive.poseEstimate)
+            drive.trajectorySequenceBuilder(Pose2d(56.28, -63.16 ,Math.toRadians(90.0)))
                 .lineTo(Vector2d(9.14, -32.71))
-                .setReversed(true)
                 .build()
 
         val traj4 =
-            drive.trajectorySequenceBuilder(drive.poseEstimate)
+            drive.trajectorySequenceBuilder(Pose2d(9.14, -32.71 ,Math.toRadians(90.0)))
+                .setReversed(true)
                 .lineTo(Vector2d(50.98, -61.59))
                 .setReversed(false)
                 .build()
@@ -114,25 +118,25 @@ class BAR_MEET2 : LinearOpMode() {
 
 
         //PLACE SPECIMEN ON HIGH BAR
-        clawRotateServo.position = clawRotateOut
-        slideVerticalMotor.targetPosition = 1100
-        slideVerticalMotor.power = 1.0
+//        clawRotateServo.position = clawRotateOut
+//        slideVerticalMotor.targetPosition = 1100
+//        slideVerticalMotor.power = 1.0
 
         drive.followTrajectorySequence(traj1)
         drive.updatePoseEstimate()
 
-        slideVerticalMotor.targetPosition = 800
-        slideVerticalMotor.power = -1.0
-        sleep(500)
-        clawServo.position = clawServoOpen
-        sleep(200)
-        slideVerticalMotor.targetPosition = 1100
-        slideVerticalMotor.power = 1.0
-        sleep(300)
-
-        slideVerticalMotor.targetPosition = 0
-        slideVerticalMotor.power = -1.0
-        clawRotateServo.position = clawRotateUpRight
+//        slideVerticalMotor.targetPosition = 800
+//        slideVerticalMotor.power = -1.0
+//        sleep(500)
+//        clawServo.position = clawServoOpen
+//        sleep(200)
+//        slideVerticalMotor.targetPosition = 1100
+//        slideVerticalMotor.power = 1.0
+//        sleep(300)
+//
+//        slideVerticalMotor.targetPosition = 0
+//        slideVerticalMotor.power = -1.0
+//        clawRotateServo.position = clawRotateUpRight
 
         drive.followTrajectorySequence(traj2)
         drive.updatePoseEstimate()

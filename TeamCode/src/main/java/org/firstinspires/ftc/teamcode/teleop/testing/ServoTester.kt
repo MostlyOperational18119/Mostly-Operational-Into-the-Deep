@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo
 class ServoTester : LinearOpMode() {
     override fun runOpMode() {
 
-        val Servo1 = hardwareMap.servo["rotateServo"]
+        val Servo1 = hardwareMap.servo["hangPusher"]
         Servo1.position = 0.2
 
         telemetry.addData("Status", "Initialized")

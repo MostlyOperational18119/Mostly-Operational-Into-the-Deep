@@ -240,8 +240,8 @@ class OtherMapping: DriveMethods() {
                     if (controller1.b && !previousController1.b){hangPusher.position = servoHangPassive}
 
                     //ROTATE SERVO
-                    if (controller1.dpad_up && !previousController1.dpad_up) {clawRotateServo.position +=0.1}
-                    if (controller1.dpad_up && !previousController1.dpad_down) {clawRotateServo.position -=0.1}
+                    if (controller1.dpad_right && !previousController1.dpad_right) {clawRotateServo.position +=0.1}
+                    if (controller1.dpad_left && !previousController1.dpad_left) {clawRotateServo.position -=0.1}
                     if (controller2.x && !previousController2.x){clawRotateServo.position = clawRotateStraight}
                     if (controller2.y && !previousController2.y){clawRotateServo.position = clawRotateOut}
                     if (controller2.a && !previousController2.a){ transferServo.position  = clawRotateUpRight }
@@ -421,15 +421,15 @@ class OtherMapping: DriveMethods() {
                 )
             )
             telemetry.addLine(hangerMotor.currentPosition.toString())
+            telemetry.addData("Tape Measure Motor: ", tapeMeasureRotateMotor.currentPosition)
+            telemetry.addData("Rotate Servo Position: ", clawRotateServo.position)
+            telemetry.addData("Transfer Servo Position: ", transferServo.position)
             telemetry.addData("Vertical Slide Power: ", slideVerticalMotor.power)
             telemetry.addData("Vertical Slide Target: ", slideVerticalMotor.targetPosition)
             telemetry.addData("Vertical Slide Position: ", slideVerticalMotor.currentPosition)
             telemetry.addData("Horizontal Slide Power: ", slideHorizontalMotor.power)
             telemetry.addData("Horizontal Slide Target: ", slideHorizontalMotor.targetPosition)
             telemetry.addData("Horizontal Slide Position: ", slideHorizontalMotor.currentPosition)
-            telemetry.addData("Tape Measure Motor: ", tapeMeasureRotateMotor.currentPosition)
-            telemetry.addData("Rotate Servo Position: ", clawRotateServo.position)
-            telemetry.addData("Transfer Servo Position: ", transferServo.position)
             telemetry.addLine("OpMode is active")
 
             telemetry.update()

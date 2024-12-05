@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleop
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
-import com.acmerobotics.roadrunner.geometry.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import org.firstinspires.ftc.teamcode.DriveMethods
@@ -92,9 +91,6 @@ class OtherMapping: DriveMethods() {
         slideHorizontalMotor.direction = DcMotorSimple.Direction.REVERSE
         setMotorModePosition(tapeMeasureRotateMotor)
         setMotorModePosition(hangerMotor)
-        tapeMeasureRotateMotor.targetPosition = 0
-//        setMotorModeEncoder(grabberExtensionMotor)
-//        setMotorModeEncoder(tapeMeasureRotateMotor)
 
         //SERVOS
         val intakeServo = hardwareMap.crservo["intakeServo"]
@@ -125,12 +121,6 @@ class OtherMapping: DriveMethods() {
         //ROADRUNNER
         val drive = SampleMecanumDrive(hardwareMap)
         drive.poseEstimate = PoseStorage.currentPose
-        val basketVector = Vector2d(-58.26, -57.64)
-        val basketHeading = Math.toRadians(225.00)
-        //val basketPose = Pose2d(-58.26, -57.64, 225.0)
-        val barVector = Vector2d(-10.04, -34.01)
-        val barHeading = Math.toRadians(-90.00)
-        //val barPose = Pose2d(-10.04, -34.01, -90.0)
 
         waitForStart()
 
@@ -147,7 +137,7 @@ class OtherMapping: DriveMethods() {
 
             //INPUTS
             val leftY = -gamepad1.left_stick_y.toDouble()*reverseDrive // Remember, Y stick is reversed!
-            val leftX = gamepad1.left_stick_x.toDouble()
+            val leftX = gamepad1.left_stick_x.toDouble()*reverseDrive
             val rightX = gamepad1.right_stick_x.toDouble()
             val leftY2 = -gamepad2.left_stick_y.toDouble()
             val rightY2 = -gamepad2.right_stick_y.toDouble()
@@ -162,6 +152,7 @@ class OtherMapping: DriveMethods() {
                     motorFR.power = (leftY - leftX - rightX) / speedDiv
                     motorBR.power = (leftY + leftX - rightX) / speedDiv
 
+                    //AUTOMATIC MOVEMENT TO BASKET
                     if (controller1.right_bumper) {
                         val traj1 =  drive.trajectorySequenceBuilder(drive.poseEstimate)
                             .lineToLinearHeading(Pose2d(-51.5, -51.5, Math.toRadians(45.00)))
@@ -169,6 +160,7 @@ class OtherMapping: DriveMethods() {
                         drive.followTrajectorySequenceAsync(traj1)
                         automatedMovementToggle = AutomaticMovementState.Auto
                     }
+                    //AUTOMATIC MOVEMENT TO BAR
                     if (controller1.right_trigger > 0.5) {
                         val traj1 =  drive.trajectorySequenceBuilder(drive.poseEstimate)
                             .lineToLinearHeading(Pose2d(-10.04, -42.4, Math.toRadians(-90.0)))
@@ -178,12 +170,13 @@ class OtherMapping: DriveMethods() {
                     }
                 }
 
+                //IF ODOMETRY IS NOT HAPPENING, YOU CAN MANUAL
                 AutomaticMovementState.Auto ->{
                     if (!drive.isBusy) { automatedMovementToggle = AutomaticMovementState.Manual }
                 }
             }
 
-            //RESET
+            //RESET ALL MOTORS
             if (controller1.left_trigger > 0.5) {
                 motorBR.direction = DcMotorSimple.Direction.REVERSE
                 motorFR.direction = DcMotorSimple.Direction.REVERSE

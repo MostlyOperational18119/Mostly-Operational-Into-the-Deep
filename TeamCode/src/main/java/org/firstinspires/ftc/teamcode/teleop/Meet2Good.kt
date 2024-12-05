@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive
 import kotlin.math.abs
 
 @TeleOp(name = "Meet2Good\uD83E\uDD83\uD83E\uDD83", group = "Aardvark")
-class Meet2Good : DriveMethods() {
+class Meet2Good: DriveMethods() {
     enum class VerticalSlideState { Floor, Low, High, Manual, Bar }
     enum class HorizontalSlideState { Floor, Extend, Manual }
     enum class AutomaticTransferState { Pickup, Transfer }
@@ -190,11 +190,11 @@ class Meet2Good : DriveMethods() {
             }
 
             //HANGING
-            if (controller2.a && !previousController2.a) {
-                hangPusher.position = 0.00 //linear position here
-                sleep(3000)
-                hangerMotor.targetPosition = 100 //motor pos here
-            }
+//            if (controller2.a && !previousController2.a) {
+//                hangPusher.position = 0.00 //linear position here
+//                sleep(3000)
+//                hangerMotor.targetPosition = 100 //motor pos here
+//            }
 
 //          if (gamepad1.left_trigger >= 0.2) {
 //              tapeMeasureRotateMotor.power = 1.0
@@ -222,10 +222,26 @@ class Meet2Good : DriveMethods() {
                     else if (intakeOutToggle) { intakeServo?.power = -1.0 }
                     else { intakeServo?.power = 0.0 }
 
-                    if (controller2.y && !previousController2.y && clawServo.position == clawServoOpen){clawServo.position = clawServoClosed} else if (controller2.y && !previousController2.y) {clawServo.position = clawServoOpen}
+                    if (controller2.y && !previousController2.y && clawServo.position == clawServoOpen){
+                        clawServo.position = clawServoClosed
+                    }
+                    else if (controller2.y && !previousController2.y) {
+                        clawServo.position = clawServoOpen
+                    }
+
                     if (controller2.a && !previousController2.a){ automatedTransferToggle = AutomaticTransferState.Transfer }
 
                     if (leftY2 >= 0.2 || leftY2 <= -0.2){verticalSlideToggle = VerticalSlideState.Manual}
+                    if (leftY >= 0.2 || leftY <= -0.2){horizontalSlideToggle = HorizontalSlideState.Manual}
+
+                    if (controller2.left_stick_button && !previousController2.left_stick_button) {
+                        transferServo.position = transferUpPos
+                        if (slideHorizontalMotor.currentPosition <= 400) {
+                            horizontalSlideToggle = HorizontalSlideState.Extend
+                        } else {
+                            horizontalSlideToggle = HorizontalSlideState.Floor
+                        }
+                    }
 
                     //CLAW SERVO1
                     if (controller1.right_trigger > 0.5){ clawServo.position = clawServoClosed }
@@ -237,7 +253,7 @@ class Meet2Good : DriveMethods() {
                     if (controller1.b && !previousController1.b){hangPusher.position = servoHangPassive}
 
                     if (controller2.dpad_left && !previousController2.dpad_left){clawRotateServo.position = clawRotateWall}
-                    if (controller2.dpad_right && !previousController2.dpad_right){clawServo.position = clawRotateUpRight}
+                    if (controller2.dpad_right && !previousController2.dpad_right){clawRotateServo.position = clawRotateUpRight}
                     if (controller2.dpad_down && !previousController2.dpad_down){ transferServo.position = transferDownPos }
                     if (controller2.dpad_up  && !previousController2.dpad_up ){ transferServo.position = transferUpPos }
 
@@ -306,10 +322,10 @@ class Meet2Good : DriveMethods() {
                     }
 
                     //VERTICAL SLIDE
-                    if (controller2.left_stick_button  && !previousController2.left_stick_button) { verticalSlideToggle = VerticalSlideState.Floor; clawRotateServo.position = clawRotateUpRight }
+                    if (controller2.right_stick_button  && !previousController2.left_stick_button) { verticalSlideToggle = VerticalSlideState.Floor; clawRotateServo.position = clawRotateUpRight }
                     if (controller2.right_bumper  && !previousController2.right_bumper) { verticalSlideToggle = VerticalSlideState.Low; clawRotateServo.position = clawRotateStraight }
-                    if (controller2.right_trigger >= 0.5)   { verticalSlideToggle = VerticalSlideState.High; clawRotateServo.position = clawRotateStraight }
-                    if (controller2.left_bumper && !previousController2.left_bumper){ verticalSlideToggle = VerticalSlideState.Bar; clawRotateServo.position = clawRotateUpRight}
+                    if (controller2.right_trigger >= 0.5)   { verticalSlideToggle = VerticalSlideState.High; clawRotateServo.position = clawRotateOut }
+                    if (controller2.left_bumper && !previousController2.left_bumper){ verticalSlideToggle = VerticalSlideState.Bar; clawRotateServo.position = clawRotateStraight}
 
                     when (verticalSlideToggle) {
                         VerticalSlideState.Manual -> {

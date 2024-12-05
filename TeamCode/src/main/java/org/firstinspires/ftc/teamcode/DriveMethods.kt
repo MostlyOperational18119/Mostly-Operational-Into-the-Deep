@@ -7,18 +7,18 @@ import com.qualcomm.robotcore.hardware.Gamepad
 
 
 abstract class DriveMethods : LinearOpMode() {
-    val clawRotateRest = 0.75
-    val clawRotateUpRight = 0.6
-    val clawRotateOut = 0.1
-    val clawRotateStraight = 0.2
-    val clawRotateWall = 0.28
+    val clawRotateRest = 0.64
+    val clawRotateUpRight = 0.48
+    val clawRotateOut = 0.0
+    val clawRotateStraight = 0.08
+    val clawRotateWall = 0.16
     val transferDownPos = 0.57
     val servoHangActive = 0.44
     val servoHangPassive = 0.3
     val transferMidPos = 0.4
     val transferUpPos = 0.20
-    val clawServoOpen = 0.13
-    val clawServoClosed = 0.26
+    val clawServoOpen = 0.1
+    val clawServoClosed = 0.22
 
     var motorFL: DcMotor? = null
     var motorBL: DcMotor? = null

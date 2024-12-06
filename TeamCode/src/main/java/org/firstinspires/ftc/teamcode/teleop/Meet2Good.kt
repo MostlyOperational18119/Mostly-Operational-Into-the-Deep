@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.autonomous.PoseStorage
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive
 import kotlin.math.abs
 
-@TeleOp(name = "Meet2Good\uD83E\uDD83\uD83E\uDD83", group = "Aardvark")
+@TeleOp(name = "Meet2Good\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83", group = "Aardvark")
 class Meet2Good: DriveMethods() {
     enum class VerticalSlideState { Floor, Low, High, Manual, Bar }
     enum class HorizontalSlideState { Floor, Extend, Manual }
@@ -110,7 +110,7 @@ class Meet2Good: DriveMethods() {
         //VARIABLES
         val verticalSlideLow = 2300
         val verticalSlideHigh = 3650
-        val horizontalSlideExtend = 2000
+        val horizontalSlideExtend = 1600
         val speedDiv = 2
         var singleRunCheck = 1
         var moveRotateServo = false
@@ -268,7 +268,7 @@ class Meet2Good: DriveMethods() {
                     when (horizontalSlideToggle) {
                         HorizontalSlideState.Manual -> {
                             if (leftY2 > 0.0 && slideHorizontalMotor.currentPosition < horizontalSlideExtend) {
-                                slideHorizontalMotor.targetPosition = 2000
+                                slideHorizontalMotor.targetPosition = horizontalSlideExtend
                                 slideHorizontalMotor.power = leftY2/1.5
                             } else if (leftY2 < 0.0 && slideHorizontalMotor.currentPosition > 0) {
                                 slideHorizontalMotor.targetPosition = 0

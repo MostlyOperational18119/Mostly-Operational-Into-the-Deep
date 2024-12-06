@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.autonomous.PoseStorage
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive
 import kotlin.math.abs
 
-@TeleOp(name = "Meet2Good\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83", group = "Aardvark")
+@TeleOp(name = "Meet2Good\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83", group = "Aardvark")
 class Meet2Good: DriveMethods() {
     enum class VerticalSlideState { Floor, Low, High, Manual, Bar }
     enum class HorizontalSlideState { Floor, Extend, Manual }
@@ -111,7 +111,7 @@ class Meet2Good: DriveMethods() {
         val verticalSlideLow = 2300
         val verticalSlideHigh = 3650
         val horizontalSlideExtend = 1600
-        val speedDiv = 2
+        val speedDiv = 2.3
         var singleRunCheck = 1
         var moveRotateServo = false
         var horizontalSlideToggle = HorizontalSlideState.Manual

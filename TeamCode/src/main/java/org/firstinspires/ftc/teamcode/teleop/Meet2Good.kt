@@ -184,12 +184,12 @@ class Meet2Good: DriveMethods() {
             }
 
             //RESET
-            if (controller1.b&& !previousController1.b) {
-                setMotorModePosition(slideVerticalMotor)
-                setMotorModeEncoder(tapeMeasureRotateMotor)
-                setMotorModePosition(slideHorizontalMotor)
-                setMotorModeEncoder(hangerMotor)
-            }
+            //if (controller1.b&& !previousController1.b) {
+            //    setMotorModePosition(slideVerticalMotor)
+            //    setMotorModeEncoder(tapeMeasureRotateMotor)
+            //    setMotorModePosition(slideHorizontalMotor)
+            //    setMotorModeEncoder(hangerMotor)
+            //}
 
             //HANGING
 /*            if (controller2.a && !previousController2.a) {
@@ -198,13 +198,13 @@ class Meet2Good: DriveMethods() {
                 hangerMotor.targetPosition = 100 //motor pos here
             }*/
 
-          if (controller1.left_bumper && !previousController1.left_bumper) {
-              hangerState = HangStates.Up
-          }
+          //if (controller1.left_bumper && !previousController1.left_bumper) {
+          //    hangerState = HangStates.Up
+          //}
 
-            if (controller1.right_bumper && !previousController1.right_bumper) {
-                hangerState = HangStates.Reset
-            }
+           // if (controller1.right_bumper && !previousController1.right_bumper) {
+            //    hangerState = HangStates.Reset
+           // }
 
             when (automatedTransferToggle) {
                 AutomaticTransferState.Pickup -> {
@@ -246,11 +246,11 @@ class Meet2Good: DriveMethods() {
                     }
 
                     //CLAW SERVO1
-                    if (controller1.right_trigger > 0.5){ clawServo.position = clawServoClosed }
-                    if (controller1.left_trigger  > 0.5){ clawServo.position = clawServoOpen }
+                    //if (controller1.right_trigger > 0.5){ clawServo.position = clawServoClosed }
+                    //if (controller1.left_trigger  > 0.5){ clawServo.position = clawServoOpen }
 
-                    if (controller1.x && !previousController1.x){hangerMotor.targetPosition = 2000; hangerMotor.power = 0.2}
-                    if (controller1.y && !previousController1.y){hangerMotor.targetPosition = 0; hangerMotor.power = -0.2}
+                    //if (controller1.x && !previousController1.x){hangerMotor.targetPosition = 2000; hangerMotor.power = 0.2}
+                    //if (controller1.y && !previousController1.y){hangerMotor.targetPosition = 0; hangerMotor.power = -0.2}
                     if (controller1.a && !previousController1.a){hangPusher.position = servoHangActive}
                     if (controller1.b && !previousController1.b){hangPusher.position = servoHangPassive}
 

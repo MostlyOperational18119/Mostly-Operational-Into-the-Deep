@@ -298,7 +298,7 @@ class Meet2Good: DriveMethods() {
 
                     when (hangerState) {
                         HangStates.None -> {
-                            hangerMotor.power = 0.0 //HangTouch
+                            hangerMotor.power = 0.0
                         }
                         HangStates.Up -> {
                             slideVerticalMotor.targetPosition = 5800
@@ -317,7 +317,7 @@ class Meet2Good: DriveMethods() {
                             }
                         }
                         HangStates.Reset -> {
-
+                            //HangTouch
                         }
                     }
 
@@ -387,7 +387,7 @@ class Meet2Good: DriveMethods() {
                         intakeServo?.power = 0.0
                         slideHorizontalMotor.targetPosition = 0
                         slideHorizontalMotor.power = -0.8
-                        slideVerticalMotor.targetPosition = 400
+                        slideVerticalMotor.targetPosition = 250
                         if (slideVerticalMotor.currentPosition > slideVerticalMotor.targetPosition) { slideVerticalMotor.power = 0.8 }
                         else { slideVerticalMotor.power = -0.8 }
                         transferServo.position = transferUpPos

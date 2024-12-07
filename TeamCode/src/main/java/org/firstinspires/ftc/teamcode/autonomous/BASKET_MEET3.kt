@@ -45,7 +45,7 @@ class BASKET_MEET_3 : DriveMethods() {
         val traj1: TrajectorySequence? =
             drive.trajectorySequenceBuilder( Pose2d(-34.09, -63.19, Math.toRadians(-90.00)))
                 .setReversed(true)
-                .lineToConstantHeading(Vector2d(-10.04, -42.4))
+                .lineToConstantHeading(Vector2d(-10.04, -42.15))
                 .setReversed(false)
                 .build()
 
@@ -87,13 +87,12 @@ class BASKET_MEET_3 : DriveMethods() {
 
         val traj8: TrajectorySequence? =
             drive.trajectorySequenceBuilder(Pose2d(-52.5, -52.5, Math.toRadians(45.00)))
-                .lineTo(Vector2d(-45.0, -45.0))
+                .lineTo(Vector2d(-44.0, -44.0))
                 .build()
 
         val traj9: TrajectorySequence? =
             drive.trajectorySequenceBuilder(Pose2d(-45.0, -45.0, Math.toRadians(45.00)))
                 .lineTo(Vector2d(-56.0, -56.0))
-                .turn(Math.toRadians(45.0))
                 .build()
 
 
@@ -110,7 +109,7 @@ class BASKET_MEET_3 : DriveMethods() {
         if (isStopRequested) return
 
         //PLACE SPECIMEN ON HIGH BAR
-        slideVerticalMotor.targetPosition = 1750
+        slideVerticalMotor.targetPosition = 1600
         slideVerticalMotor.power = 1.0
         clawRotateServo.position = clawRotateStraight
 
@@ -139,13 +138,14 @@ class BASKET_MEET_3 : DriveMethods() {
         intakeServo.power = 0.0
         slideHorizontalMotor.targetPosition = 0
         slideHorizontalMotor.power = -1.0
+        clawRotateServo.position = clawRotateUpRight
 
         //TRANSFER
         transferServo.position = transferUpPos
         clawServo.position = clawServoOpen
         clawRotateServo.position = clawRotateRest
         sleep(500)
-        slideVerticalMotor.targetPosition = 80
+        slideVerticalMotor.targetPosition = 0
         slideVerticalMotor.power = -1.0
         sleep(500)
         clawServo.position = clawServoClosed
@@ -153,8 +153,8 @@ class BASKET_MEET_3 : DriveMethods() {
         slideVerticalMotor.targetPosition = 3650
         slideVerticalMotor.power = 1.0
         clawRotateServo.position = clawRotateOut
-        transferServo.position = transferDownPos
         sleep(1100)
+        transferServo.position = transferDownPos
 
         //MOVE TO HIGH BASKET AND PLACE SAMPLE
         drive.followTrajectorySequence(traj3)
@@ -177,13 +177,14 @@ class BASKET_MEET_3 : DriveMethods() {
         intakeServo.power = 0.0
         slideHorizontalMotor.targetPosition = 0
         slideHorizontalMotor.power = -1.0
+        clawRotateServo.position = clawRotateUpRight
 
         //TRANSFER
         transferServo.position = transferUpPos
         clawServo.position = clawServoOpen
         clawRotateServo.position = clawRotateRest
         sleep(500)
-        slideVerticalMotor.targetPosition = 80
+        slideVerticalMotor.targetPosition = 0
         slideVerticalMotor.power = -1.0
         sleep(500)
         clawServo.position = clawServoClosed
@@ -191,8 +192,8 @@ class BASKET_MEET_3 : DriveMethods() {
         slideVerticalMotor.targetPosition = 3650
         slideVerticalMotor.power = 1.0
         clawRotateServo.position = clawRotateOut
-        transferServo.position = transferDownPos
         sleep(1100)
+        transferServo.position = transferDownPos
 
         //MOVE TO HIGH BASKET AND PLACE SECOND SAMPLE
         drive.followTrajectorySequence(traj5)
@@ -217,11 +218,12 @@ class BASKET_MEET_3 : DriveMethods() {
         slideHorizontalMotor.power = -1.0
 
         //TRANSFER
+        clawRotateServo.position = clawRotateUpRight
         transferServo.position = transferUpPos
         clawServo.position = clawServoOpen
         clawRotateServo.position = clawRotateRest
         sleep(500)
-        slideVerticalMotor.targetPosition = 80
+        slideVerticalMotor.targetPosition = 0
         slideVerticalMotor.power = -1.0
         sleep(500)
         clawServo.position = clawServoClosed
@@ -229,8 +231,8 @@ class BASKET_MEET_3 : DriveMethods() {
         slideVerticalMotor.targetPosition = 3650
         slideVerticalMotor.power = 1.0
         clawRotateServo.position = clawRotateOut
-        transferServo.position = transferDownPos
         sleep(1100)
+        transferServo.position = transferDownPos
 
         drive.followTrajectorySequence(traj7)
         drive.updatePoseEstimate()
@@ -242,11 +244,12 @@ class BASKET_MEET_3 : DriveMethods() {
         slideVerticalMotor.targetPosition = 0
         slideVerticalMotor.power = -0.6
 
-        clawRotateServo.position = clawRotateUpRight
         drive.followTrajectorySequence(traj8)
+        sleep(200)
+        clawRotateServo.position = clawRotateUpRight
+        sleep(500)
         slideVerticalMotor.targetPosition = 0
         slideVerticalMotor.power = -1.0
-        clawRotateServo.position = clawRotateUpRight
         drive.followTrajectorySequence(traj9)
         drive.updatePoseEstimate()
 

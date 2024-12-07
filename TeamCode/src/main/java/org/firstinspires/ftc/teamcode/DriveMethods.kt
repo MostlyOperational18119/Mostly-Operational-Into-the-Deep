@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Gamepad
 
 
 abstract class DriveMethods : LinearOpMode() {
-    val clawRotateRest = 0.64
+    val clawRotateRest = 0.63
     val clawRotateUpRight = 0.48
     val clawRotateOut = 0.0
     val clawRotateStraight = 0.08
@@ -16,7 +16,7 @@ abstract class DriveMethods : LinearOpMode() {
     val servoHangActive = 0.44
     val servoHangPassive = 0.3
     val transferMidPos = 0.4
-    val transferUpPos = 0.20
+    val transferUpPos = 0.18
     val clawServoOpen = 0.1
     val clawServoClosed = 0.22
 
@@ -43,6 +43,18 @@ abstract class DriveMethods : LinearOpMode() {
 
     fun setMotorModePosition(motor: DcMotor) {
         motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+        motor.targetPosition = 0
+        motor.mode = DcMotor.RunMode.RUN_TO_POSITION
+        motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+    }
+
+    fun setMotorModeEncoderNo(motor: DcMotor) {
+        motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+        motor.mode = DcMotor.RunMode.RUN_USING_ENCODER
+        motor.power = 0.0
+    }
+
+    fun setMotorModePositionNo(motor: DcMotor) {
         motor.targetPosition = 0
         motor.mode = DcMotor.RunMode.RUN_TO_POSITION
         motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE

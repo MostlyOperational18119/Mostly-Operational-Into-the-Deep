@@ -88,13 +88,13 @@ class Meet2Good: DriveMethods() {
         //MOTORS MODES
         motorBR.direction = DcMotorSimple.Direction.REVERSE
         motorFR.direction = DcMotorSimple.Direction.REVERSE
-        setMotorModePosition(slideVerticalMotor)
-        setMotorModePosition(hangerMotor)
+        setMotorModePositionNo(slideVerticalMotor)
+        setMotorModePositionNo(hangerMotor)
         slideVerticalMotor.direction = DcMotorSimple.Direction.REVERSE
         setMotorModePosition(slideHorizontalMotor)
         slideHorizontalMotor.direction = DcMotorSimple.Direction.REVERSE
-        setMotorModeEncoder(tapeMeasureRotateMotor)
-        setMotorModeEncoder(hangerMotor)
+        setMotorModeEncoderNo(tapeMeasureRotateMotor)
+        setMotorModeEncoderNo(hangerMotor)
         tapeMeasureRotateMotor.targetPosition = 0
 //        setMotorModeEncoder(grabberExtensionMotor)
 //        setMotorModeEncoder(tapeMeasureRotateMotor)
@@ -394,7 +394,7 @@ class Meet2Good: DriveMethods() {
                         intakeServo?.power = 0.0
                         slideHorizontalMotor.targetPosition = 0
                         slideHorizontalMotor.power = -0.8
-                        slideVerticalMotor.targetPosition = 250
+                        slideVerticalMotor.targetPosition = 0
                         if (slideVerticalMotor.currentPosition > slideVerticalMotor.targetPosition) { slideVerticalMotor.power = 0.8 }
                         else { slideVerticalMotor.power = -0.8 }
                         transferServo.position = transferUpPos
@@ -409,7 +409,7 @@ class Meet2Good: DriveMethods() {
 
                     if (moveRotateServo){
                         sleep(500)
-                        slideVerticalMotor.targetPosition = 80
+                        slideVerticalMotor.targetPosition = 0
                         if (slideVerticalMotor.currentPosition > slideVerticalMotor.targetPosition) { slideVerticalMotor.power = 0.8 }
                         else { slideVerticalMotor.power = -0.8 }
                         sleep(500)

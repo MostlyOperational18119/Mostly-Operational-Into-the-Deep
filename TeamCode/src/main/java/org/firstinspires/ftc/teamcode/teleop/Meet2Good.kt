@@ -107,6 +107,8 @@ class Meet2Good: DriveMethods() {
         clawRotateServo.position = clawRotateUpRight
         val hangPusher = hardwareMap.servo["hangPusher"] // Linear servo
 
+        val hangTouch = hardwareMap.touchSensor["HangTouch"]
+
         //VARIABLES
         val verticalSlideLow = 2300
         val verticalSlideHigh = 3650
@@ -118,7 +120,7 @@ class Meet2Good: DriveMethods() {
         var verticalSlideToggle = VerticalSlideState.Manual
         var automatedTransferToggle = AutomaticTransferState.Pickup
         var automatedMovementToggle = AutomaticMovementState.Manual
-        var hangerState = HangStates.Reset
+        var hangerState = HangStates.None
         var intakeInToggle = false
         var intakeOutToggle = false
 
@@ -190,19 +192,19 @@ class Meet2Good: DriveMethods() {
             }
 
             //HANGING
-//            if (controller2.a && !previousController2.a) {
-//                hangPusher.position = 0.00 //linear position here
-//                sleep(3000)
-//                hangerMotor.targetPosition = 100 //motor pos here
-//            }
+/*            if (controller2.a && !previousController2.a) {
+                hangPusher.position = 0.00 //linear position here
+                sleep(3000)
+                hangerMotor.targetPosition = 100 //motor pos here
+            }*/
 
-//          if (gamepad1.left_trigger >= 0.2) {
-//              tapeMeasureRotateMotor.power = 1.0
-//          } else if (gamepad1.right_trigger >= 0.2) {
-//              tapeMeasureRotateMotor.power = -1.0
-//          } else {
-//              tapeMeasureRotateMotor.power = 0.0
-//          }
+          if (controller1.left_bumper && !previousController1.left_bumper) {
+              hangerState = HangStates.Up
+          }
+
+            if (controller1.right_bumper && !previousController1.right_bumper) {
+                hangerState = HangStates.Reset
+            }
 
             when (automatedTransferToggle) {
                 AutomaticTransferState.Pickup -> {
@@ -301,23 +303,28 @@ class Meet2Good: DriveMethods() {
                             hangerMotor.power = 0.0
                         }
                         HangStates.Up -> {
-                            slideVerticalMotor.targetPosition = 5800
-                            if (slideVerticalMotor.targetPosition > slideVerticalMotor.currentPosition) {
-                                slideVerticalMotor.power = 1.0
+                            hangerMotor.targetPosition = 12000
+                            if (hangerMotor.targetPosition > hangerMotor.currentPosition) {
+                                hangerMotor.power = 1.0
                             } else {
-                                slideVerticalMotor.power = -0.1
+                                hangerMotor.power = -0.1
                             }
                         }
                         HangStates.Down -> {
-                            slideVerticalMotor.targetPosition = 0
-                            if (slideVerticalMotor.targetPosition > slideVerticalMotor.currentPosition) {
-                                slideVerticalMotor.power = 0.1
+                            hangerMotor.targetPosition = 0
+                            if (hangerMotor.targetPosition > hangerMotor.currentPosition) {
+                                hangerMotor.power = 0.1
                             } else {
-                                slideVerticalMotor.power = -1.0
+                                hangerMotor.power = -1.0
                             }
                         }
                         HangStates.Reset -> {
-                            //HangTouch
+                            while (!hangTouch.isPressed) {
+                                hangerMotor.power = -0.5
+                            }
+                            hangerMotor.power = 0.0
+                            setMotorModePosition(hangerMotor)
+                            hangerState = HangStates.None
                         }
                     }
 
@@ -432,6 +439,8 @@ class Meet2Good: DriveMethods() {
                 )
             )
             telemetry.addLine(hangerMotor.currentPosition.toString())
+            telemetry.addLine(hangerMotor.targetPosition.toString())
+            telemetry.addLine(hangTouch.isPressed.toString())
             telemetry.addData("Vertical Slide Power: ", slideVerticalMotor.power)
             telemetry.addData("Vertical Slide Target: ", slideVerticalMotor.targetPosition)
             telemetry.addData("Vertical Slide Position: ", slideVerticalMotor.currentPosition)

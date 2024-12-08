@@ -1,19 +1,16 @@
 package org.firstinspires.ftc.teamcode.teleop
 
-import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
-import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
-import com.qualcomm.robotcore.hardware.Gamepad
-import org.firstinspires.ftc.teamcode.DriveMethods
+import com.qualcomm.robotcore.util.ElapsedTime
+import org.firstinspires.ftc.teamcode.Methods
 import org.firstinspires.ftc.teamcode.autonomous.PoseStorage
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive
 import kotlin.math.abs
 
 @TeleOp(name = "Meet2Good\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83", group = "Aardvark")
-class Meet2Good: DriveMethods() {
+class Meet2Good: Methods() {
     enum class VerticalSlideState { Floor, Low, High, Manual, Bar }
     enum class HorizontalSlideState { Floor, Extend, Manual }
     enum class AutomaticTransferState { Pickup, Transfer }
@@ -21,59 +18,7 @@ class Meet2Good: DriveMethods() {
     enum class  HangStates { Up, Down, Reset, None}
 
     override fun runOpMode() {
-        telemetry.addLine(when ((0..50).random()) {
-            1 -> "good luck buddy"
-            2 -> "\"what spectrum?\""
-            3 -> "MostlyOp >>> AHoT"
-            4 -> "01101011 01101001 01101100 01101100 00100000 01111001 01101111 01110101 01110010 01110011 01100101 01101100 01100110"
-            5 -> "I LOVE ULTRAKILL!!!!!!!!!!!!"
-            6 -> "\"just hit clean build\""
-            7 -> "this match is gonna be ghoulish green"
-            8 -> "we are so back"
-            9 -> "ok so would you rather have a 1% chance of becoming a turkey everyday or..."
-            10 -> "RIP damien mode 2022-2023"
-            11 -> "build freeze at 3 AM challenge (GONE WRONG)"
-            12 -> "\"who unqueued my song?\""
-            13 -> "at least we don't have a pushbot! (not confirmed, high likelyhood of pushbot)"
-            14 -> "whoever set continuous rotation as the default is my #1 opp"
-            15 -> "shoutout to Huy for being our insider <3"
-            16 -> "why does jack always come to TR3? Is he stupid?"
-            17 -> "Nick, I need you to sand this."
-            18 -> "I wish fame and good fortune upon Sachal's bloodline"
-            19 -> "-((2 / (1 + (exp(-(target - Pos) / speed)))) - 1) * max"
-            20 -> "\"the grid system is stupid.\" *starts pointing at poles*"
-            21 -> "James, how many orange cups have you eaten today?"
-            22 -> "Tennisball is the newest sport sweeping across the nation!"
-            23 -> "our robot has been too big for the bounding box on 3 different occasions."
-            24 -> "cord control is not real"
-            25 -> "in Raytheon we trust"
-            26 -> "drive practice is for nerds."
-            27 -> "Sebastian (yum)"
-            28 -> "this is the abyss of our hero's journey."
-            29 -> "beware the FTC to Raytheon pipeline"
-            30 -> "when build says 15 minutes, expect 30. When programming says 15 minutes, expect 2-60."
-            31 -> "99% of programmers quit right before the working push"
-            32 -> "Tiger Woods PGA tour 2005 has always been there"
-            33 -> "THIS SENT ME \n sent you where? \n TO FINLAND \u1F1E"
-            34 -> "How purple?"
-            35 -> "That is fragrantly upside down"
-            36 -> "I literally just stand here and look at you guys and think god when is this done"
-            37 -> "They should be singing in the closet"
-            38 -> "autoByJames"
-            39 -> "anti-fluent"
-            40 -> "fire in the hole"
-            41 -> "Antidisestablishmentarianism is a position that advocates that a state church (the \"established church\") should continue to receive government patronage, rather than be disestablished (i.e., be separated from the state)."
-            42 -> "#include <iostream>\n\nint main() {\n\tstd::cout << \"Hello World!\\n\";\n\treturn 0;\n}\n"
-            43 -> "fn main() {\n\tprintln!(\"Hello World!\");\n}\n"
-            44 -> "console.log(\"Hello World!\");"
-            45 -> "package main\n\nimport \"fmt\"\n\nfunc main() {\n\tfmt.Println(\"Hello World!\")\n}\n"
-            46 -> "with Text_IO; use Text_IO;\nprocedure hello is\nbegin\n\tPut_Line(\"Hello world!\");\nend hello;\n"
-            47 -> ">++++++++[<+++++++++>-]<.>++++[<+++++++>-]<+.+++++++..+++.>>++++++[<+++++++>-]<++.------------.>++++++[<+++++++++>-]<+.<.+++.------.--------.>>>++++[<++++++++>-]<+."
-            48 -> "main = putStrLn \"Hello, World!\""
-            49 -> "https://lhohq.info"
-            else -> "Why did we add these?"
-        })
-        telemetry.update()
+        insideJokes ()
 
         // MOTORS
         val motorFL = hardwareMap.dcMotor["motorFL"]
@@ -88,13 +33,13 @@ class Meet2Good: DriveMethods() {
         //MOTORS MODES
         motorBR.direction = DcMotorSimple.Direction.REVERSE
         motorFR.direction = DcMotorSimple.Direction.REVERSE
-        setMotorModePositionNo(slideVerticalMotor)
-        setMotorModePositionNo(hangerMotor)
+        setMotorModePositionNoReset(slideVerticalMotor)
+        setMotorModePositionNoReset(hangerMotor)
         slideVerticalMotor.direction = DcMotorSimple.Direction.REVERSE
         setMotorModePosition(slideHorizontalMotor)
         slideHorizontalMotor.direction = DcMotorSimple.Direction.REVERSE
-        setMotorModeEncoderNo(tapeMeasureRotateMotor)
-        setMotorModeEncoderNo(hangerMotor)
+        setMotorModeEncoderNoReset(tapeMeasureRotateMotor)
+        setMotorModeEncoderNoReset(hangerMotor)
         tapeMeasureRotateMotor.targetPosition = 0
 //        setMotorModeEncoder(grabberExtensionMotor)
 //        setMotorModeEncoder(tapeMeasureRotateMotor)
@@ -106,7 +51,6 @@ class Meet2Good: DriveMethods() {
         val clawRotateServo = hardwareMap.servo["rotateServo"]
         clawRotateServo.position = clawRotateUpRight
         val hangPusher = hardwareMap.servo["hangPusher"] // Linear servo
-
         val hangTouch = hardwareMap.touchSensor["HangTouch"]
 
         //VARIABLES
@@ -123,6 +67,7 @@ class Meet2Good: DriveMethods() {
         var hangerState = HangStates.None
         var intakeInToggle = false
         var intakeOutToggle = false
+        val elapsedTime = ElapsedTime()
 
         //ROADRUNNER
         val drive = SampleMecanumDrive(hardwareMap)
@@ -135,6 +80,7 @@ class Meet2Good: DriveMethods() {
         //val barPose = Pose2d(-10.04, -34.01, -90.0)
 
         waitForStart()
+        elapsedTime.reset()
 
         while (opModeIsActive()) {
             //GAME PADS
@@ -451,7 +397,6 @@ class Meet2Good: DriveMethods() {
             telemetry.addData("Rotate Servo Position: ", clawRotateServo.position)
             telemetry.addData("Transfer Servo Position: ", transferServo.position)
             telemetry.addLine("OpMode is active")
-
             telemetry.update()
         }
     }

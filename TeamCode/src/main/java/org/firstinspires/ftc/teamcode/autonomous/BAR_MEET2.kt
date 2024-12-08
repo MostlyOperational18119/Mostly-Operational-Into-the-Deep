@@ -3,16 +3,14 @@ package org.firstinspires.ftc.teamcode.autonomous
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
-import org.firstinspires.ftc.teamcode.DriveMethods
+import org.firstinspires.ftc.teamcode.Methods
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive
 import java.util.Locale
 
 
 @Autonomous(name = "BAR_Meet2", group = "AAAA")
-class BAR_MEET2 : DriveMethods() {
+class BAR_MEET2 : Methods() {
     override fun runOpMode() {
         val drive = SampleMecanumDrive(hardwareMap)
 

@@ -2,11 +2,10 @@ package org.firstinspires.ftc.teamcode.teleop
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.DcMotorSimple
-import org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap
-import org.firstinspires.ftc.teamcode.DriveMethods
+import org.firstinspires.ftc.teamcode.Methods
 
 @TeleOp(name = "RESETMOTORS", group = "Aardvark")
-class ResetMotors : DriveMethods() {
+class ResetMotors : Methods() {
     override fun runOpMode() {
         // MOTORS
         val motorFL = hardwareMap.dcMotor["motorFL"]

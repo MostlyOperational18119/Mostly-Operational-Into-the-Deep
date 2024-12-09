@@ -3,39 +3,13 @@ package org.firstinspires.ftc.teamcode.autonomous
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
-import com.qualcomm.robotcore.hardware.DcMotorSimple
 import org.firstinspires.ftc.teamcode.Methods
-import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive
-import java.util.Locale
-
 
 @Autonomous(name = "BAR_Meet2", group = "AAAA")
-class BAR_MEET2 : Methods() {
+class BAR2 : Methods() {
     override fun runOpMode() {
-        val drive = SampleMecanumDrive(hardwareMap)
-
-        // MOTORS
-        val motorFL = hardwareMap.dcMotor["motorFL"]
-        val motorFR = hardwareMap.dcMotor["motorFR"]
-        val motorBL = hardwareMap.dcMotor["motorBL"]
-        val motorBR = hardwareMap.dcMotor["motorBR"]
-        val slideVerticalMotor = hardwareMap.dcMotor["slideVertical"]
-        val slideHorizontalMotor = hardwareMap.dcMotor["slideHorizontal"]
-
-        //MOTORS MODES
-        setMotorModePosition(slideVerticalMotor)
-        slideVerticalMotor.direction = DcMotorSimple.Direction.REVERSE
-        setMotorModePosition(slideHorizontalMotor)
-        slideHorizontalMotor.direction = DcMotorSimple.Direction.REVERSE
-
-        //Servos
-        val intakeServo = hardwareMap.crservo["intakeServo"]
-        val clawServo = hardwareMap.servo["clawServo"]
-        val transferServo = hardwareMap.servo["transferServo"]
-        transferServo.position = transferUpPos
-        val clawRotateServo = hardwareMap.servo["rotateServo"]
-        clawRotateServo.position = clawRotateUpRight
-        val hangPusher = hardwareMap.servo["hangPusher"]
+        initMotors()
+        initServosAndTouch()
 
         drive.poseEstimate = Pose2d(12.08, -63.19, Math.toRadians(-90.00))
         
@@ -70,20 +44,7 @@ class BAR_MEET2 : Methods() {
                 .setReversed(false)
                 .build()
 
-
-
-        // Tell the User the Robot has been initialized
-        telemetry.addData("Status", "Initialized")
-        telemetry.update()
-
-
-        // Wait for the game to start (driver presses PLAY)
         waitForStart()
-        telemetry.addLine("started")
-        telemetry.update()
-        if (isStopRequested) return
-        telemetry.addLine("not stopped")
-        telemetry.update()
 
 
         //PLACE SPECIMEN ON HIGH BAR
@@ -118,18 +79,7 @@ class BAR_MEET2 : Methods() {
         drive.updatePoseEstimate()
         sleep(500)
 
-        while (opModeIsActive() && !isStopRequested) {
-            drive.update()
-        }
-        telemetry.addLine("tried to run code")
-        telemetry.update()
-        sleep(1000)
-        val (x, y, heading) = drive.poseEstimate
-        telemetry.addData(
-            "Current Position",
-            String.format(Locale.ENGLISH, "X: %f, Y: %f, and Rotation: %f", x, y, heading)
-        )
-        telemetry.update()
+        while (opModeIsActive() && !isStopRequested) { drive.update() }
         PoseStorage.currentPose = drive.poseEstimate
     }
 }

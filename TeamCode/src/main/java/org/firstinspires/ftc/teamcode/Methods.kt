@@ -9,6 +9,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.Gamepad
 import com.qualcomm.robotcore.hardware.Servo
 import com.qualcomm.robotcore.hardware.TouchSensor
+import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
 import kotlin.math.abs
 
 
@@ -42,6 +44,7 @@ abstract class Methods : LinearOpMode() {
     var intakeInToggle = false
     var intakeOutToggle = false
 
+    val drive = SampleMecanumDrive(hardwareMap)
     val basketVector = Vector2d(-58.26, -57.64)
     val basketHeading = Math.toRadians(225.00)
     val barVector = Vector2d(-10.04, -34.01)
@@ -89,6 +92,16 @@ abstract class Methods : LinearOpMode() {
         sleep(200)
     }
 
+    fun placeSpecimen(){
+        transferServo!!.position = transferDownPos
+        clawServo!!.position = clawServoClosed
+        verticalSlideTo(500,1.0)
+        sleep(500)
+        clawServo!!.position = clawServoOpen
+        sleep(200)
+        clawRotateServo!!.position = clawRotateUpRight
+    }
+
     //Sets the position of verical motor and moves. Only uses 1 power since it checks.
     fun verticalSlideTo(position : Int, power : Double){
         slideVerticalMotor!!.targetPosition = position
@@ -126,7 +139,7 @@ abstract class Methods : LinearOpMode() {
     }
 
     //The slow but consistent transfer when the slide is already down
-    fun transferSlowDown (){
+    fun transferFromDownToHigh(){
         intakeServo!!.power = 0.0
         horizontalSlideTo(0,1.0)
         clawRotateServo!!.position = clawRotateUpRight
@@ -139,9 +152,9 @@ abstract class Methods : LinearOpMode() {
         sleep(500)
         clawServo!!.position = clawServoClosed
         sleep(500)
-        verticalSlideTo(1000,1.0)
+        verticalSlideTo(3650,1.0)
         clawRotateServo!!.position = clawRotateOut
-        sleep(1500)
+        sleep(1100)
         transferServo!!.position = transferDownPos
     }
 

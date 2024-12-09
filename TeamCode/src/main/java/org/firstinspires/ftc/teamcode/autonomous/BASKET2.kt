@@ -3,14 +3,12 @@ package org.firstinspires.ftc.teamcode.autonomous
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
-import com.qualcomm.robotcore.hardware.DcMotorSimple
 import org.firstinspires.ftc.teamcode.Methods
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
-import java.util.Locale
 
 @Autonomous(name = "BASKET_Meet2", group = "AAAA")
-class BASKET_MEET_2 : Methods() {
+class BASKET2 : Methods() {
     override fun runOpMode() {
         val drive = SampleMecanumDrive(hardwareMap)
 

@@ -5,7 +5,7 @@ import org.firstinspires.ftc.teamcode.Methods
 import org.firstinspires.ftc.teamcode.autonomous.PoseStorage
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive
 
-@TeleOp(name = "Meet2Good\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83", group = "Aardvark")
+@TeleOp(name = "Meet2Good\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83", group = "AAAA")
 class Meet2Good: Methods() {
     override fun runOpMode() {
         insideJokes ()
@@ -93,11 +93,9 @@ class Meet2Good: Methods() {
                     if (leftY >= 0.2 || leftY <= -0.2){horizontalSlideToggle = HorizontalSlideState.Manual}
                     if (controller2.left_stick_button && !previousController2.left_stick_button) {
                         transferServo!!.position = transferUpPos
-                        if (slideHorizontalMotor!!.currentPosition <= 400) {
-                            horizontalSlideToggle = HorizontalSlideState.Extend
-                        } else {
-                            horizontalSlideToggle = HorizontalSlideState.Floor
-                        }
+                        horizontalSlideToggle =
+                            if (slideHorizontalMotor!!.currentPosition <= 400) { HorizontalSlideState.Extend }
+                            else { HorizontalSlideState.Floor }
                     }
 
                     when (horizontalSlideToggle) {

@@ -275,6 +275,29 @@ abstract class Methods : LinearOpMode() {
         motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
     }
 
+    fun teleopTelemetry(){
+        telemetry.addData("Odometry: ",
+            String.format(
+                "Pose: %s, Velocity: %s",
+                drive.poseEstimate.toString(),
+                drive.getWheelVelocities().toString()
+            )
+        )
+        telemetry.addLine(hangerMotor!!.currentPosition.toString())
+        telemetry.addLine(hangerMotor!!.targetPosition.toString())
+        telemetry.addLine(hangTouch!!.isPressed.toString())
+        telemetry.addData("Vertical Slide Power: ", slideVerticalMotor!!.power)
+        telemetry.addData("Vertical Slide Target: ", slideVerticalMotor!!.targetPosition)
+        telemetry.addData("Vertical Slide Position: ", slideVerticalMotor!!.currentPosition)
+        telemetry.addData("Horizontal Slide Power: ", slideHorizontalMotor!!.power)
+        telemetry.addData("Horizontal Slide Target: ", slideHorizontalMotor!!.targetPosition)
+        telemetry.addData("Horizontal Slide Position: ", slideHorizontalMotor!!.currentPosition)
+        telemetry.addData("Tape Measure Motor: ", tapeMeasureRotateMotor!!.currentPosition)
+        telemetry.addData("Rotate Servo Position: ", clawRotateServo!!.position)
+        telemetry.addData("Transfer Servo Position: ", transferServo!!.position)
+        telemetry.addLine("OpMode is active")
+        telemetry.update()
+    }
     //insideJokes
     fun insideJokes (){
         telemetry.addLine(when ((0..50).random()) {

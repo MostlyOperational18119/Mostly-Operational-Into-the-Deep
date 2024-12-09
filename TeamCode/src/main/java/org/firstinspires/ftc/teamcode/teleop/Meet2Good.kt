@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode.teleop
 
-import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.Methods
 import org.firstinspires.ftc.teamcode.autonomous.PoseStorage
-import org.firstinspires.ftc.teamcode.drive.advanced.TeleOpAugmentedDriving
 
 @TeleOp(name = "Meet2Good\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83", group = "AAAA")
 class Meet2Good: Methods() {
@@ -12,7 +10,6 @@ class Meet2Good: Methods() {
         insideJokes ()
         initMotorsNoReset()
         initServosAndTouch()
-
         drive.poseEstimate = PoseStorage.currentPose
 
         waitForStart()
@@ -26,29 +23,29 @@ class Meet2Good: Methods() {
             drive.update()
             when (automatedMovementToggle) {
                 AutomaticMovementState.Manual ->{
-                    //MOVE
                     moveRobot()
+                    drive.update()
+                    drive.updatePoseEstimate()
 
                     if (controller1.left_trigger>0.5 && !(previousController1.left_trigger>0.5)) {
-                        val traj1 =  drive.trajectorySequenceBuilder(drive.poseEstimate)
+                        val teleopBasket = drive.trajectorySequenceBuilder(drive.poseEstimate)
                             .setReversed(true)
                             .lineToLinearHeading(basketPose)
                             .setReversed(false)
                             .build()
-                        drive.followTrajectorySequenceAsync(traj1)
+                        drive.followTrajectorySequenceAsync(teleopBasket)
                         automatedMovementToggle = AutomaticMovementState.Auto
                     }
                     if (controller1.left_bumper && !previousController1.left_bumper) {
-                        val traj1 =  drive.trajectorySequenceBuilder(drive.poseEstimate)
+                        val teleopBar =  drive.trajectorySequenceBuilder(drive.poseEstimate)
                             .setReversed(true)
                             .lineToLinearHeading(barPose)
                             .setReversed(false)
                             .build()
-                        drive.followTrajectorySequenceAsync(traj1)
+                        drive.followTrajectorySequenceAsync(teleopBar)
                         automatedMovementToggle = AutomaticMovementState.Auto
                     }
                 }
-
                 AutomaticMovementState.Auto ->{
                     if (controller1.left_bumper && !previousController1.left_bumper) { drive.breakFollowing();automatedMovementToggle = AutomaticMovementState.Manual }
                     if (controller1.left_trigger>0.5 && !(previousController1.left_trigger>0.5)) { drive.breakFollowing();automatedMovementToggle = AutomaticMovementState.Manual }
@@ -72,7 +69,7 @@ class Meet2Good: Methods() {
                     if (controller2.y && !previousController2.y && clawServo!!.position == clawServoOpen){ clawServo!!.position = clawServoClosed }
                     else if (controller2.y && !previousController2.y) { clawServo!!.position = clawServoOpen }
 
-                    //HANGING
+                    //HANG PUSHER SERVO
                     if (controller1.a && !previousController1.a){hangPusher!!.position = servoHangActive}
                     if (controller1.b && !previousController1.b){hangPusher!!.position = servoHangPassive}
 
@@ -84,7 +81,7 @@ class Meet2Good: Methods() {
                     if (controller2.dpad_down && !previousController2.dpad_down){ transferServo!!.position = transferDownPos }
                     if (controller2.dpad_up  && !previousController2.dpad_up ){ transferServo!!.position = transferUpPos }
 
-                    //HORIZONTAL MOTOR
+                    //HORIZONTAL SLIDE
                     if (controller2.y && !previousController2.y) {horizontalSlideToggle = HorizontalSlideState.Floor }
                     if (leftY1!! >= 0.2 || leftY1!! <= -0.2){horizontalSlideToggle = HorizontalSlideState.Manual}
                     if (controller2.left_stick_button && !previousController2.left_stick_button) {
@@ -201,27 +198,7 @@ class Meet2Good: Methods() {
                 }
             }
 
-            telemetry.addData("Odometry: ",
-                String.format(
-                    "Pose: %s, Velocity: %s",
-                    drive.poseEstimate.toString(),
-                    drive.getWheelVelocities().toString()
-                )
-            )
-            telemetry.addLine(hangerMotor!!.currentPosition.toString())
-            telemetry.addLine(hangerMotor!!.targetPosition.toString())
-            telemetry.addLine(hangTouch!!.isPressed.toString())
-            telemetry.addData("Vertical Slide Power: ", slideVerticalMotor!!.power)
-            telemetry.addData("Vertical Slide Target: ", slideVerticalMotor!!.targetPosition)
-            telemetry.addData("Vertical Slide Position: ", slideVerticalMotor!!.currentPosition)
-            telemetry.addData("Horizontal Slide Power: ", slideHorizontalMotor!!.power)
-            telemetry.addData("Horizontal Slide Target: ", slideHorizontalMotor!!.targetPosition)
-            telemetry.addData("Horizontal Slide Position: ", slideHorizontalMotor!!.currentPosition)
-            telemetry.addData("Tape Measure Motor: ", tapeMeasureRotateMotor!!.currentPosition)
-            telemetry.addData("Rotate Servo Position: ", clawRotateServo!!.position)
-            telemetry.addData("Transfer Servo Position: ", transferServo!!.position)
-            telemetry.addLine("OpMode is active")
-            telemetry.update()
+            teleopTelemetry()
         }
     }
 }

@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode.teleop
 
+import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.Methods
 import org.firstinspires.ftc.teamcode.autonomous.PoseStorage
-import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive
+import org.firstinspires.ftc.teamcode.drive.advanced.TeleOpAugmentedDriving
 
 @TeleOp(name = "Meet2Good\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83\uD83E\uDD83", group = "AAAA")
 class Meet2Good: Methods() {
@@ -12,58 +13,53 @@ class Meet2Good: Methods() {
         initMotorsNoReset()
         initServosAndTouch()
 
-        val drive = SampleMecanumDrive(hardwareMap)
         drive.poseEstimate = PoseStorage.currentPose
 
         waitForStart()
 
         while (opModeIsActive()) {
-            copyControls ()
-
-            //INPUTS
-            val leftY = -gamepad1.left_stick_y.toDouble() // Remember, Y stick is reversed!
-            val leftX = gamepad1.left_stick_x.toDouble()
-            val rightX = gamepad1.right_stick_x.toDouble()
-            val leftY2 = -gamepad2.left_stick_y.toDouble()
-            val rightY2 = -gamepad2.right_stick_y.toDouble()
+            //GAMEPAD
+            copyControls()
+            getStickInputs()
 
             //MOVEMENT + ODOMETRY
             drive.update()
             when (automatedMovementToggle) {
                 AutomaticMovementState.Manual ->{
                     //MOVE
-                    motorFL!!.power = (leftY + leftX + rightX) / speedDiv
-                    motorBL!!.power = (leftY - leftX + rightX) / speedDiv
-                    motorFR!!.power = (leftY - leftX - rightX) / speedDiv
-                    motorBR!!.power = (leftY + leftX - rightX) / speedDiv
+                    moveRobot()
 
-//                    if (controller1.left_trigger>0.5) {
-//                        val traj1 =  drive.trajectorySequenceBuilder(drive.poseEstimate)
-//                            .setReversed(false)
-//                            .splineTo(basketVector, basketHeading)
-//                            .build()
-//                        drive.followTrajectorySequenceAsync(traj1)
-//                        automatedMovementToggle = AutomaticMovementState.Auto
-//                    }
-//                    if (controller1.left_bumper) {
-//                        val traj1 =  drive.trajectorySequenceBuilder(drive.poseEstimate)
-//                            .setReversed(false)
-//                            .splineTo(barVector, barHeading)
-//                            .build()
-//                        drive.followTrajectorySequenceAsync(traj1)
-//                        automatedMovementToggle = AutomaticMovementState.Auto
-//                    }
+                    if (controller1.left_trigger>0.5 && !(previousController1.left_trigger>0.5)) {
+                        val traj1 =  drive.trajectorySequenceBuilder(drive.poseEstimate)
+                            .setReversed(true)
+                            .lineToLinearHeading(basketPose)
+                            .setReversed(false)
+                            .build()
+                        drive.followTrajectorySequenceAsync(traj1)
+                        automatedMovementToggle = AutomaticMovementState.Auto
+                    }
+                    if (controller1.left_bumper && !previousController1.left_bumper) {
+                        val traj1 =  drive.trajectorySequenceBuilder(drive.poseEstimate)
+                            .setReversed(true)
+                            .lineToLinearHeading(barPose)
+                            .setReversed(false)
+                            .build()
+                        drive.followTrajectorySequenceAsync(traj1)
+                        automatedMovementToggle = AutomaticMovementState.Auto
+                    }
                 }
 
                 AutomaticMovementState.Auto ->{
+                    if (controller1.left_bumper && !previousController1.left_bumper) { drive.breakFollowing();automatedMovementToggle = AutomaticMovementState.Manual }
+                    if (controller1.left_trigger>0.5 && !(previousController1.left_trigger>0.5)) { drive.breakFollowing();automatedMovementToggle = AutomaticMovementState.Manual }
                     if (!drive.isBusy) { automatedMovementToggle = AutomaticMovementState.Manual }
                 }
             }
 
             when (automatedTransferToggle) {
-                AutomaticTransferState.Pickup -> {
+                AutomaticTransferState.Manual -> {
                     //TRANSFER TOGGLE
-                    if (controller2.a && !previousController2.a){ automatedTransferToggle = AutomaticTransferState.Transfer }
+                    if (controller2.a && !previousController2.a){ automatedTransferToggle = AutomaticTransferState.StartTransfer }
 
                     //INTAKE SERVO
                     if (controller2.x&& !previousController2.x){ intakeInToggle  = !intakeInToggle;  intakeOutToggle = false }
@@ -90,7 +86,7 @@ class Meet2Good: Methods() {
 
                     //HORIZONTAL MOTOR
                     if (controller2.y && !previousController2.y) {horizontalSlideToggle = HorizontalSlideState.Floor }
-                    if (leftY >= 0.2 || leftY <= -0.2){horizontalSlideToggle = HorizontalSlideState.Manual}
+                    if (leftY1!! >= 0.2 || leftY1!! <= -0.2){horizontalSlideToggle = HorizontalSlideState.Manual}
                     if (controller2.left_stick_button && !previousController2.left_stick_button) {
                         transferServo!!.position = transferUpPos
                         horizontalSlideToggle =
@@ -100,10 +96,10 @@ class Meet2Good: Methods() {
 
                     when (horizontalSlideToggle) {
                         HorizontalSlideState.Manual -> {
-                            if (leftY2 > 0.0 && slideHorizontalMotor!!.currentPosition < horizontalSlideExtend) {
-                                horizontalSlideTo(horizontalSlideExtend,leftY2/1.5)
-                            } else if (leftY2 < 0.0 && slideHorizontalMotor!!.currentPosition > 0) {
-                                horizontalSlideTo(0,leftY2/1.5)
+                            if (leftY2!! > 0.0 && slideHorizontalMotor!!.currentPosition < horizontalSlideExtend) {
+                                horizontalSlideTo(horizontalSlideExtend,leftY2!!/1.5)
+                            } else if (leftY2!! < 0.0 && slideHorizontalMotor!!.currentPosition > 0) {
+                                horizontalSlideTo(0,leftY2!!/1.5)
                             } else { horizontalSlideTo(slideHorizontalMotor!!.currentPosition,0.1) }
                         }
                         HorizontalSlideState.Floor -> { horizontalSlideTo(0,1.0); horizontalBackToManual() }
@@ -115,12 +111,12 @@ class Meet2Good: Methods() {
                     if (controller2.right_bumper  && !previousController2.right_bumper) { verticalSlideToggle = VerticalSlideState.Low; clawRotateServo!!.position = clawRotateStraight }
                     if (controller2.right_trigger >= 0.5)   { verticalSlideToggle = VerticalSlideState.High; clawRotateServo!!.position = clawRotateOut }
                     if (controller2.left_bumper && !previousController2.left_bumper){ verticalSlideToggle = VerticalSlideState.Bar; clawRotateServo!!.position = clawRotateStraight}
-                    if (leftY2 >= 0.2 || leftY2 <= -0.2){verticalSlideToggle = VerticalSlideState.Manual}
+                    if (leftY2!! >= 0.2 || leftY2!! <= -0.2){verticalSlideToggle = VerticalSlideState.Manual}
 
                     when (verticalSlideToggle) {
                         VerticalSlideState.Manual -> {
-                            if (rightY2 > 0.0 && slideVerticalMotor!!.currentPosition < verticalSlideHigh) { slideVerticalMotor!!.targetPosition +=40
-                            } else if (rightY2 < 0.0 && slideVerticalMotor!!.currentPosition > 0) { slideVerticalMotor!!.targetPosition -=40 }
+                            if (rightY2!! > 0.0 && slideVerticalMotor!!.currentPosition < verticalSlideHigh) { slideVerticalMotor!!.targetPosition +=40
+                            } else if (rightY2!! < 0.0 && slideVerticalMotor!!.currentPosition > 0) { slideVerticalMotor!!.targetPosition -=40 }
                             slideVerticalMotor!!.power = 1.0
                         }
                         VerticalSlideState.Floor -> { verticalSlideTo(0, 1.0);verticalBackToManual() }
@@ -167,38 +163,41 @@ class Meet2Good: Methods() {
 //                    }
                 }
 
-                AutomaticTransferState.Transfer ->{
-                    if (singleRunCheck == 1) {
-                        intakeServo?.power = 0.0
-                        slideHorizontalMotor!!.targetPosition = 0
-                        slideHorizontalMotor!!.power = -0.8
-                        verticalSlideTo(0, 1.0)
-                        transferServo!!.position = transferUpPos
-                        clawServo!!.position = clawServoOpen
-                        singleRunCheck=2
-                    }
-                    if (slideVerticalMotor!!.currentPosition < 600){
+                AutomaticTransferState.StartTransfer->{
+                    intakeServo?.power = 0.0
+                    slideHorizontalMotor!!.targetPosition = 0
+                    slideHorizontalMotor!!.power = -0.8
+                    verticalSlideTo(0, 1.0)
+                    transferServo!!.position = transferUpPos
+                    clawServo!!.position = clawServoOpen
+                    if (slideVerticalMotor!!.currentPosition < 400){
                         clawRotateServo!!.position = clawRotateRest
-                        moveRotateServo = true
+                        elapsedTime.reset()
+                        if (elapsedTime.time() > 0.5){ automatedTransferToggle = AutomaticTransferState.Pickup }
                     }
-                    if (moveRotateServo){
-                        sleep(500)
-                        verticalSlideTo(0, 1.0)
-                        sleep(500)
-                        clawServo!!.position = clawServoClosed
-                        sleep(500)
-                        verticalSlideTo(1000, 1.0)
-                        sleep(100)
-                        clawRotateServo!!.position = clawRotateOut
-                        sleep(200)
-                        moveRotateServo = false
-                        singleRunCheck = 1
-                        intakeInToggle = false
-                        intakeOutToggle = false
-                        verticalSlideToggle = VerticalSlideState.Manual
-                        horizontalSlideToggle = HorizontalSlideState.Manual
-                        automatedTransferToggle = AutomaticTransferState.Pickup
-                    }
+                }
+                AutomaticTransferState.SlideDown-> {
+                    verticalSlideTo(0, 1.0)
+                    elapsedTime.reset()
+                    if (elapsedTime.time() > 0.5) { automatedTransferToggle = AutomaticTransferState.Pickup }
+                }
+                AutomaticTransferState.Pickup ->{
+                    clawServo!!.position = clawServoClosed
+                    elapsedTime.reset()
+                    if (elapsedTime.time() > 0.5) { automatedTransferToggle = AutomaticTransferState.Pickup }
+                }
+                AutomaticTransferState.ResetSlide-> {
+                    verticalSlideTo(1000, 1.0)
+                    elapsedTime.reset()
+                    if (elapsedTime.time() > 0.1) { automatedTransferToggle = AutomaticTransferState.RotateOut }
+                }
+                AutomaticTransferState.RotateOut ->{
+                    clawRotateServo!!.position = clawRotateOut
+                    intakeInToggle = false
+                    intakeOutToggle = false
+                    verticalSlideToggle = VerticalSlideState.Manual
+                    horizontalSlideToggle = HorizontalSlideState.Manual
+                    automatedTransferToggle = AutomaticTransferState.Manual
                 }
             }
 

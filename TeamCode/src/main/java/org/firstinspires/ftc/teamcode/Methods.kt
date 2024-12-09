@@ -9,17 +9,17 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.Gamepad
 import com.qualcomm.robotcore.hardware.Servo
 import com.qualcomm.robotcore.hardware.TouchSensor
-import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
+import com.qualcomm.robotcore.util.ElapsedTime
+import org.firstinspires.ftc.teamcode.drive.advanced.SampleMecanumDriveCancelable
 import kotlin.math.abs
 
 
 abstract class Methods : LinearOpMode() {
     enum class VerticalSlideState { Floor, Low, High, Manual, Bar }
     enum class HorizontalSlideState { Floor, Extend, Manual }
-    enum class AutomaticTransferState { Pickup, Transfer }
+    enum class AutomaticTransferState { Manual, StartTransfer, SlideDown, Pickup, ResetSlide, RotateOut }
     enum class AutomaticMovementState { Manual, Auto }
-    enum class  HangStates { Up, Down, Reset, None}
+    enum class HangStates { Up, Down, Reset, None}
 
     val clawRotateRest = 0.63
     val clawRotateUpRight = 0.48
@@ -38,19 +38,19 @@ abstract class Methods : LinearOpMode() {
     val verticalSlideBar = 1738
     val horizontalSlideExtend = 1600
     val speedDiv = 2.3
-    var singleRunCheck = 1
 
-    var moveRotateServo = false
+    val elapsedTime = ElapsedTime()
+
     var intakeInToggle = false
     var intakeOutToggle = false
 
-    val drive = SampleMecanumDrive(hardwareMap)
+    val drive = SampleMecanumDriveCancelable(hardwareMap)
     val basketVector = Vector2d(-58.26, -57.64)
     val basketHeading = Math.toRadians(225.00)
     val barVector = Vector2d(-10.04, -34.01)
     val barHeading = Math.toRadians(-90.00)
-    val basketPose = Pose2d(-58.26, -57.64, 225.0)
-    val barPose = Pose2d(-10.04, -34.01, -90.0)
+    val basketPose = Pose2d(-52.5, -52.5, 45.0)
+    val barPose = Pose2d(-10.04, -42.15, 90.0)
 
     var horizontalSlideToggle = HorizontalSlideState.Manual
     var verticalSlideToggle = VerticalSlideState.Manual
@@ -62,6 +62,12 @@ abstract class Methods : LinearOpMode() {
     val controller2 = Gamepad()
     val previousController1 = Gamepad()
     val previousController2 = Gamepad()
+
+    var leftY1: Double? = null
+    var leftX1: Double? = null
+    var rightX1: Double? = null
+    var leftY2: Double? = null
+    var rightY2: Double? = null
 
     var motorFL: DcMotor? = null
     var motorBL: DcMotor? = null
@@ -77,6 +83,22 @@ abstract class Methods : LinearOpMode() {
     var clawRotateServo : Servo? = null
     var hangPusher : Servo? = null
     var hangTouch : TouchSensor? = null
+
+    //Get stick Inputs
+    fun getStickInputs (){
+        leftY1 = -gamepad1.left_stick_y.toDouble() / speedDiv
+        leftX1 = gamepad1.left_stick_x.toDouble() / (speedDiv/1.5)
+        rightX1 = gamepad1.right_stick_x.toDouble()
+        leftY2 = -gamepad2.left_stick_y.toDouble()
+        rightY2 = -gamepad2.right_stick_y.toDouble()
+    }
+
+    fun moveRobot(){
+        motorFL!!.power = (leftY1!! + leftX1!!+ rightX1!!)
+        motorBL!!.power = (leftY1!! - leftX1!! + rightX1!!)
+        motorFR!!.power = (leftY1!! - leftX1!! - rightX1!!)
+        motorBR!!.power = (leftY1!! + leftX1!! - rightX1!!)
+    }
 
     //Intake the pixel with a sleep
     fun intakePixel (sleep: Long){
@@ -102,7 +124,7 @@ abstract class Methods : LinearOpMode() {
         clawRotateServo!!.position = clawRotateUpRight
     }
 
-    //Sets the position of verical motor and moves. Only uses 1 power since it checks.
+    //Sets the position of vertical motor and moves. Only uses 1 power since it checks.
     fun verticalSlideTo(position : Int, power : Double){
         slideVerticalMotor!!.targetPosition = position
         if (slideVerticalMotor!!.currentPosition < slideVerticalMotor!!.targetPosition) {

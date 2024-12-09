@@ -14,37 +14,8 @@ class BASKET_MEET_2 : Methods() {
     override fun runOpMode() {
         val drive = SampleMecanumDrive(hardwareMap)
 
-        // MOTORS
-        val motorFL = hardwareMap.dcMotor["motorFL"]
-        val motorFR = hardwareMap.dcMotor["motorFR"]
-        val motorBL = hardwareMap.dcMotor["motorBL"]
-        val motorBR = hardwareMap.dcMotor["motorBR"]
-        val slideVerticalMotor = hardwareMap.dcMotor["slideVertical"]
-        val slideHorizontalMotor = hardwareMap.dcMotor["slideHorizontal"]
-        val hangerMotor = hardwareMap.dcMotor["hanger"]
-        val tapeMeasureRotateMotor = hardwareMap.dcMotor["tapeMeasureRotateMotor"]
-
-        //MOTORS MODES
-        motorBR.direction = DcMotorSimple.Direction.REVERSE
-        motorFR.direction = DcMotorSimple.Direction.REVERSE
-        setMotorModePosition(slideVerticalMotor)
-        setMotorModePosition(hangerMotor)
-        slideVerticalMotor.direction = DcMotorSimple.Direction.REVERSE
-        setMotorModePosition(slideHorizontalMotor)
-        slideHorizontalMotor.direction = DcMotorSimple.Direction.REVERSE
-        setMotorModeEncoder(tapeMeasureRotateMotor)
-        setMotorModeEncoder(hangerMotor)
-        tapeMeasureRotateMotor.targetPosition = 0
-
-        //Servos
-        val intakeServo = hardwareMap.crservo["intakeServo"]
-        val clawServo = hardwareMap.servo["clawServo"]
-        clawServo.position =  clawServoClosed
-        val transferServo = hardwareMap.servo["transferServo"]
-        transferServo.position = transferUpPos
-        val clawRotateServo = hardwareMap.servo["rotateServo"]
-        clawRotateServo.position = clawRotateUpRight
-        val hangPusher = hardwareMap.servo["hangPusher"]
+        initMotors()
+        initServosAndTouch()
 
         drive.poseEstimate = Pose2d(-34.09, -63.19, Math.toRadians(-90.00))
 
@@ -102,12 +73,9 @@ class BASKET_MEET_2 : Methods() {
                 .build()
 
 
-        // Tell the User the Robot has been initialized
         telemetry.addData("Status", "Initialized")
         telemetry.update()
 
-
-        // Wait for the game to start (driver presses PLAY)
         waitForStart()
         telemetry.addLine("started")
         telemetry.update()
@@ -115,131 +83,65 @@ class BASKET_MEET_2 : Methods() {
         telemetry.addLine("not stopped")
         telemetry.update()
 
-
-        //PLACE SPECIMEN ON HIGH BAR
-        slideVerticalMotor.targetPosition = 1600
-        slideVerticalMotor.power = 1.0
-        clawRotateServo.position = clawRotateStraight
+        //HIGH BAR
+        verticalSlideTo(1600, 1.0)
+        clawRotateServo!!.position = clawRotateStraight
 
         drive.followTrajectorySequence(traj1)
-        drive.updatePoseEstimate()
 
-        transferServo.position = transferDownPos
-        clawServo.position = clawServoClosed
-        slideVerticalMotor.targetPosition = 500
-        slideVerticalMotor.power = -1.0
+        transferServo!!.position = transferDownPos
+        clawServo!!.position = clawServoClosed
+        verticalSlideTo(500, 1.0)
         sleep(700)
-        clawServo.position = clawServoOpen
+        clawServo!!.position = clawServoOpen
         sleep(300)
-        clawRotateServo.position = clawRotateUpRight
-        intakeServo.power = 1.0
+        clawRotateServo!!.position = clawRotateUpRight
+        intakeServo!!.power = 1.0
 
-        //GO TO AND PICK UP FIRST SAMPLE
+        //FIRST SAMPLE
         drive.followTrajectorySequence(traj2)
-        drive.updatePoseEstimate()
 
-        intakeServo.power = 1.0
-        slideHorizontalMotor.targetPosition = 800
-        slideHorizontalMotor.power = 1.0
-        sleep(3500)
-        intakeServo.power = 0.0
-        slideHorizontalMotor.targetPosition = 0
-        slideHorizontalMotor.power = -1.0
+        intakePixel(3500)
+        transferSlowDown()
+        verticalSlideTo(3650, 1.0)
 
-        //TRANSFER
-        clawRotateServo.position = clawRotateUpRight
-        slideVerticalMotor.targetPosition = 400
-        if (slideVerticalMotor.currentPosition > slideVerticalMotor.targetPosition) { slideVerticalMotor.power = 1.0 }
-        else { slideVerticalMotor.power = -1.0 }
-        transferServo.position = transferUpPos
-        clawServo.position = clawServoOpen
-        clawRotateServo.position = clawRotateRest
-        sleep(500)
-        slideVerticalMotor.targetPosition = 0
-        if (slideVerticalMotor.currentPosition > slideVerticalMotor.targetPosition) { slideVerticalMotor.power = 1.0 }
-        else { slideVerticalMotor.power = -1.0 }
-        sleep(500)
-        clawServo.position = clawServoClosed
-        sleep(500)
-        slideVerticalMotor.targetPosition = 3650
-        slideVerticalMotor.power = 1.0
-        clawRotateServo.position = clawRotateOut
-        sleep(1500)
-        transferServo.position = transferDownPos
-
-        //MOVE TO HIGH BASKET AND PLACE SAMPLE
+        //HIGH BASKET #1
         drive.followTrajectorySequence(traj3)
-        drive.updatePoseEstimate()
 
-        clawRotateServo.position = clawRotateOut
-        sleep(200)
-        clawServo.position = clawServoOpen
-        sleep(200)
-        slideVerticalMotor.targetPosition = 0
-        slideVerticalMotor.power = -0.5
+        placeSample()
+        verticalSlideTo(0, 0.5)
 
-        //MOVE TO 2nd PIXEL AND PICK UP
+        //SECOND SAMPLE
         drive.followTrajectorySequence(traj4)
 
-        intakeServo.power = 1.0
-        slideHorizontalMotor.targetPosition = 800
-        slideHorizontalMotor.power = 1.0
-        sleep(3500)
-        intakeServo.power = 0.0
-        slideHorizontalMotor.targetPosition = 0
-        slideHorizontalMotor.power = -1.0
-
-        //TRANSFER
-        clawRotateServo.position = clawRotateUpRight
-        slideVerticalMotor.targetPosition = 400
-        if (slideVerticalMotor.currentPosition > slideVerticalMotor.targetPosition) { slideVerticalMotor.power = 1.0 }
-        else { slideVerticalMotor.power = -1.0 }
-        transferServo.position = transferUpPos
-        clawServo.position = clawServoOpen
-        clawRotateServo.position = clawRotateRest
-        sleep(500)
-        slideVerticalMotor.targetPosition = 0
-        if (slideVerticalMotor.currentPosition > slideVerticalMotor.targetPosition) { slideVerticalMotor.power = 1.0 }
-        else { slideVerticalMotor.power = -1.0 }
-        sleep(500)
-        clawServo.position = clawServoClosed
-        sleep(500)
-        slideVerticalMotor.targetPosition = 3650
-        slideVerticalMotor.power = 1.0
-        clawRotateServo.position = clawRotateOut
-        sleep(1500)
-        transferServo.position = transferDownPos
+        intakePixel(3500)
+        transferSlowDown()
+        verticalSlideTo(3650, 1.0)
 
         //MOVE TO HIGH BASKET AND PLACE SECOND SAMPLE
         drive.followTrajectorySequence(traj5)
-        drive.updatePoseEstimate()
 
-        clawRotateServo.position = clawRotateOut
-        sleep(200)
-        clawServo.position = clawServoOpen
-        sleep(200)
-        slideVerticalMotor.targetPosition = 0
-        slideVerticalMotor.power = -0.6
+        placeSample()
+        verticalSlideTo(0, 0.5)
 
         drive.followTrajectorySequence(traj8)
-        sleep(200)
-        clawRotateServo.position = clawRotateUpRight
-        sleep(500)
-        slideVerticalMotor.targetPosition = 0
-        slideVerticalMotor.power = -1.0
-        drive.followTrajectorySequence(traj9)
-        drive.updatePoseEstimate()
 
-        while (opModeIsActive() && !isStopRequested) {
-            drive.update()
-        }
-        telemetry.addLine("tried to run code")
-        telemetry.update()
-        sleep(1000)
-        val (x, y, heading) = drive.poseEstimate
-        telemetry.addData(
-            "Current Position",
-            String.format(Locale.ENGLISH, "X: %f, Y: %f, and Rotation: %f", x, y, heading)
+        sleep(200)
+        clawRotateServo!!.position = clawRotateUpRight
+        sleep(500)
+
+        verticalSlideTo(0, 1.0)
+
+        drive.followTrajectorySequence(traj9)
+
+        while (opModeIsActive() && !isStopRequested) { drive.update() }
+
+        telemetry.addData("Odometry: ",
+            String.format(
+                "Pose: %s, Velocity: %s",
+                drive.poseEstimate.toString(),
+                drive.getWheelVelocities().toString()
+            )
         )
         telemetry.update()
         PoseStorage.currentPose = drive.poseEstimate

@@ -104,10 +104,10 @@ class OutreachBotBig : LinearOpMode() {
 
             // Movement
             if (movementToggle) {
-                motorFL.power = (gamepad1LeftY + gamepadLeftX + gamepad1RightX) / speedDiv
-                motorBL.power = (gamepad1LeftY - gamepadLeftX + gamepad1RightX) / speedDiv
-                motorFR.power = (gamepad1LeftY - gamepadLeftX - gamepad1RightX) / speedDiv
-                motorBR.power = (gamepad1LeftY + gamepadLeftX - gamepad1RightX) / speedDiv
+                motorFL.power = (-gamepad1LeftY - gamepadLeftX - gamepad1RightX) / speedDiv
+                motorBL.power = (-gamepad1LeftY + gamepadLeftX - gamepad1RightX) / speedDiv
+                motorFR.power = (-gamepad1LeftY + gamepadLeftX + gamepad1RightX) / speedDiv
+                motorBR.power = (-gamepad1LeftY - gamepadLeftX + gamepad1RightX) / speedDiv
             } else {
                 motorFL.power = 0.0
                 motorBL.power = 0.0

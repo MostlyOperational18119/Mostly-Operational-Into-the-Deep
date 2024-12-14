@@ -6,8 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.IMU
-import com.qualcomm.robotcore.hardware.ImuOrientationOnRobot
-import org.firstinspires.ftc.ftccommon.internal.manualcontrol.parameters.ImuParameters
 import org.firstinspires.ftc.teamcode.teleop.outreach.OutreachBotBig
 
 @Autonomous(name = "OutreachBotBigAuto")
@@ -51,35 +49,35 @@ class OutreachBotBigAuto : LinearOpMode() {
         // Start of Auto
 
         // Forward for 3 seconds
-        motorFL.power = 0.5
-        motorFR.power = 0.5
-        motorBL.power = 0.5
-        motorBR.power = 0.5
+        motorFL.power = MoveSpeed
+        motorFR.power = MoveSpeed
+        motorBL.power = MoveSpeed
+        motorBR.power = MoveSpeed
 
         sleep(DriveForwardTime)
 
         // Back to original positions, then back 3 seconds
-        motorFL.power = -0.5
-        motorFR.power = -0.5
-        motorBL.power = -0.5
-        motorBR.power = -0.5
+        motorFL.power = -MoveSpeed
+        motorFR.power = -MoveSpeed
+        motorBL.power = -MoveSpeed
+        motorBR.power = -MoveSpeed
 
         sleep(DriveForwardTime * 2)
 
         // Back to original position
 
-        motorFL.power = 0.5
-        motorFR.power = 0.5
-        motorBL.power = 0.5
-        motorBR.power = 0.5
+        motorFL.power = MoveSpeed
+        motorFR.power = MoveSpeed
+        motorBL.power = MoveSpeed
+        motorBR.power = MoveSpeed
 
         sleep(DriveForwardTime)
 
         // Spin in a circle :)
-        motorFL.power = -0.5
-        motorFR.power = -0.5
-        motorBL.power = 0.5
-        motorBR.power = 0.5
+        motorFL.power = -MoveSpeed
+        motorFR.power = MoveSpeed
+        motorBL.power = -MoveSpeed
+        motorBR.power = MoveSpeed
 
         sleep(10000)
 
@@ -89,9 +87,13 @@ class OutreachBotBigAuto : LinearOpMode() {
         motorBL.power = 0.0
         motorBR.power = 0.0
 
-        telemetry.addLine("Going to launch the airplane in 5 seconds")
+        telemetry.addLine("Going to launch the airplane in 5 seconds (to ${OutreachBotBig.LauncherServoLaunchPosition})")
+        telemetry.update()
 
         sleep(5000)
+
+        telemetry.addLine("Launching plane now")
+        telemetry.update()
 
         // Launch the airplane, hope no one is hurt (it would be such a shame)
         launcherServo.position = OutreachBotBig.LauncherServoLaunchPosition
@@ -102,6 +104,7 @@ class OutreachBotBigAuto : LinearOpMode() {
     }
 
     companion object {
-        const val DriveForwardTime: Long = 3000
+        const val DriveForwardTime: Long = 300
+        const val MoveSpeed: Double = 0.5
     }
 }

@@ -31,6 +31,7 @@ class OutreachBotBig : LinearOpMode() {
 
         // Servos
         val launcherServo = hardwareMap.servo["launcherServo"]
+        launcherServo.position = LauncherServoReadyPosition
 
         // Gamepads
         var currentGamepad1 = Gamepad()
@@ -129,7 +130,7 @@ class OutreachBotBig : LinearOpMode() {
     }
 
     companion object {
-        const val LauncherServoReadyPosition = 0.04 // Press B
-        const val LauncherServoLaunchPosition = 0.01 // Press A
+        const val LauncherServoReadyPosition = 0.11 // Press B
+        const val LauncherServoLaunchPosition = 0.06 // Press A
     }
 }

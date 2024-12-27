@@ -11,32 +11,27 @@ class MotorTester : LinearOpMode() {
         telemetry.addData("Status", "Initialized")
         telemetry.update()
 
-        val FL = hardwareMap.get(DcMotor::class.java, "motorFL")
-        val BL = hardwareMap.get(DcMotor::class.java, "motorBL")
-        val FR = hardwareMap.get(DcMotor::class.java, "motorFR")
-        val BR = hardwareMap.get(DcMotor::class.java, "motorBR")
-        BR.direction = DcMotorSimple.Direction.REVERSE
-        FR.direction = DcMotorSimple.Direction.REVERSE
+        val motor = hardwareMap.get(DcMotor::class.java, "HorizontalSlide")
+        motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+        motor.targetPosition = 0
+        motor.mode = DcMotor.RunMode.RUN_TO_POSITION
+        motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
 
         waitForStart()
         while (opModeIsActive()) {
             var leftX = gamepad1.left_stick_x.toDouble()
-            var leftY = -gamepad1.left_stick_y.toDouble()
-            var rightX = gamepad1.right_stick_x.toDouble()
 
-            FL?.power = (leftY + leftX + rightX)
-            BL?.power = (leftY - leftX + rightX)
-            FR?.power = (leftY - leftX - rightX)
-            BR?.power = (leftY + leftX - rightX)
+            if (leftX >= 0.5) {
+                motor.targetPosition += 10
+                motor.power = 0.2
+            } else if (leftX <= -0.5) {
+                motor.targetPosition -= 10
+                motor.power = -0.2
+            }
 
-
-            telemetry.addData("BL Power: ", BL.power)
-            telemetry.addData("BR Power:  ", BR.power)
-            telemetry.addData("FL Power: ", FL.power)
-            telemetry.addData("FR Power:  ", FR.power)
-            telemetry.addData("Left Stick Y:  ", gamepad1.left_stick_y)
+            telemetry.addData("BR Power:  ", motor.power)
+            telemetry.addData("BR Position ", motor.targetPosition)
             telemetry.addData("Left Stick X:  ", gamepad1.left_stick_x)
-            telemetry.addData("Right Stick X:  ", gamepad1.right_stick_x)
             telemetry.addLine("OpMode is active")
             telemetry.update()
         }

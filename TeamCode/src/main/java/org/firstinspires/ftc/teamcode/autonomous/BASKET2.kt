@@ -53,36 +53,36 @@ class BASKET2 : Methods() {
         waitForStart()
 
         //START
-        verticalSlideTo(1600, 1.0)
-        clawRotateServo!!.position = clawRotateStraight
-
-        //BAR
-        drive.followTrajectorySequence(bar)
-        placeSpecimen()
-
-        //SAMPLE1
-        drive.followTrajectorySequence(sample1)
-        intakePixel(3500)
-        transferFromDownToHigh()
-
-        //BASKET1
-        drive.followTrajectorySequence(basket1)
-        placeSample()
-        verticalSlideTo(0, 0.5)
-
-        //SAMPLE2
-        drive.followTrajectorySequence(sample2)
-        intakePixel(3500)
-        transferFromDownToHigh()
-        verticalSlideTo(3650, 1.0)
-
-        //BASKET2
-        drive.followTrajectorySequence(basket2)
-        placeSample()
-
-        //END
-        drive.followTrajectorySequence(end)
-        verticalSlideTo(0, 1.0)
+//        verticalSlideTo(1600, 1.0)
+//        clawRotateServo!!.position = clawRotateStraight
+//
+//        //BAR
+//        drive.followTrajectorySequence(bar)
+//        placeSpecimen()
+//
+//        //SAMPLE1
+//        drive.followTrajectorySequence(sample1)
+//        intakePixel(3500)
+//        transferFromDownToHigh()
+//
+//        //BASKET1
+//        drive.followTrajectorySequence(basket1)
+//        placeSample()
+//        verticalSlideTo(0, 0.5)
+//
+//        //SAMPLE2
+//        drive.followTrajectorySequence(sample2)
+//        intakePixel(3500)
+//        transferFromDownToHigh()
+//        verticalSlideTo(3650, 1.0)
+//
+//        //BASKET2
+//        drive.followTrajectorySequence(basket2)
+//        placeSample()
+//
+//        //END
+//        drive.followTrajectorySequence(end)
+//        verticalSlideTo(0, 1.0)
         clawRotateServo!!.position = clawRotateUpRight
 
         while (opModeIsActive() && !isStopRequested) { drive.update() }

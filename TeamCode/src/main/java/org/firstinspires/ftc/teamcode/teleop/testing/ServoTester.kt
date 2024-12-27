@@ -8,8 +8,12 @@ import com.qualcomm.robotcore.hardware.Gamepad
 class ServoTester : LinearOpMode() {
     override fun runOpMode() {
 
-        val servo1 = hardwareMap.servo["launcherServo"]
-        servo1.position = 0.05
+        val transferServo = hardwareMap.servo["Transfer"]
+        val outClawServo = hardwareMap.servo["OutClaw"]
+        val outRotationServo = hardwareMap.servo["OutRotation"]
+        val outSwivelServo = hardwareMap.servo["OutSwivel"]
+        val inSwivelServo = hardwareMap.servo["InSwivel"]
+        val inRotationServo = hardwareMap.servo["InRotation"]
 
         telemetry.addData("Status", "Initialized")
         telemetry.update()
@@ -30,18 +34,23 @@ class ServoTester : LinearOpMode() {
             currentGamepad2.copy(gamepad2)
 
             if (currentGamepad1.a && !previousGamepad1.a) {
-                servo1.position += 0.02
-                //servo1.power = 1.0
+                transferServo.position += 0.02
             } else if (currentGamepad1.b && !previousGamepad1.b) {
-                servo1.position -= 0.02
-                //servo1.power = -1.0
+                transferServo.position -= 0.02
             }
-            //else if (currentGamepad1.x && !previousGamepad1.x){
-                //servo1.power = 0.0
-            //}
 
+            if (currentGamepad1.x && !previousGamepad1.x) {
+                outClawServo.position += 0.02
+            } else if (currentGamepad1.y && !previousGamepad1.y) {
+                outClawServo.position -= 0.02
+            }
 
-            telemetry.addData("Servo1 position:", servo1.position)
+            telemetry.addData("transferServo position:", transferServo.position)
+            telemetry.addData("outClaw position:", outClawServo.position)
+//            telemetry.addData("outRotation position:", outRotationServo.position)
+//            telemetry.addData("outSwivel position:", outSwivelServo.position)
+//            telemetry.addData("inSwivel position:", inSwivelServo.position)
+//            telemetry.addData("inRotation position:", inRotationServo.position)
             telemetry.update()
         }
     }

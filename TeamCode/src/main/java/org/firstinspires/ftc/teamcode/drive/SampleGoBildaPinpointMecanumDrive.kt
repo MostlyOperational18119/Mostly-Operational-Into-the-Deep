@@ -24,10 +24,6 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceRunne
 import kotlin.math.PI
 
 class SampleGoBildaPinpointMecanumDrive(hardwareMap: HardwareMap) : Drive() {
-    fun getAccelerationConstraint(maxAccel: Double): TrajectoryAccelerationConstraint {
-        return ProfileAccelerationConstraint(maxAccel)
-    }
-
     companion object {
         val TRANSLATIONAL_PID = PIDCoefficients(8.0, 0.0, 1.0)
         val HEADING_PID = PIDCoefficients(7.0, 0.0, 0.0)

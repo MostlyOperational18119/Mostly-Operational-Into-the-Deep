@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.drive
 
+import com.acmerobotics.dashboard.config.Config
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.localization.Localizer
 import com.qualcomm.robotcore.hardware.HardwareMap
@@ -9,6 +10,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D
 import org.firstinspires.ftc.teamcode.autonomous.goBuilda.GoBildaPinpointDriver
 import kotlin.math.PI
 
+@Config
 class GoBildaPinpointMecanumLocalizer(hardwareMap: HardwareMap) : Localizer {
     private val pinpointDriver = hardwareMap.get(GoBildaPinpointDriver::class.java, "odo")
 

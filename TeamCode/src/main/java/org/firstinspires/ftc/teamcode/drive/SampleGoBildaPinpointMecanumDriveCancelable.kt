@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.drive
 
+import com.acmerobotics.dashboard.config.Config
 import com.acmerobotics.roadrunner.control.PIDCoefficients
 import com.acmerobotics.roadrunner.drive.Drive
 import com.acmerobotics.roadrunner.drive.DriveSignal
@@ -25,6 +26,7 @@ import org.firstinspires.ftc.teamcode.drive.advanced.TrajectorySequenceRunnerCan
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder
 
+@Config
 class SampleGoBildaPinpointMecanumDriveCancelable(hardwareMap: HardwareMap) : Drive() {
     companion object {
         val TRANSLATIONAL_PID = PIDCoefficients(8.0, 0.0, 1.0)

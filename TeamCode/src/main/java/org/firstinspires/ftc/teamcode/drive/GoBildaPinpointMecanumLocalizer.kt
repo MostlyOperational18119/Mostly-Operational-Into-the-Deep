@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.drive
 
+import android.util.Log
 import com.acmerobotics.dashboard.config.Config
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.localization.Localizer
@@ -20,7 +21,7 @@ class GoBildaPinpointMecanumLocalizer(hardwareMap: HardwareMap) : Localizer {
         pinpointDriver.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
 
         pinpointDriver.setEncoderDirections(
-            GoBildaPinpointDriver.EncoderDirection.FORWARD,
+            GoBildaPinpointDriver.EncoderDirection.REVERSED, // HAVEN'T TESTED YET, BUT SHOULD FIX ROBOT
             GoBildaPinpointDriver.EncoderDirection.FORWARD
         )
 
@@ -39,7 +40,9 @@ class GoBildaPinpointMecanumLocalizer(hardwareMap: HardwareMap) : Localizer {
         get() = _poseVelocity
 
     fun degToRadian(deg: Double): Double {
-        return deg / 180.0 * PI
+        val result = deg / 180.0 * PI
+        Log.i("degToRadian", "Called with degrees of $deg, returning $result (would be ${Math.toRadians(deg)}")
+        return result
     }
 
     fun radianToDeg(rad: Double): Double {
@@ -57,15 +60,17 @@ class GoBildaPinpointMecanumLocalizer(hardwareMap: HardwareMap) : Localizer {
     override fun update() {
         pinpointDriver.update()
 
+        Log.i("GoBildaPinpointMecanumLocalizer", "Position Pose2D ${pinpointDriver.getPosition()}")
+
         val posX = mmToInches(pinpointDriver.getPosX())
         val posY = mmToInches(pinpointDriver.getPosY())
-        val posHeading = degToRadian(pinpointDriver.getHeading())
+        val posHeading = pinpointDriver.getHeading()
 
         _poseEstimate = Pose2d(posX, posY, posHeading)
 
         val velX = mmToInches(pinpointDriver.getVelX())
         val velY = mmToInches(pinpointDriver.getVelY())
-        val velHeading = mmToInches(pinpointDriver.getHeadingVelocity())
+        val velHeading = pinpointDriver.getHeadingVelocity()
 
         _poseVelocity = Pose2d(velX, velY, velHeading)
     }

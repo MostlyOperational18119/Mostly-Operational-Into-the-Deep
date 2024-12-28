@@ -21,10 +21,11 @@ import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
 import com.qualcomm.robotcore.hardware.PIDFCoefficients
-import org.firstinspires.ftc.teamcode.drive.DriveConstants.MOTOR_VELO_PID
+import org.firstinspires.ftc.teamcode.drive.advanced.SampleMecanumDriveCancelable
 import org.firstinspires.ftc.teamcode.drive.advanced.TrajectorySequenceRunnerCancelable
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder
+import kotlin.math.abs
 
 @Config
 class SampleGoBildaPinpointMecanumDriveCancelable(hardwareMap: HardwareMap) : Drive() {
@@ -120,7 +121,7 @@ class SampleGoBildaPinpointMecanumDriveCancelable(hardwareMap: HardwareMap) : Dr
     fun setPIDFCoefficients(runMode: DcMotor.RunMode, coefficients: PIDFCoefficients) {
         val compensatedCoefficients = PIDFCoefficients(
             coefficients.p, coefficients.i, coefficients.d,
-            coefficients.f * (12 / batteryVoltageSensor.voltage)
+            coefficients.f * 12 / batteryVoltageSensor.voltage
         )
 
         motors.forEach {
@@ -139,6 +140,39 @@ class SampleGoBildaPinpointMecanumDriveCancelable(hardwareMap: HardwareMap) : Dr
             update()
     }
 
+    fun turn(angle: Double) {
+        turnAsync(angle)
+        waitForIdle()
+    }
+
+    fun turnAsync(angle: Double) {
+        trajectorySequenceRunnerCancelable.followTrajectorySequenceAsync(
+            trajectorySequenceBuilder(poseEstimate)
+                .turn(angle)
+                .build()
+        )
+    }
+
+    fun setWeightedDrivePower(drivePower: Pose2d) {
+        var vel = drivePower
+
+        if ((abs(drivePower.x) + abs(drivePower.y) + abs(drivePower.heading)) > 1) {
+            // re-normalize the powers according to the weights
+            val denom =
+                (SampleMecanumDriveCancelable.VX_WEIGHT * abs(drivePower.x) + SampleMecanumDriveCancelable.VY_WEIGHT * abs(
+                    drivePower.y
+                ) + SampleMecanumDriveCancelable.OMEGA_WEIGHT * abs(drivePower.heading))
+
+            vel = Pose2d(
+                SampleMecanumDriveCancelable.VX_WEIGHT * drivePower.x,
+                SampleMecanumDriveCancelable.VY_WEIGHT * drivePower.y,
+                SampleMecanumDriveCancelable.OMEGA_WEIGHT * drivePower.heading
+            ).div(denom)
+        }
+
+        setDrivePower(vel!!)
+    }
+
     val isBusy: Boolean
         get() = trajectorySequenceRunnerCancelable.isBusy
 
@@ -147,7 +181,7 @@ class SampleGoBildaPinpointMecanumDriveCancelable(hardwareMap: HardwareMap) : Dr
         motorBL.direction = DcMotorSimple.Direction.REVERSE
         motorFL.direction = DcMotorSimple.Direction.REVERSE
 
-//        setPIDFCoefficients(DcMotor.RunMode.RUN_WITHOUT_ENCODER, MOTOR_VELO_PID)
+//        setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, MOTOR_VELO_PID)
 
         trajectoryFollower = HolonomicPIDVAFollower(
             TRANSLATIONAL_PID,

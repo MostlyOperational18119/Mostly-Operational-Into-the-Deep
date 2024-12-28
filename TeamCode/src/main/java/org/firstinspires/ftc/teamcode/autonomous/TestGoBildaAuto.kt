@@ -9,7 +9,10 @@ import org.firstinspires.ftc.teamcode.drive.SampleGoBildaPinpointMecanumDriveCan
 class TestGoBildaAuto : LinearOpMode() {
     override fun runOpMode() {
         val drive = SampleGoBildaPinpointMecanumDriveCancelable(hardwareMap)
-        drive.poseEstimate = Pose2d()
+
+        sleep(250)
+
+//        drive.poseEstimate = Pose2d()
 
         telemetry.addLine("Init done")
         telemetry.update()
@@ -25,6 +28,8 @@ class TestGoBildaAuto : LinearOpMode() {
             if (gamepad1.a) break
         }
 
+        drive.turn(Math.toRadians(360.0))
+
         // Start Auto
         val trajectorySequence = drive.trajectorySequenceBuilder(Pose2d())
             .forward(10.0)
@@ -34,9 +39,12 @@ class TestGoBildaAuto : LinearOpMode() {
 
         while (drive.isBusy) {
             drive.update()
+
             telemetry.addLine("Pose estimate: ${drive.poseEstimate}")
             telemetry.addLine("Pose velocity: ${drive.poseVelocity}")
             telemetry.update()
+
+            sleep(50)
         }
 
         // End Auto

@@ -3,15 +3,17 @@ package org.firstinspires.ftc.teamcode.autonomous
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import org.firstinspires.ftc.teamcode.drive.SampleGoBildaPinpointMecanumDrive
+import org.firstinspires.ftc.teamcode.drive.SampleGoBildaPinpointMecanumDriveCancelable
 
 @Autonomous(name = "GoBilda Test Autonomous")
 class TestGoBildaAuto : LinearOpMode() {
     override fun runOpMode() {
-        val drive = SampleGoBildaPinpointMecanumDrive(hardwareMap)
+        val drive = SampleGoBildaPinpointMecanumDriveCancelable(hardwareMap)
 
         telemetry.addLine("Init done")
         telemetry.update()
+
+        waitForStart()
 
         // Start Auto
         val trajectorySequence = drive.trajectorySequenceBuilder(Pose2d())

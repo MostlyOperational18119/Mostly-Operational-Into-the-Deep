@@ -15,15 +15,12 @@ import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint
 import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationConstraint
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint
-import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.HardwareMap
-import com.qualcomm.robotcore.hardware.VoltageSensor
+import org.firstinspires.ftc.teamcode.drive.advanced.TrajectorySequenceRunnerCancelable
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceRunner
-import kotlin.math.PI
 
-class SampleGoBildaPinpointMecanumDrive(hardwareMap: HardwareMap) : Drive() {
+class SampleGoBildaPinpointMecanumDriveCancelable(hardwareMap: HardwareMap) : Drive() {
     companion object {
         val TRANSLATIONAL_PID = PIDCoefficients(8.0, 0.0, 1.0)
         val HEADING_PID = PIDCoefficients(7.0, 0.0, 0.0)
@@ -40,25 +37,23 @@ class SampleGoBildaPinpointMecanumDrive(hardwareMap: HardwareMap) : Drive() {
             ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL)
     }
 
-    private var motorFL: DcMotor
-    private var motorFR: DcMotor
-    private var motorBL: DcMotor
-    private var motorBR: DcMotor
+    // Define and get Motors
+    private var motorFL = hardwareMap.dcMotor["motorFL"]
+    private var motorFR = hardwareMap.dcMotor["motorFR"]
+    private var motorBL = hardwareMap.dcMotor["motorBL"]
+    private var motorBR = hardwareMap.dcMotor["motorBR"]
+
+    private var batteryVoltageSensor = hardwareMap.voltageSensor.first()
     private var goBildaLocalizer = GoBildaPinpointMecanumLocalizer(hardwareMap)
-    private var batteryVoltageSensor: VoltageSensor
 
     private var trajectoryFollower: TrajectoryFollower
-    private var trajectorySequenceRunner: TrajectorySequenceRunner
+    private var trajectorySequenceRunnerCancelable: TrajectorySequenceRunnerCancelable
 
     override var localizer: Localizer
         get() = goBildaLocalizer
         set(_) {}
     override val rawExternalHeading: Double
         get() = localizer.poseEstimate.heading
-
-    fun degToRadian(deg: Double): Double {
-        return deg / 180.0 * PI
-    }
 
     override fun setDrivePower(drivePower: Pose2d) {
         val powers = MecanumKinematics.robotToWheelVelocities(
@@ -105,7 +100,7 @@ class SampleGoBildaPinpointMecanumDrive(hardwareMap: HardwareMap) : Drive() {
     }
 
     fun followTrajectorySequenceAsync(trajectorySequence: TrajectorySequence) {
-        trajectorySequenceRunner.followTrajectorySequenceAsync(trajectorySequence)
+        trajectorySequenceRunnerCancelable.followTrajectorySequenceAsync(trajectorySequence)
     }
 
     fun followTrajectorySequence(trajectorySequence: TrajectorySequence) {
@@ -115,7 +110,7 @@ class SampleGoBildaPinpointMecanumDrive(hardwareMap: HardwareMap) : Drive() {
 
     fun update() {
         localizer.update()
-        val signal = trajectorySequenceRunner.update(localizer.poseEstimate, localizer.poseVelocity)
+        val signal = trajectorySequenceRunnerCancelable.update(localizer.poseEstimate, localizer.poseVelocity)
         if (signal != null) setDriveSignal(signal)
     }
 
@@ -125,18 +120,11 @@ class SampleGoBildaPinpointMecanumDrive(hardwareMap: HardwareMap) : Drive() {
     }
 
     fun isBusy(): Boolean {
-        return trajectorySequenceRunner.isBusy
+        return trajectorySequenceRunnerCancelable.isBusy
     }
 
     init {
-        motorFL = hardwareMap.dcMotor["motorFL"]
-        motorFR = hardwareMap.dcMotor["motorFR"]
-        motorBL = hardwareMap.dcMotor["motorBL"]
-        motorBR = hardwareMap.dcMotor["motorBR"]
-
-        batteryVoltageSensor = hardwareMap.voltageSensor.first()
-
-        // Reverse motors
+        // Reverse motors here
 
         trajectoryFollower = HolonomicPIDVAFollower(
             TRANSLATIONAL_PID,
@@ -146,10 +134,7 @@ class SampleGoBildaPinpointMecanumDrive(hardwareMap: HardwareMap) : Drive() {
             0.5
         )
 
-        trajectorySequenceRunner = TrajectorySequenceRunner(
-            trajectoryFollower, HEADING_PID,
-            batteryVoltageSensor,
-            ArrayList<Int>(), ArrayList<Int>(), ArrayList<Int>(), ArrayList<Int>() // TODO: Make arrays for these
-        )
+        trajectorySequenceRunnerCancelable =
+            TrajectorySequenceRunnerCancelable(trajectoryFollower, HEADING_PID)
     }
 }

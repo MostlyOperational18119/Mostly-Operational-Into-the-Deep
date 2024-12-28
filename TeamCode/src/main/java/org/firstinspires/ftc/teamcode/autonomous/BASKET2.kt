@@ -83,7 +83,7 @@ class BASKET2 : Methods() {
 //        //END
 //        drive.followTrajectorySequence(end)
 //        verticalSlideTo(0, 1.0)
-        clawRotateServo!!.position = clawRotateUpRight
+        //clawRotateServo!!.position = clawRotateUpRight
 
         while (opModeIsActive() && !isStopRequested) { drive.update() }
         PoseStorage.currentPose = drive.poseEstimate

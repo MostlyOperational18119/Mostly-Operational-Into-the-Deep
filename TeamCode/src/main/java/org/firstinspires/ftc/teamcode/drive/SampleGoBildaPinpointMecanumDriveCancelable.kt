@@ -15,7 +15,11 @@ import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint
 import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationConstraint
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint
+import com.qualcomm.robotcore.hardware.DcMotor
+import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.HardwareMap
+import com.qualcomm.robotcore.hardware.PIDFCoefficients
+import org.firstinspires.ftc.teamcode.drive.DriveConstants.MOTOR_VELO_PID
 import org.firstinspires.ftc.teamcode.drive.advanced.TrajectorySequenceRunnerCancelable
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder
@@ -42,6 +46,8 @@ class SampleGoBildaPinpointMecanumDriveCancelable(hardwareMap: HardwareMap) : Dr
     private var motorFR = hardwareMap.dcMotor["motorFR"]
     private var motorBL = hardwareMap.dcMotor["motorBL"]
     private var motorBR = hardwareMap.dcMotor["motorBR"]
+
+    private var motors: List<DcMotor> = listOf(motorFL, motorFR, motorBL, motorBR)
 
     private var batteryVoltageSensor = hardwareMap.voltageSensor.first()
     private var goBildaLocalizer = GoBildaPinpointMecanumLocalizer(hardwareMap)
@@ -108,6 +114,17 @@ class SampleGoBildaPinpointMecanumDriveCancelable(hardwareMap: HardwareMap) : Dr
         waitForIdle()
     }
 
+    fun setPIDFCoefficients(runMode: DcMotor.RunMode, coefficients: PIDFCoefficients) {
+        val compensatedCoefficients = PIDFCoefficients(
+            coefficients.p, coefficients.i, coefficients.d,
+            coefficients.f * (12 / batteryVoltageSensor.voltage)
+        )
+
+        motors.forEach {
+            (it as DcMotorEx).setPIDFCoefficients(runMode, compensatedCoefficients)
+        }
+    }
+
     fun update() {
         localizer.update()
         val signal = trajectorySequenceRunnerCancelable.update(localizer.poseEstimate, localizer.poseVelocity)
@@ -125,6 +142,8 @@ class SampleGoBildaPinpointMecanumDriveCancelable(hardwareMap: HardwareMap) : Dr
 
     init {
         // Reverse motors here
+
+        setPIDFCoefficients(DcMotor.RunMode.RUN_WITHOUT_ENCODER, MOTOR_VELO_PID)
 
         trajectoryFollower = HolonomicPIDVAFollower(
             TRANSLATIONAL_PID,

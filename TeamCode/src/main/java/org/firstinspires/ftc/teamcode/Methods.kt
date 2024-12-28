@@ -21,17 +21,22 @@ abstract class Methods : LinearOpMode() {
     enum class AutomaticMovementState { Manual, Auto }
     enum class HangStates { Up, Down, Reset, None}
 
-    val clawRotateRest = 0.63
-    val clawRotateUpRight = 0.48
-    val clawRotateOut = 0.0
-    val clawRotateStraight = 0.08
-    val clawRotateWall = 0.16
-    val transferDownPos = 0.57
-    val servoHangActive = 0.44
-    val servoHangPassive = 0.3
-    val transferUpPos = 0.18
-    val clawServoOpen = 0.1
-    val clawServoClosed = 0.22
+    val transferServoNormal = 0.84
+    val transferServoIntake = 0.94
+    val outClawClose = 0.56
+    val outClawOpen = 0.38
+    val outSwivelParallel = 0.11
+    val outSwivelPerp = 0.44
+    val outRotationBack = 0.1
+    val outRotationCenter = 0.6
+    val outRotationFront = 1.0
+    val inRotationPick = 0.1
+    val inRotationTransfer = 1.0
+    val inSwivelRight = 0.6
+    val inSwivelCenter = 0.8
+    val inSwivelLeft = 1.0
+    val inClawOpen = 0.5
+    val inClawClosed = 0.85
 
     val verticalSlideLow = 2300
     val verticalSlideHigh = 3650

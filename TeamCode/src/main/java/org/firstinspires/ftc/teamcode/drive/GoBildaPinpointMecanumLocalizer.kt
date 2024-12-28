@@ -3,6 +3,9 @@ package org.firstinspires.ftc.teamcode.drive
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.localization.Localizer
 import com.qualcomm.robotcore.hardware.HardwareMap
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D
 import org.firstinspires.ftc.teamcode.autonomous.goBuilda.GoBildaPinpointDriver
 import kotlin.math.PI
 
@@ -25,7 +28,10 @@ class GoBildaPinpointMecanumLocalizer(hardwareMap: HardwareMap) : Localizer {
     private var _poseEstimate = Pose2d()
     override var poseEstimate: Pose2d
         get() = _poseEstimate
-        set(value) { _poseEstimate = value }
+        set(value) {
+            pinpointDriver.setPosition(Pose2D(DistanceUnit.INCH, value.x, value.y, AngleUnit.RADIANS, value.heading))
+            _poseEstimate = value
+        }
     private var _poseVelocity = Pose2d()
     override val poseVelocity: Pose2d
         get() = _poseVelocity
@@ -34,8 +40,16 @@ class GoBildaPinpointMecanumLocalizer(hardwareMap: HardwareMap) : Localizer {
         return deg / 180.0 * PI
     }
 
+    fun radianToDeg(rad: Double): Double {
+        return rad * 180.0 / PI
+    }
+
     fun mmToInches(mm: Double): Double {
         return mm / 25.4
+    }
+
+    fun inchesToMM(inches: Double): Double {
+        return inches * 25.4
     }
 
     override fun update() {

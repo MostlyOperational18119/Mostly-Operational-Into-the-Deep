@@ -17,6 +17,7 @@ import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAcceleration
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
+import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
 import com.qualcomm.robotcore.hardware.PIDFCoefficients
 import org.firstinspires.ftc.teamcode.drive.DriveConstants.MOTOR_VELO_PID
@@ -132,18 +133,19 @@ class SampleGoBildaPinpointMecanumDriveCancelable(hardwareMap: HardwareMap) : Dr
     }
 
     fun waitForIdle() {
-        while (!Thread.currentThread().isInterrupted && isBusy())
+        while (!Thread.currentThread().isInterrupted && isBusy)
             update()
     }
 
-    fun isBusy(): Boolean {
-        return trajectorySequenceRunnerCancelable.isBusy
-    }
+    val isBusy: Boolean
+        get() = trajectorySequenceRunnerCancelable.isBusy
 
     init {
         // Reverse motors here
+        motorBL.direction = DcMotorSimple.Direction.REVERSE
+        motorFL.direction = DcMotorSimple.Direction.REVERSE
 
-        setPIDFCoefficients(DcMotor.RunMode.RUN_WITHOUT_ENCODER, MOTOR_VELO_PID)
+//        setPIDFCoefficients(DcMotor.RunMode.RUN_WITHOUT_ENCODER, MOTOR_VELO_PID)
 
         trajectoryFollower = HolonomicPIDVAFollower(
             TRANSLATIONAL_PID,

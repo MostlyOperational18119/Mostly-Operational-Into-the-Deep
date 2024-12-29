@@ -7,9 +7,12 @@ import com.qualcomm.robotcore.hardware.CRServo
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.Gamepad
+import com.qualcomm.robotcore.hardware.PwmControl
 import com.qualcomm.robotcore.hardware.Servo
+import com.qualcomm.robotcore.hardware.ServoImplEx
 import com.qualcomm.robotcore.hardware.TouchSensor
 import com.qualcomm.robotcore.util.ElapsedTime
+import org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry
 import org.firstinspires.ftc.teamcode.drive.advanced.SampleMecanumDriveCancelable
 import kotlin.math.abs
 
@@ -17,9 +20,9 @@ import kotlin.math.abs
 abstract class Methods : LinearOpMode() {
     enum class VerticalSlideState { Floor, Low, High, Manual, Bar }
     enum class HorizontalSlideState { Floor, Extend, Manual }
-    enum class AutomaticTransferState { Manual, StartTransfer, SlideDown, Pickup, ResetSlide, RotateOut }
-    enum class AutomaticMovementState { Manual, Auto }
-    enum class HangStates { Up, Down, Reset, None}
+    enum class AutomaticTransferState { Manual, StartTransfer, InRotate, SlideDown, Pickup, ResetSlide, RotateOut }
+    //enum class AutomaticMovementState { Manual, Auto }
+    //enum class HangStates { Up, Down, Reset, None}
 
     val transferServoNormal = 0.84
     val transferServoIntake = 0.94
@@ -36,18 +39,24 @@ abstract class Methods : LinearOpMode() {
     val inSwivelCenter = 0.8
     val inSwivelLeft = 1.0
     val inClawOpen = 0.5
-    val inClawClosed = 0.85
+    val inClawClose = 0.85
 
-    val verticalSlideLow = 2300
-    val verticalSlideHigh = 3650
-    val verticalSlideBar = 1738
-    val horizontalSlideExtend = 1600
+    val verticalSlideWall = 500
+    val verticalSlideHigh = 3500
+    val verticalSlideBar = 1500
+    val horizontalSlideExtend = 950
+
+
+    var outClawToggle = false
+    var inClawToggle = false
+    var inRotationToggle = false
+    var outSwivelToggle = false
+    var transferServoToggle = false
+    var doOnce = false
+    var verticalHeight = 0
     val speedDiv = 2.3
 
     val elapsedTime = ElapsedTime()
-
-    var intakeInToggle = false
-    var intakeOutToggle = false
 
     val drive = SampleMecanumDriveCancelable(hardwareMap)
     val basketVector = Vector2d(-58.26, -57.64)
@@ -59,9 +68,9 @@ abstract class Methods : LinearOpMode() {
 
     var horizontalSlideToggle = HorizontalSlideState.Manual
     var verticalSlideToggle = VerticalSlideState.Manual
-    var automatedTransferToggle = AutomaticTransferState.Pickup
-    var automatedMovementToggle = AutomaticMovementState.Manual
-    var hangerState = HangStates.None
+    var automaticTransferToggle = AutomaticTransferState.Pickup
+//    var automatedMovementToggle = AutomaticMovementState.Manual
+//    var hangerState = HangStates.None
 
     val controller1 = Gamepad()
     val controller2 = Gamepad()
@@ -80,125 +89,75 @@ abstract class Methods : LinearOpMode() {
     var motorBR: DcMotor? = null
     var slideVertical: DcMotor? = null
     var slideHorizontal: DcMotor? = null
-    var intakeServo : CRServo? = null
-    var clawServo : Servo? = null
+
     var transferServo : Servo? = null
-    var clawRotateServo : Servo? = null
-    var hangPusher : Servo? = null
-    var inRotation : Servo? = null
-
-    //Get stick Inputs
-    fun getStickInputs (){
-        leftY1 = -gamepad1.left_stick_y.toDouble() / speedDiv
-        leftX1 = gamepad1.left_stick_x.toDouble() / (speedDiv/1.5)
-        rightX1 = gamepad1.right_stick_x.toDouble()
-        leftY2 = -gamepad2.left_stick_y.toDouble()
-        rightY2 = -gamepad2.right_stick_y.toDouble()
-    }
-
-    fun moveRobot(){
-        motorFL!!.power = (leftY1!! + leftX1!!+ rightX1!!)
-        motorBL!!.power = (leftY1!! - leftX1!! + rightX1!!)
-        motorFR!!.power = (leftY1!! - leftX1!! - rightX1!!)
-        motorBR!!.power = (leftY1!! + leftX1!! - rightX1!!)
-    }
-
-//    //Intake the pixel with a sleep
-//    fun intakePixel (sleep: Long){
-//        intakeServo!!.power = 1.0
-//        horizontalSlideTo(800, 1.0)
-//        sleep(sleep)
-//    }
-//
-//    //places the sample. Really just opening the claw
-//    fun placeSample(){
-//        sleep(200)
-//        clawServo!!.position = clawServoOpen
-//        sleep(200)
-//    }
-//
-//    fun placeSpecimen(){
-//        transferServo!!.position = transferDownPos
-//        clawServo!!.position = clawServoClosed
-//        verticalSlideTo(500,1.0)
-//        sleep(500)
-//        clawServo!!.position = clawServoOpen
-//        sleep(200)
-//        clawRotateServo!!.position = clawRotateUpRight
-//    }
+    var outClawServo : Servo? = null
+    var outRotationServo : Servo? = null
+    var outSwivelServo : Servo? = null
+    var inSwivelServo : Servo? = null
+    var inClawServo : Servo? = null
+    var inRotationServo : Servo? = null
 
     //Sets the position of vertical motor and moves. Only uses 1 power since it checks.
-//    fun verticalSlideTo(position : Int, power : Double){
-//        slideVerticalMotor!!.targetPosition = position
-//        if (slideVerticalMotor!!.currentPosition < slideVerticalMotor!!.targetPosition) {
-//            slideVerticalMotor!!.power = power
-//        }
-//        else{
-//            slideVerticalMotor!!.power = -power
-//        }
-//    }
-//
-//    //Sets the position of horizontal motor and moves. Only uses 1 power since it checks.
-//    fun horizontalSlideTo(position : Int, power : Double){
-//        slideHorizontalMotor!!.targetPosition = position
-//        if (slideHorizontalMotor!!.currentPosition < slideHorizontalMotor!!.targetPosition) {
-//            slideHorizontalMotor!!.power = power
-//        }
-//        else{
-//            slideHorizontalMotor!!.power = -power
-//        }
-//    }
-//
-//    //Resets the mode back to Manual for Vertical Motor in Vertical States
-//    fun verticalBackToManual(){
-//        if (abs(slideVerticalMotor!!.currentPosition - slideVerticalMotor!!.targetPosition) < 20) {
-//            verticalSlideToggle = VerticalSlideState.Manual
-//        }
-//    }
+    fun verticalSlideTo(position : Int, power : Double){
+        slideVertical!!.targetPosition = position
+        if (slideVertical!!.currentPosition < slideVertical!!.targetPosition) {
+            slideVertical!!.power = power
+        }
+        else{
+            slideVertical!!.power = -power
+        }
+    }
 
-//    //Resets the mode back to Manual for Horizontal Motor in Horizontal States
-//    fun horizontalBackToManual(){
-//        if (abs(slideHorizontalMotor!!.currentPosition - slideHorizontalMotor!!.targetPosition) < 20) {
-//            horizontalSlideToggle = HorizontalSlideState.Manual
-//        }
-//    }
-//
-//    //The slow but consistent transfer when the slide is already down
-//    fun transferFromDownToHigh(){
-//        intakeServo!!.power = 0.0
-//        horizontalSlideTo(0,1.0)
-//        clawRotateServo!!.position = clawRotateUpRight
-//        verticalSlideTo(400,1.0)
-//        transferServo!!.position = transferUpPos
-//        clawServo!!.position = clawServoOpen
-//        clawRotateServo!!.position = clawRotateRest
-//        sleep(500)
-//        verticalSlideTo(0,1.0)
-//        sleep(500)
-//        clawServo!!.position = clawServoClosed
-//        sleep(500)
-//        verticalSlideTo(3650,1.0)
-//        clawRotateServo!!.position = clawRotateOut
-//        sleep(1100)
-//        transferServo!!.position = transferDownPos
-//    }
+    //Sets the position of horizontal motor and moves. Only uses 1 power since it checks.
+    fun horizontalSlideTo(position : Int, power : Double){
+        slideHorizontal!!.targetPosition = position
+        if (slideHorizontal!!.currentPosition < slideHorizontal!!.targetPosition) {
+            slideHorizontal!!.power = power
+        }
+        else{
+            slideHorizontal!!.power = -power
+        }
+    }
 
-    //Copies the Controls for Teleop
-    fun copyControls (){
-        previousController1.copy(controller1)
-        previousController2.copy(controller2)
-        controller1.copy(gamepad1)
-        controller2.copy(gamepad2)
+    fun verticalBackToManual(){
+        if (abs(slideVertical!!.currentPosition - slideVertical!!.targetPosition) < 40) {
+            verticalSlideToggle = VerticalSlideState.Manual
+            verticalHeight = slideVertical!!.currentPosition
+        }
+    }
+
+    //Resets the mode back to Manual for Horizontal Motor in Horizontal States
+    fun horizontalBackToManual(){
+        if (abs(slideHorizontal!!.currentPosition - slideHorizontal!!.targetPosition) < 40) {
+            horizontalSlideToggle = HorizontalSlideState.Manual
+        }
     }
 
     //Initializes the Servos and Touch Sensor
-    fun initServosAndTouch(){
-        intakeServo = hardwareMap.crservo["Transfer"]
-        clawServo = hardwareMap.servo["OutClaw"]
-        transferServo = hardwareMap.servo["OutRotation"]
-        clawRotateServo = hardwareMap.servo["OutSwivel"]
-        hangPusher = hardwareMap.servo["InSwivel"]
-        inRotation = hardwareMap.servo["InRotation"]
+    fun initServosAndTouchWithSet(){
+        transferServo = hardwareMap.servo["Transfer"]
+        transferServo!!.position = transferServoNormal
+        outClawServo = hardwareMap.servo["OutClaw"]
+        outClawServo!!.position = outClawClose
+        outRotationServo = hardwareMap.servo["OutRotation"]
+        outRotationServo!!.position = outRotationCenter
+        outSwivelServo = hardwareMap.servo["OutSwivel"]
+        outSwivelServo!!.position = outSwivelParallel
+        inSwivelServo = hardwareMap.servo["InSwivel"]
+        inSwivelServo!!.position = inSwivelCenter
+        inRotationServo = hardwareMap.servo["InRotation"]
+        inClawServo = hardwareMap.servo["InClaw"]
+    }
+
+    fun initServosAndTouchWithoutSet(){
+        transferServo = hardwareMap.servo["Transfer"]
+        outClawServo = hardwareMap.servo["OutClaw"]
+        outRotationServo = hardwareMap.servo["OutRotation"]
+        outSwivelServo = hardwareMap.servo["OutSwivel"]
+        inSwivelServo = hardwareMap.servo["InSwivel"]
+        inClawServo = hardwareMap.servo["InClaw"]
+        inRotationServo = hardwareMap.servo["InRotation"]
     }
 
     //Initializes and sets motors but does not reset the motors
@@ -210,8 +169,10 @@ abstract class Methods : LinearOpMode() {
         slideVertical = hardwareMap.dcMotor["verticalSlide"]
         slideHorizontal = hardwareMap.dcMotor["horizontalSlide"]
         setMotorModePositionNoReset(slideHorizontal!!)
-        motorBL!!.direction = DcMotorSimple.Direction.REVERSE
+        setMotorModePositionNoReset(slideVertical!!)
         motorFL!!.direction = DcMotorSimple.Direction.REVERSE
+        motorBL!!.direction = DcMotorSimple.Direction.REVERSE
+        slideHorizontal!!.direction = DcMotorSimple.Direction.REVERSE
     }
 
     //Initializes and sets motors amd resets them
@@ -223,8 +184,9 @@ abstract class Methods : LinearOpMode() {
         slideVertical = hardwareMap.dcMotor["verticalSlide"]
         slideHorizontal = hardwareMap.dcMotor["horizontalSlide"]
         setMotorModePosition(slideHorizontal!!)
-        motorBL!!.direction = DcMotorSimple.Direction.REVERSE
+        setMotorModePosition(slideVertical!!)
         motorFL!!.direction = DcMotorSimple.Direction.REVERSE
+        motorBL!!.direction = DcMotorSimple.Direction.REVERSE
         slideHorizontal!!.direction = DcMotorSimple.Direction.REVERSE
     }
 
@@ -259,19 +221,22 @@ abstract class Methods : LinearOpMode() {
     }
 
     fun teleopTelemetry(){
-//        telemetry.addData("Odometry: ",
-//            String.format(
-//                "Pose: %s, Velocity: %s",
-//                drive.poseEstimate.toString(),
-//                drive.getWheelVelocities().toString()
-//            )
-//        )
-//        telemetry.addData("Tape Measure Motor: ", tapeMeasureRotateMotor!!.currentPosition)
-//        telemetry.addData("Rotate Servo Position: ", clawRotateServo!!.position)
-//        telemetry.addData("Transfer Servo Position: ", transferServo!!.position)
-        telemetry.addLine("OpMode is active")
+        telemetry.addData("Odometry: ",
+            String.format(
+                "Pose: %s, Velocity: %s",
+                drive.poseEstimate.toString(),
+                drive.getWheelVelocities().toString()
+            )
+        )
+        telemetry.addData("Vertical Current: ", slideVertical!!.currentPosition)
+        telemetry.addData("Vertical Target: ", slideVertical!!.targetPosition)
+        telemetry.addData("Vertical Power: ", slideVertical!!.power)
+        telemetry.addData("Hor Current: ", slideHorizontal!!.currentPosition)
+        telemetry.addData("Hor Target: ", slideHorizontal!!.targetPosition)
+        telemetry.addData("Hor Power: ", slideHorizontal!!.power)
         telemetry.update()
     }
+
     //insideJokes
     fun insideJokes (){
         telemetry.addLine(when ((0..50).random()) {

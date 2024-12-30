@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.Gamepad
 
-@Disabled
 @TeleOp(name = "OtherMotorTester")
 class OtherMotorTester : LinearOpMode() {
     override fun runOpMode() {
@@ -59,10 +58,10 @@ class OtherMotorTester : LinearOpMode() {
                 motorBR.power = if (motorBRRun) runPower else 0.0
             }
 
-            telemetry.addLine("motorFL running: $motorFLRun")
-            telemetry.addLine("motorFR running: $motorFRRun")
-            telemetry.addLine("motorBL running: $motorBLRun")
-            telemetry.addLine("motorBR running: $motorBRRun")
+            telemetry.addLine("motorFL running: $motorFLRun (Toggle with A)")
+            telemetry.addLine("motorFR running: $motorFRRun (Toggle with B)")
+            telemetry.addLine("motorBL running: $motorBLRun (Toggle with X)")
+            telemetry.addLine("motorBR running: $motorBRRun (Toggle with Y)")
             telemetry.addLine("Previous A: ${previousGamepad.a}. Current A: ${currentGamepad.a}")
             println("Previous A: ${previousGamepad.a}. Current A: ${currentGamepad.a}")
             telemetry.update()

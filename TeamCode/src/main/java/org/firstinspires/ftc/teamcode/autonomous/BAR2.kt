@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.Methods
 class BAR2 : Methods() {
     override fun runOpMode() {
         initMotors()
-        initServosAndTouch()
+        initServosAndTouchWithoutSet()
 
         drive.poseEstimate = Pose2d(12.08, -63.19, Math.toRadians(-90.00))
         

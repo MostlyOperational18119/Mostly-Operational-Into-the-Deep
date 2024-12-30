@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.drive.SampleGoBildaPinpointMecanumDriveCancelable;
-import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 /**
  * This is a simple teleop routine for testing localization. Drive the robot around like a normal
@@ -21,14 +20,14 @@ public class LocalizationTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         SampleGoBildaPinpointMecanumDriveCancelable drive = new SampleGoBildaPinpointMecanumDriveCancelable(hardwareMap);
 
-//        drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         waitForStart();
 
         while (!isStopRequested()) {
-            double lStickY = -gamepad1.left_stick_y * 0.5;
-            double lStickX = gamepad1.left_stick_x * 0.5;
-            double rStickX = gamepad1.right_stick_x * 0.5;
+            double lStickY = -gamepad1.left_stick_y * 0.5; // X
+            double lStickX = gamepad1.left_stick_x * 0.5;  // Y
+            double rStickX = gamepad1.right_stick_x * 0.5; // Z
 
             drive.setWeightedDrivePower(
                     new Pose2d(

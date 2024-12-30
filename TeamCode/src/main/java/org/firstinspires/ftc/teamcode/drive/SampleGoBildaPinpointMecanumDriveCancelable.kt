@@ -27,6 +27,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder
 import kotlin.math.abs
 
+@Suppress("SpellCheckingInspection")
 @Config
 class SampleGoBildaPinpointMecanumDriveCancelable(hardwareMap: HardwareMap) : Drive() {
     companion object {
@@ -170,7 +171,13 @@ class SampleGoBildaPinpointMecanumDriveCancelable(hardwareMap: HardwareMap) : Dr
             ).div(denom)
         }
 
-        setDrivePower(vel!!)
+        setDrivePower(vel)
+    }
+
+    fun setMode(mode: DcMotor.RunMode) {
+        motors.forEach {
+            it.mode = mode
+        }
     }
 
     val isBusy: Boolean

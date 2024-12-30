@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
 class BASKET2 : Methods() {
     override fun runOpMode() {
         initMotors()
-        initServosAndTouch()
+        initServosAndTouchWithoutSet()
 
         drive.poseEstimate = Pose2d(-34.09, -63.19, Math.toRadians(-90.00))
 

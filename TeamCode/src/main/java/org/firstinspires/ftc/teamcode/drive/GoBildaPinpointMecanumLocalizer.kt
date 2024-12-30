@@ -21,7 +21,7 @@ class GoBildaPinpointMecanumLocalizer(hardwareMap: HardwareMap) : Localizer {
         pinpointDriver.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
 
         pinpointDriver.setEncoderDirections(
-            GoBildaPinpointDriver.EncoderDirection.REVERSED, // HAVEN'T TESTED YET, BUT SHOULD FIX ROBOT
+            GoBildaPinpointDriver.EncoderDirection.FORWARD, // MAYBE TRY REVERSED AGAIN
             GoBildaPinpointDriver.EncoderDirection.FORWARD
         )
 
@@ -39,38 +39,24 @@ class GoBildaPinpointMecanumLocalizer(hardwareMap: HardwareMap) : Localizer {
     override val poseVelocity: Pose2d
         get() = _poseVelocity
 
-    fun degToRadian(deg: Double): Double {
-        val result = deg / 180.0 * PI
-        Log.i("degToRadian", "Called with degrees of $deg, returning $result (would be ${Math.toRadians(deg)}")
-        return result
-    }
-
-    fun radianToDeg(rad: Double): Double {
-        return rad * 180.0 / PI
-    }
-
-    fun mmToInches(mm: Double): Double {
-        return mm / 25.4
-    }
-
-    fun inchesToMM(inches: Double): Double {
-        return inches * 25.4
-    }
-
     override fun update() {
         pinpointDriver.update()
 
         Log.i("GoBildaPinpointMecanumLocalizer", "Position Pose2D ${pinpointDriver.getPosition()}")
 
-        val posX = mmToInches(pinpointDriver.getPosX())
-        val posY = mmToInches(pinpointDriver.getPosY())
-        val posHeading = pinpointDriver.getHeading()
+        val pos = pinpointDriver.getPosition()
+
+        val posX = pos.getX(DistanceUnit.INCH)
+        val posY = pos.getY(DistanceUnit.INCH)
+        val posHeading = pos.getHeading(AngleUnit.RADIANS)
 
         _poseEstimate = Pose2d(posX, posY, posHeading)
 
-        val velX = mmToInches(pinpointDriver.getVelX())
-        val velY = mmToInches(pinpointDriver.getVelY())
-        val velHeading = pinpointDriver.getHeadingVelocity()
+        val vel = pinpointDriver.getVelocity()
+
+        val velX = vel.getX(DistanceUnit.INCH)
+        val velY = vel.getY(DistanceUnit.INCH)
+        val velHeading = vel.getHeading(AngleUnit.RADIANS)
 
         _poseVelocity = Pose2d(velX, velY, velHeading)
     }

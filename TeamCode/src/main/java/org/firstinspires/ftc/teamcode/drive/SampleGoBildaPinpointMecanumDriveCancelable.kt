@@ -180,6 +180,16 @@ class SampleGoBildaPinpointMecanumDriveCancelable(hardwareMap: HardwareMap) : Dr
         }
     }
 
+    fun getWheelVelocities(): List<Double> {
+        val list = ArrayList<Double>()
+
+        motors.forEach {
+            list.add(it.power)
+        }
+
+        return list
+    }
+
     val isBusy: Boolean
         get() = trajectorySequenceRunnerCancelable.isBusy
 

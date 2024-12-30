@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.hardware.ServoImplEx
 import com.qualcomm.robotcore.hardware.TouchSensor
 import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry
+import org.firstinspires.ftc.teamcode.drive.SampleGoBildaPinpointMecanumDriveCancelable
 import org.firstinspires.ftc.teamcode.drive.advanced.SampleMecanumDriveCancelable
 import kotlin.math.abs
 
@@ -58,7 +59,7 @@ abstract class Methods : LinearOpMode() {
 
     val elapsedTime = ElapsedTime()
 
-    val drive = SampleMecanumDriveCancelable(hardwareMap)
+    var drive: SampleGoBildaPinpointMecanumDriveCancelable? = null
     val basketVector = Vector2d(-58.26, -57.64)
     val basketHeading = Math.toRadians(225.00)
     val barVector = Vector2d(-10.04, -34.01)
@@ -190,6 +191,12 @@ abstract class Methods : LinearOpMode() {
         slideHorizontal!!.direction = DcMotorSimple.Direction.REVERSE
     }
 
+    fun initOdometry() {
+        drive = SampleGoBildaPinpointMecanumDriveCancelable(hardwareMap)
+
+        assert(drive != null)
+    }
+
     //Sets the mode of a motor to encoder with reset
     fun setMotorModeEncoder(motor: DcMotor) {
         motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
@@ -221,19 +228,13 @@ abstract class Methods : LinearOpMode() {
     }
 
     fun teleopTelemetry(){
-        telemetry.addData("Odometry: ",
-            String.format(
-                "Pose: %s, Velocity: %s",
-                drive.poseEstimate.toString(),
-                drive.getWheelVelocities().toString()
-            )
-        )
-        telemetry.addData("Vertical Current: ", slideVertical!!.currentPosition)
-        telemetry.addData("Vertical Target: ", slideVertical!!.targetPosition)
-        telemetry.addData("Vertical Power: ", slideVertical!!.power)
-        telemetry.addData("Hor Current: ", slideHorizontal!!.currentPosition)
-        telemetry.addData("Hor Target: ", slideHorizontal!!.targetPosition)
-        telemetry.addData("Hor Power: ", slideHorizontal!!.power)
+        telemetry.addLine("Odometry Pose: ${drive!!.poseEstimate}, Velocity: ${drive!!.getWheelVelocities()}")
+        telemetry.addLine("Vertical Current: ${slideVertical!!.currentPosition}")
+        telemetry.addLine("Vertical Target: ${slideVertical!!.targetPosition}")
+        telemetry.addLine("Vertical Power: ${slideVertical!!.power}")
+        telemetry.addLine("Horizontal Current: ${slideHorizontal!!.currentPosition}")
+        telemetry.addLine("Horizontal Target: ${slideHorizontal!!.targetPosition}")
+        telemetry.addLine("Horizontal Power: ${slideHorizontal!!.power}")
         telemetry.update()
     }
 

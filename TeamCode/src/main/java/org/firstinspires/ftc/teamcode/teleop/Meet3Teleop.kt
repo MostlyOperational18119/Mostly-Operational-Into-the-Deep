@@ -33,20 +33,21 @@ class Meet3Teleop: Methods() {
             when (automaticTransferToggle) {
                 AutomaticTransferState.Manual -> {
                     //AUTO TRANSFER TOGGLE
-                    if (controller1.right_trigger > 0.5 && !(previousController1.right_trigger > 0.5)) {
+                    if (controller2.x && !(previousController2.x)) {
                         automaticTransferToggle = AutomaticTransferState.StartTransfer
                     }
 
                     //ALL SERVOS STUFF HERE. ASK BUILD FOR WHICH SERVO IS WHICH
-                    if (controller1.a && !previousController1.a) { outClawToggle = !outClawToggle }
+                    if (controller2.right_bumper && !previousController2.right_bumper) { outClawToggle = !outClawToggle }
                     if (outClawToggle){ outClawServo!!.position = outClawOpen}
                     if (!outClawToggle){ outClawServo!!.position = outClawClose}
 
-                    if (controller1.b && !previousController1.b) { inClawToggle = !inClawToggle }
+                    if (controller2.left_bumper && !previousController2.left_bumper) { inClawToggle = !inClawToggle }
                     if (inClawToggle){ inClawServo!!.position = inClawOpen}
                     if (!inClawToggle){ inClawServo!!.position = inClawClose}
 
-                    if (controller1.x && !previousController1.x) { inRotationToggle = !inRotationToggle }
+                    if (controller2.y && !previousController2.y) { inRotationToggle = true }
+                    if (controller2.a && !previousController2.a) { inRotationToggle = false }
                     if (inRotationToggle){ inRotationServo!!.position = inRotationTransfer}
                     if (!inRotationToggle){ inRotationServo!!.position = inRotationPick}
 
@@ -58,16 +59,16 @@ class Meet3Teleop: Methods() {
                     if (transferServoToggle){ transferServo!!.position = transferServoIntake}
                     if (!transferServoToggle){ transferServo!!.position = transferServoNormal}
 
-                    if (controller1.left_bumper && !previousController1.left_bumper) {
-                        inSwivelServo!!.position +=0.02
-                    }
-                    if (controller1.right_bumper && !previousController1.right_bumper) {
-                        inSwivelServo!!.position -=0.02
-                    }
+                    //if (controller1.left_bumper && !previousController1.left_bumper) {
+                    //    inSwivelServo!!.position +=0.02
+                    //}
+                    //if (controller1.right_bumper && !previousController1.right_bumper) {
+                    //    inSwivelServo!!.position -=0.02
+                    //}
 
                     //HORIZONTAL SLIDE
-                    if (controller2.y && !previousController2.y) { horizontalSlideToggle = HorizontalSlideState.Floor }
-                    if (controller2.x && !previousController2.x) { horizontalSlideToggle = HorizontalSlideState.Extend }
+                    if (controller2.left_stick_button && !previousController2.left_stick_button) { horizontalSlideToggle = HorizontalSlideState.Floor }
+                    //if (controller2.x && !previousController2.x) { horizontalSlideToggle = HorizontalSlideState.Extend }
                     if (leftY2!! >= 0.2 || leftY2!! <= -0.2) { horizontalSlideToggle = HorizontalSlideState.Manual }
                     when (horizontalSlideToggle) {
                         HorizontalSlideState.Manual -> {
@@ -87,6 +88,7 @@ class Meet3Teleop: Methods() {
                     //VERTICAL SLIDE
                     if (controller2.dpad_up && !previousController2.dpad_up) { verticalSlideToggle = VerticalSlideState.High }
                     if (controller2.dpad_down && !previousController2.dpad_down) { verticalSlideToggle = VerticalSlideState.Floor }
+                    if (controller2.right_stick_button && !previousController2.right_stick_button) { verticalSlideToggle = VerticalSlideState.Floor }
                     if (controller2.dpad_left && !previousController2.dpad_left) { verticalSlideToggle = VerticalSlideState.Low }
                     if (controller2.dpad_right && !previousController2.dpad_right) { verticalSlideToggle = VerticalSlideState.Bar }
                     if (rightY2!! >= 0.2 || rightY2!! <= -0.2) { verticalSlideToggle = VerticalSlideState.Manual }

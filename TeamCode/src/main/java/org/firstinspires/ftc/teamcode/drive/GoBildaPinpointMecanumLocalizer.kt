@@ -21,7 +21,7 @@ class GoBildaPinpointMecanumLocalizer(hardwareMap: HardwareMap) : Localizer {
         pinpointDriver.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
 
         pinpointDriver.setEncoderDirections(
-            GoBildaPinpointDriver.EncoderDirection.FORWARD, // MAYBE TRY REVERSED AGAIN
+            GoBildaPinpointDriver.EncoderDirection.REVERSED, // MAYBE TRY REVERSED AGAIN
             GoBildaPinpointDriver.EncoderDirection.FORWARD
         )
 

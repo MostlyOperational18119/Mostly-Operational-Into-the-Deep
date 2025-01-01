@@ -12,12 +12,19 @@ class TestGoBildaAuto : LinearOpMode() {
 
         sleep(250)
 
-//        drive.poseEstimate = Pose2d()
-
         telemetry.addLine("Init done")
         telemetry.update()
 
         waitForStart()
+
+        // Create trajectory sequence
+        val trajectorySequence = drive.trajectorySequenceBuilder(Pose2d())
+            .forward(42.0)
+            .strafeRight(84.0)
+            .back(84.0)
+            .strafeLeft(84.0)
+            .forward(42.0)
+            .build()
 
         while (opModeIsActive()) {
             telemetry.addLine("Pose estimate: ${drive.poseEstimate}")
@@ -28,16 +35,12 @@ class TestGoBildaAuto : LinearOpMode() {
             if (gamepad1.a) break
         }
 
-        drive.turn(Math.toRadians(360.0))
+        if (!opModeIsActive()) return
 
-        // Start Auto
-        val trajectorySequence = drive.trajectorySequenceBuilder(Pose2d())
-            .forward(10.0)
-            .build()
+        while (opModeIsActive()) {
+            // Start Auto movement
+            if (!drive.isBusy) drive.followTrajectorySequenceAsync(trajectorySequence)
 
-        drive.followTrajectorySequenceAsync(trajectorySequence)
-
-        while (drive.isBusy) {
             drive.update()
 
             telemetry.addLine("Pose estimate: ${drive.poseEstimate}")

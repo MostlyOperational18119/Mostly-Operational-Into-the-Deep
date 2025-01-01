@@ -10,6 +10,8 @@ import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.kinematics.Kinematics
 import com.acmerobotics.roadrunner.kinematics.MecanumKinematics
 import com.acmerobotics.roadrunner.localization.Localizer
+import com.acmerobotics.roadrunner.trajectory.Trajectory
+import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder
 import com.acmerobotics.roadrunner.trajectory.constraints.AngularVelocityConstraint
 import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstraint
 import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint
@@ -21,6 +23,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
 import com.qualcomm.robotcore.hardware.PIDFCoefficients
+import org.firstinspires.ftc.teamcode.drive.DriveConstants.MOTOR_VELO_PID
 import org.firstinspires.ftc.teamcode.drive.advanced.SampleMecanumDriveCancelable
 import org.firstinspires.ftc.teamcode.drive.advanced.TrajectorySequenceRunnerCancelable
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
@@ -31,10 +34,10 @@ import kotlin.math.abs
 @Config
 class SampleGoBildaPinpointMecanumDriveCancelable(hardwareMap: HardwareMap) : Drive() {
     companion object {
-        val TRANSLATIONAL_PID = PIDCoefficients(8.0, 0.0, 1.0)
-        val HEADING_PID = PIDCoefficients(7.0, 0.0, 0.0)
+        @JvmField var TRANSLATIONAL_PID = PIDCoefficients(3.0, 1.0, 1.0)
+        @JvmField var HEADING_PID = PIDCoefficients(7.0, 0.0, 0.0)
 
-        private val VEL_CONSTRAINT: TrajectoryVelocityConstraint =
+        @JvmField var VEL_CONSTRAINT: TrajectoryVelocityConstraint =
             MinVelocityConstraint(
                 listOf(
                     AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
@@ -42,7 +45,7 @@ class SampleGoBildaPinpointMecanumDriveCancelable(hardwareMap: HardwareMap) : Dr
                 )
             )
 
-        private val ACCEL_CONSTRAINT: TrajectoryAccelerationConstraint =
+        @JvmField var ACCEL_CONSTRAINT: TrajectoryAccelerationConstraint =
             ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL)
     }
 
@@ -110,12 +113,34 @@ class SampleGoBildaPinpointMecanumDriveCancelable(hardwareMap: HardwareMap) : Dr
         )
     }
 
+    fun trajectoryBuilder(startPose: Pose2d): TrajectoryBuilder {
+        return TrajectoryBuilder(
+            startPose,
+            false,
+            VEL_CONSTRAINT,
+            ACCEL_CONSTRAINT
+        )
+    }
+
     fun followTrajectorySequenceAsync(trajectorySequence: TrajectorySequence) {
         trajectorySequenceRunnerCancelable.followTrajectorySequenceAsync(trajectorySequence)
     }
 
     fun followTrajectorySequence(trajectorySequence: TrajectorySequence) {
         followTrajectorySequenceAsync(trajectorySequence)
+        waitForIdle()
+    }
+
+    fun followTrajectoryAsync(trajectory: Trajectory) {
+        trajectorySequenceRunnerCancelable.followTrajectorySequenceAsync(
+            trajectorySequenceBuilder(trajectory.start())
+                .addTrajectory(trajectory)
+                .build()
+        )
+    }
+
+    fun followTrajectory(trajectory: Trajectory) {
+        followTrajectoryAsync(trajectory)
         waitForIdle()
     }
 
@@ -198,7 +223,7 @@ class SampleGoBildaPinpointMecanumDriveCancelable(hardwareMap: HardwareMap) : Dr
         motorBL.direction = DcMotorSimple.Direction.REVERSE
         motorFL.direction = DcMotorSimple.Direction.REVERSE
 
-//        setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, MOTOR_VELO_PID)
+        setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, MOTOR_VELO_PID)
 
         trajectoryFollower = HolonomicPIDVAFollower(
             TRANSLATIONAL_PID,

@@ -23,7 +23,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
 import com.qualcomm.robotcore.hardware.PIDFCoefficients
-import org.firstinspires.ftc.teamcode.drive.DriveConstants.MOTOR_VELO_PID
 import org.firstinspires.ftc.teamcode.drive.advanced.SampleMecanumDriveCancelable
 import org.firstinspires.ftc.teamcode.drive.advanced.TrajectorySequenceRunnerCancelable
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
@@ -34,7 +33,8 @@ import kotlin.math.abs
 @Config
 class SampleGoBildaPinpointMecanumDriveCancelable(hardwareMap: HardwareMap) : Drive() {
     companion object {
-        @JvmField var TRANSLATIONAL_PID = PIDCoefficients(3.0, 1.0, 1.0)
+        @JvmField var TRANSLATIONAL_X_PID = PIDCoefficients(3.0, 1.0, 1.0)
+        @JvmField var TRANSLATIONAL_Y_PID = PIDCoefficients(3.0, 1.0, 1.0)
         @JvmField var HEADING_PID = PIDCoefficients(7.0, 0.0, 0.0)
 
         @JvmField var VEL_CONSTRAINT: TrajectoryVelocityConstraint =
@@ -117,6 +117,24 @@ class SampleGoBildaPinpointMecanumDriveCancelable(hardwareMap: HardwareMap) : Dr
         return TrajectoryBuilder(
             startPose,
             false,
+            VEL_CONSTRAINT,
+            ACCEL_CONSTRAINT
+        )
+    }
+
+    fun trajectoryBuilder(startPose: Pose2d, reversed: Boolean): TrajectoryBuilder {
+        return TrajectoryBuilder(
+            startPose,
+            reversed,
+            VEL_CONSTRAINT,
+            ACCEL_CONSTRAINT
+        )
+    }
+
+    fun trajectoryBuilder(startPose: Pose2d, startHeading: Double): TrajectoryBuilder {
+        return TrajectoryBuilder(
+            startPose,
+            startHeading,
             VEL_CONSTRAINT,
             ACCEL_CONSTRAINT
         )
@@ -223,17 +241,17 @@ class SampleGoBildaPinpointMecanumDriveCancelable(hardwareMap: HardwareMap) : Dr
         motorBL.direction = DcMotorSimple.Direction.REVERSE
         motorFL.direction = DcMotorSimple.Direction.REVERSE
 
-        setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, MOTOR_VELO_PID)
+//        setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, MOTOR_VELO_PID)
 
         trajectoryFollower = HolonomicPIDVAFollower(
-            TRANSLATIONAL_PID,
-            TRANSLATIONAL_PID,
+            TRANSLATIONAL_X_PID,
+            TRANSLATIONAL_Y_PID,
             HEADING_PID,
             Pose2d(0.5, 0.5, Math.toRadians(5.0)),
             0.5
         )
 
         trajectorySequenceRunnerCancelable =
-            TrajectorySequenceRunnerCancelable(trajectoryFollower, HEADING_PID)
+            TrajectorySequenceRunnerCancelable(trajectoryFollower, HEADING_PID, batteryVoltageSensor)
     }
 }

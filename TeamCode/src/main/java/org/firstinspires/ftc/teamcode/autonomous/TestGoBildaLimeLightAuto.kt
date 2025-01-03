@@ -23,13 +23,15 @@ class TestGoBildaLimeLightAuto : LinearOpMode() {
 
         var choice = -1
 
-        while (choice == -1) {
+        while (choice == -1 && !isStopRequested) {
             telemetry.addLine("A for RED \nB for BLUE \nX for ORANGE")
             telemetry.update()
             choice = if (gamepad1.a) 0 else if (gamepad1.b) 1 else if (gamepad1.x) 2 else -1
 
             sleep(50)
         }
+
+        if (isStopRequested) return
 
         limelight.pipelineSwitch(choice)
         limelight.start()
@@ -44,7 +46,7 @@ class TestGoBildaLimeLightAuto : LinearOpMode() {
             val colorResult = llResults.colorResults[0]
 
             // Center to sample
-            val inchSamplePose = colorResult.targetPoseCameraSpace.position.toUnit(DistanceUnit.INCH)
+            val inchSamplePose = colorResult.targetPoseRobotSpace.position.toUnit(DistanceUnit.INCH)
             lMove += inchSamplePose.x
             fMove += inchSamplePose.z
         }

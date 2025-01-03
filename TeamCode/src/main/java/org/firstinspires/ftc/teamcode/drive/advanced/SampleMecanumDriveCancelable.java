@@ -131,7 +131,7 @@ public class SampleMecanumDriveCancelable extends MecanumDrive {
         setLocalizer(new TwoWheelTrackingLocalizer(hardwareMap, this));
         // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
 
-        trajectorySequenceRunner = new TrajectorySequenceRunnerCancelable(follower, HEADING_PID);
+        trajectorySequenceRunner = new TrajectorySequenceRunnerCancelable(follower, HEADING_PID, batteryVoltageSensor);
     }
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {

@@ -15,7 +15,9 @@ import com.acmerobotics.roadrunner.profile.MotionState;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryMarker;
 import com.acmerobotics.roadrunner.util.NanoClock;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
+import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.trajectorysequence.sequencesegment.SequenceSegment;
 import org.firstinspires.ftc.teamcode.trajectorysequence.sequencesegment.TrajectorySegment;
@@ -55,14 +57,18 @@ public class TrajectorySequenceRunnerCancelable {
 
     List<TrajectoryMarker> remainingMarkers = new ArrayList<>();
 
+    private VoltageSensor voltageSensor;
+
     private final FtcDashboard dashboard;
     private final LinkedList<Pose2d> poseHistory = new LinkedList<>();
 
-    public TrajectorySequenceRunnerCancelable(TrajectoryFollower follower, PIDCoefficients headingPIDCoefficients) {
+    public TrajectorySequenceRunnerCancelable(TrajectoryFollower follower, PIDCoefficients headingPIDCoefficients, VoltageSensor voltageSensor) {
         this.follower = follower;
 
         turnController = new PIDFController(headingPIDCoefficients);
         turnController.setInputBounds(0, 2 * Math.PI);
+
+        this.voltageSensor = voltageSensor;
 
         clock = NanoClock.system();
 
@@ -183,6 +189,15 @@ public class TrajectorySequenceRunnerCancelable {
 
         if (POSE_HISTORY_LIMIT > -1 && poseHistory.size() > POSE_HISTORY_LIMIT) {
             poseHistory.removeFirst();
+        }
+
+        final double NOMINAL_VOLTAGE = 12.0;
+        double voltage = voltageSensor.getVoltage();
+        if (driveSignal != null && !DriveConstants.RUN_USING_ENCODER) {
+            driveSignal = new DriveSignal(
+                    driveSignal.getVel().times(NOMINAL_VOLTAGE / voltage),
+                    driveSignal.getAccel().times(NOMINAL_VOLTAGE / voltage)
+            );
         }
 
         packet.put("x", poseEstimate.getX());

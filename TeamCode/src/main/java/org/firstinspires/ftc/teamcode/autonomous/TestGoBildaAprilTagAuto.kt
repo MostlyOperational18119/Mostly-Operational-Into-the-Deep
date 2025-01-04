@@ -8,9 +8,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
 import org.firstinspires.ftc.teamcode.drive.SampleGoBildaPinpointMecanumDriveCancelable
 
-@Autonomous(name = "GoBilda + LimeLight Test Autonomous")
+@Autonomous(name = "TestGoBildaAprilTagAuto")
 @Disabled
-class TestGoBildaLimeLightAuto : LinearOpMode() {
+class TestGoBildaAprilTagAuto : LinearOpMode() {
     override fun runOpMode() {
         val drive = SampleGoBildaPinpointMecanumDriveCancelable(hardwareMap)
         val limelight = hardwareMap.get(Limelight3A::class.java, "limelight")

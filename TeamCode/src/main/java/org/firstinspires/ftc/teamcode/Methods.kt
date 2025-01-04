@@ -94,7 +94,7 @@ abstract class Methods : LinearOpMode() {
     var inRotationServo : Servo? = null
 
     //Sets the position of vertical motor and moves. Only uses 1 power since it checks.
-    fun verticalSlideTo(position : Int, power : Double){
+    fun verticalSlideTo(position : Int, power : Double) {
         slideVertical!!.targetPosition = position
         if (slideVertical!!.currentPosition < slideVertical!!.targetPosition) {
             slideVertical!!.power = power
@@ -105,7 +105,7 @@ abstract class Methods : LinearOpMode() {
     }
 
     //Sets the position of horizontal motor and moves. Only uses 1 power since it checks.
-    fun horizontalSlideTo(position : Int, power : Double){
+    fun horizontalSlideTo(position : Int, power : Double) {
         slideHorizontal!!.targetPosition = position
         if (slideHorizontal!!.currentPosition < slideHorizontal!!.targetPosition) {
             slideHorizontal!!.power = power
@@ -115,7 +115,7 @@ abstract class Methods : LinearOpMode() {
         }
     }
 
-    fun verticalBackToManual(){
+    fun verticalBackToManual() {
         if (abs(slideVertical!!.currentPosition - slideVertical!!.targetPosition) < 40) {
             verticalSlideToggle = VerticalSlideState.Manual
             verticalHeight = slideVertical!!.currentPosition
@@ -123,14 +123,14 @@ abstract class Methods : LinearOpMode() {
     }
 
     //Resets the mode back to Manual for Horizontal Motor in Horizontal States
-    fun horizontalBackToManual(){
+    fun horizontalBackToManual() {
         if (abs(slideHorizontal!!.currentPosition - slideHorizontal!!.targetPosition) < 40) {
             horizontalSlideToggle = HorizontalSlideState.Manual
         }
     }
 
     //Initializes the Servos and Touch Sensor
-    fun initServosAndTouchWithSet(){
+    fun initServosAndTouchWithSet() {
         transferServo = hardwareMap.servo["Transfer"]
         transferServo!!.position = transferServoNormal
         outClawServo = hardwareMap.servo["OutClaw"]
@@ -145,7 +145,7 @@ abstract class Methods : LinearOpMode() {
         inClawServo = hardwareMap.servo["InClaw"]
     }
 
-    fun initServosAndTouchWithoutSet(){
+    fun initServosAndTouchWithoutSet() {
         transferServo = hardwareMap.servo["Transfer"]
         outClawServo = hardwareMap.servo["OutClaw"]
         outRotationServo = hardwareMap.servo["OutRotation"]
@@ -156,7 +156,7 @@ abstract class Methods : LinearOpMode() {
     }
 
     //Initializes and sets motors but does not reset the motors
-    fun initMotorsNoReset (){
+    fun initMotorsNoReset() {
         motorFL = hardwareMap.dcMotor["motorFL"]
         motorFR = hardwareMap.dcMotor["motorFR"]
         motorBL = hardwareMap.dcMotor["motorBL"]
@@ -171,7 +171,7 @@ abstract class Methods : LinearOpMode() {
     }
 
     //Initializes and sets motors amd resets them
-    fun initMotors(){
+    fun initMotors() {
         motorFL = hardwareMap.dcMotor["motorFL"]
         motorFR = hardwareMap.dcMotor["motorFR"]
         motorBL = hardwareMap.dcMotor["motorBL"]
@@ -221,7 +221,7 @@ abstract class Methods : LinearOpMode() {
         motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
     }
 
-    fun teleopTelemetry(){
+    fun teleopTelemetry() {
         telemetry.addLine("Odometry Pose: ${drive!!.poseEstimate}, Velocity: ${drive!!.getWheelVelocities()}")
         telemetry.addLine("Vertical Current: ${slideVertical!!.currentPosition}")
         telemetry.addLine("Vertical Target: ${slideVertical!!.targetPosition}")
@@ -233,7 +233,7 @@ abstract class Methods : LinearOpMode() {
     }
 
     //insideJokes
-    fun insideJokes (){
+    fun insideJokes() {
         telemetry.addLine(when ((0..50).random()) {
             1 -> "good luck buddy"
             2 -> "\"what spectrum?\""

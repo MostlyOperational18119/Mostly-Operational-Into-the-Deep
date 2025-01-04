@@ -9,19 +9,19 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D
 import org.firstinspires.ftc.teamcode.autonomous.goBuilda.GoBildaPinpointDriver
-import kotlin.math.PI
 
 @Config
+@Suppress("SpellCheckingInspection")
 class GoBildaPinpointMecanumLocalizer(hardwareMap: HardwareMap) : Localizer {
     private val pinpointDriver = hardwareMap.get(GoBildaPinpointDriver::class.java, "odo")
 
     init {
-        pinpointDriver.setOffsets(-84.0, -168.0)
+        pinpointDriver.setOffsets(-17.0, 0.0) // Y is 21.0 from odometry computer (in case I need this value again)
 
         pinpointDriver.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
 
         pinpointDriver.setEncoderDirections(
-            GoBildaPinpointDriver.EncoderDirection.REVERSED, // MAYBE TRY REVERSED AGAIN
+            GoBildaPinpointDriver.EncoderDirection.REVERSED,
             GoBildaPinpointDriver.EncoderDirection.FORWARD
         )
 

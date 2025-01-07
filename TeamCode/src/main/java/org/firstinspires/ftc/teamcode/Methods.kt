@@ -104,11 +104,9 @@ abstract class Methods : LinearOpMode() {
 
     // Places the specimen
     fun placeSpecimen() {
-        slideVertical!!.power = -0.5
-
-        sleep(3000)
-
-        slideVertical!!.power = 0.0
+        verticalSlideTo(900,1.0)
+        sleep(1000)
+        outClawServo!!.position = outClawOpen
     }
 
     fun intakeSample() {

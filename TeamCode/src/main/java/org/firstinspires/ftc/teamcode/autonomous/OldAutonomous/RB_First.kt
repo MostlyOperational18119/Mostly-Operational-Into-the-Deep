@@ -165,13 +165,11 @@ class RB_First : LinearOpMode() {
         drive.followTrajectorySequence(traj5)
         sleep(10000)
 
-
-
-
         while (opModeIsActive() && !isStopRequested) {
             drive.update()
         }
-        telemetry.addLine("tried to run code")
+
+        telemetry.addLine("Tried to run code")
         telemetry.update()
         sleep(1000)
         val (x, y, heading) = drive.poseEstimate

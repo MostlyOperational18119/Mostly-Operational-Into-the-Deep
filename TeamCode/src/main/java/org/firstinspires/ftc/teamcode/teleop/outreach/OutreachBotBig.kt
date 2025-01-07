@@ -31,6 +31,7 @@ class OutreachBotBig : LinearOpMode() {
 
         // Servos
         val launcherServo = hardwareMap.servo["launcherServo"]
+        launcherServo.position = LauncherServoReadyPosition
 
         // Gamepads
         var currentGamepad1 = Gamepad()
@@ -103,10 +104,10 @@ class OutreachBotBig : LinearOpMode() {
 
             // Movement
             if (movementToggle) {
-                motorFL.power = (gamepad1LeftY + gamepadLeftX + gamepad1RightX) / speedDiv
-                motorBL.power = (gamepad1LeftY - gamepadLeftX + gamepad1RightX) / speedDiv
-                motorFR.power = (gamepad1LeftY - gamepadLeftX - gamepad1RightX) / speedDiv
-                motorBR.power = (gamepad1LeftY + gamepadLeftX - gamepad1RightX) / speedDiv
+                motorFL.power = (-gamepad1LeftY - gamepadLeftX - gamepad1RightX) / speedDiv
+                motorBL.power = (-gamepad1LeftY + gamepadLeftX - gamepad1RightX) / speedDiv
+                motorFR.power = (-gamepad1LeftY + gamepadLeftX + gamepad1RightX) / speedDiv
+                motorBR.power = (-gamepad1LeftY - gamepadLeftX + gamepad1RightX) / speedDiv
             } else {
                 motorFL.power = 0.0
                 motorBL.power = 0.0
@@ -129,7 +130,7 @@ class OutreachBotBig : LinearOpMode() {
     }
 
     companion object {
-        const val LauncherServoReadyPosition = 0.04 // Press B
-        const val LauncherServoLaunchPosition = 0.01 // Press A
+        const val LauncherServoReadyPosition = 0.11 // Press B
+        const val LauncherServoLaunchPosition = 0.06 // Press A
     }
 }

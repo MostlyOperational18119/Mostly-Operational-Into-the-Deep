@@ -32,12 +32,12 @@ class Meet3Teleop: Methods() {
 
             when (automaticTransferToggle) {
                 AutomaticTransferState.Manual -> {
-                    //AUTO TRANSFER TOGGLE
+                    // Auto transfer toggle
                     if (controller2.x && !(previousController2.x)) {
                         automaticTransferToggle = AutomaticTransferState.StartTransfer
                     }
 
-                    //ALL SERVOS STUFF HERE. ASK BUILD FOR WHICH SERVO IS WHICH
+                    // All Servo stuff here. Ask Build for which Servo is which
                     if (controller2.right_bumper && !previousController2.right_bumper) { outClawToggle = !outClawToggle }
                     if (outClawToggle){ outClawServo!!.position = outClawOpen}
                     if (!outClawToggle){ outClawServo!!.position = outClawClose}
@@ -66,7 +66,7 @@ class Meet3Teleop: Methods() {
                     //    inSwivelServo!!.position -=0.02
                     //}
 
-                    //HORIZONTAL SLIDE
+                    // Horizontal slide
                     if (controller2.left_stick_button && !previousController2.left_stick_button) { horizontalSlideToggle = HorizontalSlideState.Floor }
                     //if (controller2.x && !previousController2.x) { horizontalSlideToggle = HorizontalSlideState.Extend }
                     if (leftY2!! >= 0.2 || leftY2!! <= -0.2) { horizontalSlideToggle = HorizontalSlideState.Manual }
@@ -85,7 +85,7 @@ class Meet3Teleop: Methods() {
                         HorizontalSlideState.Extend -> { horizontalSlideTo(950,1.0); horizontalBackToManual() }
                     }
 
-                    //VERTICAL SLIDE
+                    // Vertical slide
                     if (controller2.dpad_up && !previousController2.dpad_up) { verticalSlideToggle = VerticalSlideState.High }
                     if (controller2.dpad_down && !previousController2.dpad_down) { verticalSlideToggle = VerticalSlideState.Floor }
                     if (controller2.right_stick_button && !previousController2.right_stick_button) { verticalSlideToggle = VerticalSlideState.Floor }
@@ -99,7 +99,7 @@ class Meet3Teleop: Methods() {
                             } else if (rightY2!! < 0 && slideVertical!!.currentPosition > 0) {
                                 verticalSlideTo(0, -(rightY2 as Double) / 3)
                             }
-                            //This part here is for holding power
+                            // This part here is for holding power
                             else if (controller2.right_stick_y.toDouble() == 0.0 && previousController2.right_stick_y.toDouble() != 0.0) {
                                 verticalHeight = slideVertical!!.currentPosition
                                 verticalSlideTo(verticalHeight, 0.3)
@@ -114,7 +114,7 @@ class Meet3Teleop: Methods() {
                     }
                 }
 
-                //AUTOMATED TRANSFER
+                // Automated transfer
                 AutomaticTransferState.StartTransfer-> {
                     inClawServo!!.position = inClawClose
                     inRotationServo!!.position = inRotationTransfer
@@ -124,10 +124,10 @@ class Meet3Teleop: Methods() {
                     outSwivelServo!!.position = outSwivelParallel
                     outClawServo!!.position = outClawOpen
                     transferServo!!.position = transferServoIntake
-                    //ONCE THE VERTICAL SLIDE IS UP, THEN WE USE A TIMER TO WAIT AND THEN CHANGE STATE
+                    // Once the vertical slide is up, then we use a timer to wait and then change state
                     if (abs(1200 - slideVertical!!.currentPosition)  < 20){
                         inClawServo!!.position = inClawOpen
-                        //The doOnce thingy is just to make it so that it only resets timer once.
+                        // The doOnce thingy is just to make it so that it only resets timer once.
                         if (!doOnce) { elapsedTime.reset(); doOnce = true }
                         if (elapsedTime.time() > 1.0){
                             automaticTransferToggle = AutomaticTransferState.InRotate

@@ -93,6 +93,76 @@ abstract class Methods : LinearOpMode() {
     var inClawServo : Servo? = null
     var inRotationServo : Servo? = null
 
+    // Places the sample
+    fun placeSample() {
+        outClawServo!!.position = outClawOpen
+
+        sleep(500)
+
+        outClawServo!!.position = outClawClose
+    }
+
+    // Places the specimen
+    fun placeSpecimen() {
+        slideVertical!!.power = -0.5
+
+        sleep(3000)
+
+        slideVertical!!.power = 0.0
+    }
+
+    fun intakeSample() {
+        horizontalSlideTo(horizontalSlideExtend, 0.5)
+        inClawServo!!.position = inClawOpen
+        inRotationServo!!.position = inRotationPick
+
+        sleep(300)
+
+        inClawServo!!.position = inClawClose
+    }
+
+
+    //The slow but consistent transfer when the slide is already down
+    fun transferFromDownToHigh() {
+        inClawServo!!.position = inClawClose
+        inRotationServo!!.position = inRotationTransfer
+        horizontalSlideTo(0,1.0)
+        verticalSlideTo(1200,1.0)
+        outRotationServo!!.position = outRotationCenter
+        outSwivelServo!!.position = outSwivelParallel
+        outClawServo!!.position = outClawOpen
+        transferServo!!.position = transferServoIntake
+
+        // Once the vertical slide is up, then we use a timer to wait and then change state
+        while (abs(1200 - slideVertical!!.currentPosition) >= 20) {
+            sleep(50)
+        }
+
+        inClawServo!!.position = inClawOpen
+        inRotationServo!!.position = inRotationPick
+
+        sleep(500)
+
+        transferServo!!.position = transferServoNormal
+        verticalSlideTo(0,1.0)
+
+        sleep(500)
+
+        outClawServo!!.position = outClawClose
+
+        sleep(500)
+
+        verticalSlideTo(1500,1.0)
+        verticalHeight = 1500
+
+        sleep(700)
+
+        inRotationServo!!.position = inRotationPick
+        transferServo!!.position = transferServoNormal
+        outRotationServo!!.position = outRotationBack
+        outSwivelServo!!.position = outSwivelPerp
+    }
+
     //Sets the position of vertical motor and moves. Only uses 1 power since it checks.
     fun verticalSlideTo(position : Int, power : Double) {
         slideVertical!!.targetPosition = position
@@ -187,8 +257,6 @@ abstract class Methods : LinearOpMode() {
 
     fun initOdometry() {
         drive = SampleGoBildaPinpointMecanumDriveCancelable(hardwareMap)
-
-        assert(drive != null)
     }
 
     //Sets the mode of a motor to encoder with reset

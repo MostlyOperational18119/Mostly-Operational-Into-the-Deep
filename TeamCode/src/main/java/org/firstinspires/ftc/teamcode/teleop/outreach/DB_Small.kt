@@ -42,7 +42,7 @@ class DB_Small : LinearOpMode() {
 
             val y = gamepad1.left_stick_y.toDouble()
             val r = gamepad1.right_stick_x.toDouble()
-            val reset = gamepad1.y
+            val reset = gamepad1.b
             val launch = (currentGamepad.a && previousGamepad.a)
             val armUp = gamepad1.dpad_up
             val armDown = gamepad1.dpad_down

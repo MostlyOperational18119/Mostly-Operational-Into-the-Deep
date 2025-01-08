@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.Gamepad
 import com.qualcomm.robotcore.hardware.Servo
 import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.teamcode.drive.SampleGoBildaPinpointMecanumDriveCancelable
+import org.firstinspires.ftc.teamcode.drive.advanced.SampleMecanumDriveCancelable
 import kotlin.math.abs
 
 
@@ -53,7 +54,7 @@ abstract class Methods : LinearOpMode() {
 
     val elapsedTime = ElapsedTime()
 
-    var drive: SampleGoBildaPinpointMecanumDriveCancelable? = null
+    var drive: SampleMecanumDriveCancelable? = null
     val basketVector = Vector2d(-58.26, -57.64)
     val basketHeading = Math.toRadians(225.00)
     val barVector = Vector2d(-10.04, -34.01)
@@ -254,7 +255,7 @@ abstract class Methods : LinearOpMode() {
     }
 
     fun initOdometry() {
-        drive = SampleGoBildaPinpointMecanumDriveCancelable(hardwareMap)
+        drive = SampleMecanumDriveCancelable(hardwareMap)
     }
 
     //Sets the mode of a motor to encoder with reset

@@ -18,13 +18,13 @@ class BASKET3 : Methods() {
         val bar: TrajectorySequence =
             drive!!.trajectorySequenceBuilder( Pose2d(-34.09, -63.19, Math.toRadians(-90.00)))
                 .setReversed(true)
-                .lineToConstantHeading(Vector2d(-10.04, -42.15))
+                .lineToConstantHeading(Vector2d(-10.04, -33.0))
                 .setReversed(false)
                 .build()
 
         val sample1: TrajectorySequence =
             drive!!.trajectorySequenceBuilder(Pose2d(-10.04, -42.4,Math.toRadians(-90.0)))
-                .splineToLinearHeading(Pose2d(-48.25, -40.5, Math.toRadians(90.0)), Math.toRadians(90.00))
+                .splineToLinearHeading(Pose2d(-48.25, -32.5, Math.toRadians(90.0)), Math.toRadians(90.00))
                 .build()
 
         val basket1: TrajectorySequence =
@@ -36,7 +36,7 @@ class BASKET3 : Methods() {
 
         val sample2: TrajectorySequence =
             drive!!.trajectorySequenceBuilder(Pose2d(-52.5, -52.5, Math.toRadians(45.00)))
-                .lineToLinearHeading(Pose2d(-57.0, -40.5, Math.toRadians(90.00)))
+                .lineToLinearHeading(Pose2d(-57.0, -32.5, Math.toRadians(90.00)))
                 .build()
 
         val basket2: TrajectorySequence =
@@ -48,7 +48,7 @@ class BASKET3 : Methods() {
 
         val sample3: TrajectorySequence =
             drive!!.trajectorySequenceBuilder(Pose2d(-52.5, -52.5, Math.toRadians(45.00)))
-                .lineToLinearHeading(Pose2d(-58.0, -40.5, Math.toRadians(122.00)))
+                .lineToLinearHeading(Pose2d(-58.0, -32.5, Math.toRadians(122.00)))
                 .build()
 
         val basket3: TrajectorySequence =
@@ -67,7 +67,7 @@ class BASKET3 : Methods() {
 
         //START
         verticalSlideTo(1600, 1.0)
-        outRotationServo!!.position = outRotationFront
+        outRotationServo!!.position = outRotationBack
 
         //BAR
         drive!!.followTrajectorySequence(bar)

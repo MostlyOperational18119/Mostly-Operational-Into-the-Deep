@@ -26,8 +26,8 @@ abstract class Methods : LinearOpMode() {
     val outClawOpen = 0.38
     val outSwivelParallel = 0.11
     val outSwivelPerp = 0.44
-    val outRotationBack = 0.1
-    val outRotationCenter = 0.6
+    val outRotationBack = 0.05
+    val outRotationCenter = 0.7
     val outRotationFront = 1.0
     val inRotationPick = 0.1
     val inRotationTransfer = 1.0
@@ -105,7 +105,7 @@ abstract class Methods : LinearOpMode() {
 
     // Places the specimen
     fun placeSpecimen() {
-        verticalSlideTo(900,1.0)
+        verticalSlideTo(1000,1.0)
         sleep(1000)
         outClawServo!!.position = outClawOpen
     }

@@ -14,8 +14,7 @@ class ServoTester : LinearOpMode() {
         val transferServo = hardwareMap.servo["Transfer"]
         transferServo.position = 0.84
         val outClawServo = hardwareMap.servo["OutClaw"]
-        val outRotationServo = hardwareMap.get(ServoImplEx::class.java, "OutRotation")
-        outRotationServo.pwmRange = PwmControl.PwmRange(500.0, 2500.0)
+        val outRotationServo = hardwareMap.servo["OutRotation"]
         val outSwivelServo = hardwareMap.servo["OutSwivel"]
         val inSwivelServo = hardwareMap.servo["InSwivel"]
         val inClawServo = hardwareMap.servo["InClaw"]
@@ -40,21 +39,20 @@ class ServoTester : LinearOpMode() {
             currentGamepad2.copy(gamepad2)
 
             if (currentGamepad1.a && !previousGamepad1.a) {
-                inSwivelServo.position += 0.05
+                outRotationServo.position += 0.05
             } else if (currentGamepad1.b && !previousGamepad1.b) {
-                inSwivelServo.position -= 0.05
+                outRotationServo.position -= 0.05
             }
-
-            if (currentGamepad1.x && !previousGamepad1.x) {
-                inClawServo.position += 0.05
-            } else if (currentGamepad1.y && !previousGamepad1.y) {
-                inClawServo.position -= 0.05
-            }
+//
+//            if (currentGamepad1.x && !previousGamepad1.x) {
+//                inClawServo.position += 0.05
+//            } else if (currentGamepad1.y && !previousGamepad1.y) {
+//                inClawServo.position -= 0.05
+//            }
 
             telemetry.addData("transferServo position:", transferServo.position)
             telemetry.addData("outClaw position:", outClawServo.position)
             telemetry.addData("outRotation position:", outRotationServo.position)
-            telemetry.addData("outRotation pwm:", outRotationServo.pwmRange)
             telemetry.addData("outSwivel position:", outSwivelServo.position)
             telemetry.addData("inSwivel position:", inSwivelServo.position)
             telemetry.addData("inRotation position:", inRotationServo.position)

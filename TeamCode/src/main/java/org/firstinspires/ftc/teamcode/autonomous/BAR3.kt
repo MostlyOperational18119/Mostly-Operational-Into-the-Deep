@@ -7,12 +7,23 @@ import org.firstinspires.ftc.teamcode.Methods
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
 
 
-@Autonomous(name = "BASKET_Meet2", group = "AAAA")
+@Autonomous(name = "BAR3", group = "AAAA")
 class BAR3 : Methods() {
     override fun runOpMode() {
         initOdometry()
         initMotors()
-        initServosAndTouchWithoutSet()
+
+        transferServo = hardwareMap.servo["Transfer"]
+        transferServo!!.position = transferServoNormal
+        outClawServo = hardwareMap.servo["OutClaw"]
+        outClawServo!!.position = outClawClose
+        outRotationServo = hardwareMap.servo["OutRotation"]
+        outSwivelServo = hardwareMap.servo["OutSwivel"]
+        outSwivelServo!!.position = outSwivelParallel
+        inSwivelServo = hardwareMap.servo["InSwivel"]
+        inSwivelServo!!.position = inSwivelCenter
+        inRotationServo = hardwareMap.servo["InRotation"]
+        inClawServo = hardwareMap.servo["InClaw"]
 
         drive!!.poseEstimate = Pose2d(14.74, -63.19, Math.toRadians(-90.00))
 
@@ -68,7 +79,9 @@ class BAR3 : Methods() {
 
         //START
         verticalSlideTo(1600, 1.0)
+        sleep(300)
         outRotationServo!!.position = outRotationBack
+        sleep(300)
 
         //BAR0
         drive!!.followTrajectorySequence(bar0)

@@ -19,7 +19,7 @@ class BAR3 : Methods() {
         outClawServo!!.position = outClawClose
         outRotationServo = hardwareMap.servo["OutRotation"]
         outSwivelServo = hardwareMap.servo["OutSwivel"]
-        outSwivelServo!!.position = outSwivelPerp
+        outSwivelServo!!.position = outSwivelPerpFront
         inSwivelServo = hardwareMap.servo["InSwivel"]
         inSwivelServo!!.position = inSwivelCenter
         inRotationServo = hardwareMap.servo["InRotation"]

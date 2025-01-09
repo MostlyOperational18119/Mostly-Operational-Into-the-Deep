@@ -16,7 +16,7 @@ class Meet3Teleop: Methods() {
         while (opModeIsActive()) {
             leftY1 = -gamepad1.left_stick_y.toDouble()/speedDiv
             leftX1 = gamepad1.left_stick_x.toDouble()/(speedDiv/1.5)
-            rightX1 = gamepad1.right_stick_x.toDouble()
+            rightX1 = gamepad1.right_stick_x.toDouble()/speedDiv
             leftY2 = -gamepad2.left_stick_y.toDouble()
             rightY2 = -gamepad2.right_stick_y.toDouble()
 
@@ -37,6 +37,8 @@ class Meet3Teleop: Methods() {
                         automaticTransferToggle = AutomaticTransferState.StartTransfer
                     }
 
+
+
                     // All Servo stuff here. Ask Build for which Servo is which
                     if (controller2.right_bumper && !previousController2.right_bumper) { outClawToggle = !outClawToggle }
                     if (outClawToggle){ outClawServo!!.position = outClawOpen}
@@ -53,18 +55,21 @@ class Meet3Teleop: Methods() {
 
                     if (controller1.y && !previousController1.y) { outSwivelToggle = !outSwivelToggle }
                     if (outSwivelToggle){ outSwivelServo!!.position = outSwivelParallel}
-                    if (!outSwivelToggle){ outSwivelServo!!.position = outSwivelPerp}
+                    if (!outSwivelToggle){ outSwivelServo!!.position = outSwivelPerpFront}
 
                     if (controller1.left_trigger>0.5 && !(previousController1.left_trigger>0.5)) { transferServoToggle = !transferServoToggle }
                     if (transferServoToggle){ transferServo!!.position = transferServoIntake}
                     if (!transferServoToggle){ transferServo!!.position = transferServoNormal}
 
-                    //if (controller1.left_bumper && !previousController1.left_bumper) {
-                    //    inSwivelServo!!.position +=0.02
-                    //}
-                    //if (controller1.right_bumper && !previousController1.right_bumper) {
-                    //    inSwivelServo!!.position -=0.02
-                    //}
+                    if (controller1.left_bumper && !previousController1.left_bumper) {
+                        speedDiv = 4.6
+                    }
+                    if (controller1.right_bumper && !previousController1.right_bumper) {
+                        speedDiv = 1.0
+                    }
+                    if (!controller1.left_bumper && !controller1.right_bumper) {
+                        speedDiv = 2.3
+                    }
 
                     // Horizontal slide
                     if (controller2.left_stick_button && !previousController2.left_stick_button) { horizontalSlideToggle = HorizontalSlideState.Floor }
@@ -173,7 +178,7 @@ class Meet3Teleop: Methods() {
                     inRotationServo!!.position = inRotationPick
                     transferServo!!.position = transferServoNormal
                     outRotationServo!!.position = outRotationBack
-                    outSwivelServo!!.position = outSwivelPerp
+                    outSwivelServo!!.position = outSwivelPerpFront
                     automaticTransferToggle = AutomaticTransferState.Manual
                 }
             }

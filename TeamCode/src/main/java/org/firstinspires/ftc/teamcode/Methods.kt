@@ -25,9 +25,10 @@ abstract class Methods : LinearOpMode() {
     val outClawClose = 0.56
     val outClawOpen = 0.38
     val outSwivelParallel = 0.11
-    val outSwivelPerp = 0.44
+    val outSwivelPerpBack = 0.44
+    val outSwivelPerpFront = 0.11
     val outRotationBack = 0.05
-    val outRotationCenter = 0.7
+    val outRotationCenter = 0.6
     val outRotationFront = 1.0
     val inRotationPick = 0.1
     val inRotationTransfer = 1.0
@@ -35,7 +36,7 @@ abstract class Methods : LinearOpMode() {
     val inSwivelCenter = 0.79
     val inSwivelLeft = 1.0
     val inClawOpen = 0.5
-    val inClawClose = 0.9
+    val inClawClose = 0.65
 
     val verticalSlideWall = 500
     val verticalSlideHigh = 3500
@@ -50,7 +51,7 @@ abstract class Methods : LinearOpMode() {
     var transferServoToggle = false
     var doOnce = false
     var verticalHeight = 0
-    val speedDiv = 2.3
+    var speedDiv = 2.3
 
     val elapsedTime = ElapsedTime()
 
@@ -64,7 +65,7 @@ abstract class Methods : LinearOpMode() {
 
     var horizontalSlideToggle = HorizontalSlideState.Manual
     var verticalSlideToggle = VerticalSlideState.Manual
-    var automaticTransferToggle = AutomaticTransferState.Pickup
+    var automaticTransferToggle = AutomaticTransferState.Manual
 //    var automatedMovementToggle = AutomaticMovementState.Manual
 //    var hangerState = HangStates.None
 
@@ -159,7 +160,7 @@ abstract class Methods : LinearOpMode() {
         inRotationServo!!.position = inRotationPick
         transferServo!!.position = transferServoNormal
         outRotationServo!!.position = outRotationBack
-        outSwivelServo!!.position = outSwivelPerp
+        outSwivelServo!!.position = outSwivelPerpFront
     }
 
     //Sets the position of vertical motor and moves. Only uses 1 power since it checks.

@@ -11,6 +11,15 @@ class Meet3Teleop: Methods() {
         initServosAndTouchWithSet()
         insideJokes()
 
+        outClawToggle = false
+        inClawToggle = false
+        inRotationToggle = false
+        outSwivelToggle = false
+        transferServoToggle = false
+        doOnce = false
+        verticalHeight = 0
+        speedDiv = 2.3
+
         waitForStart()
 
         while (opModeIsActive()) {

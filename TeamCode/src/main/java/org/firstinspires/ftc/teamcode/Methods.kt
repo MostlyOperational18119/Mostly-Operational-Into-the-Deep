@@ -24,9 +24,9 @@ abstract class Methods : LinearOpMode() {
     val transferServoIntake = 0.94
     val outClawClose = 0.56
     val outClawOpen = 0.38
-    val outSwivelParallel = 0.11
-    val outSwivelPerpBack = 0.44
-    val outSwivelPerpFront = 0.11
+    val outSwivelParallel = 0.45
+    val outSwivelPerpBack = 0.1
+    val outSwivelPerpFront = 0.75
     val outRotationBack = 0.05
     val outRotationCenter = 0.6
     val outRotationFront = 1.0

@@ -8,7 +8,7 @@ import kotlin.math.abs
 class Meet3Teleop: Methods() {
     override fun runOpMode() {
         initMotors()
-        initServosAndTouchWithSet()
+        initServosAndTouchWithoutSet()
         insideJokes()
 
         outClawToggle = false
@@ -17,6 +17,7 @@ class Meet3Teleop: Methods() {
         outSwivelToggle = false
         transferServoToggle = false
         doOnce = false
+        var outRotation = false
         verticalHeight = 0
         speedDiv = 2.3
 
@@ -46,8 +47,6 @@ class Meet3Teleop: Methods() {
                         automaticTransferToggle = AutomaticTransferState.StartTransfer
                     }
 
-
-
                     // All Servo stuff here. Ask Build for which Servo is which
                     if (controller2.right_bumper && !previousController2.right_bumper) { outClawToggle = !outClawToggle }
                     if (outClawToggle){ outClawServo!!.position = outClawOpen}
@@ -61,14 +60,31 @@ class Meet3Teleop: Methods() {
                     if (controller2.a && !previousController2.a) { inRotationToggle = false }
                     if (inRotationToggle){ inRotationServo!!.position = inRotationTransfer}
                     if (!inRotationToggle){ inRotationServo!!.position = inRotationPick}
-
-                    if (controller1.y && !previousController1.y) { outSwivelToggle = !outSwivelToggle }
-                    if (outSwivelToggle){ outSwivelServo!!.position = outSwivelParallel}
-                    if (!outSwivelToggle){ outSwivelServo!!.position = outSwivelPerpFront}
+//
+//                    if (controller1.y && !previousController1.y) { outSwivelToggle = !outSwivelToggle }
+//                    if (outSwivelToggle){ outSwivelServo!!.position = outSwivelParallel}
+//                    if (!outSwivelToggle){ outSwivelServo!!.position = outSwivelPerpFront}
 
                     if (controller1.left_trigger>0.5 && !(previousController1.left_trigger>0.5)) { transferServoToggle = !transferServoToggle }
                     if (transferServoToggle){ transferServo!!.position = transferServoIntake}
                     if (!transferServoToggle){ transferServo!!.position = transferServoNormal}
+
+                    if (controller1.right_trigger>0.5 && !(previousController1.right_trigger>0.5)){
+                        if (slideVertical!!.currentPosition < 1500) {
+                            verticalSlideTo(1000,1.0)
+                            verticalHeight = 1000
+                        }
+                        sleep(300)
+                        if (outRotation) {
+                            outRotationServo!!.position = outRotationFront
+                            outSwivelServo!!.position = outSwivelPerpFront
+                            outRotation = false
+                        } else {
+                            outRotationServo!!.position = outRotationBack
+                            outSwivelServo!!.position = outSwivelPerpBack
+                            outRotation = true
+                        }
+                    }
 
                     if (controller1.left_bumper && !previousController1.left_bumper) {
                         speedDiv = 4.6
@@ -131,6 +147,7 @@ class Meet3Teleop: Methods() {
                 // Automated transfer
                 AutomaticTransferState.StartTransfer-> {
                     inClawServo!!.position = inClawClose
+                    inSwivelServo!!.position = inSwivelCenter
                     inRotationServo!!.position = inRotationTransfer
                     horizontalSlideTo(0,1.0)
                     verticalSlideTo(1200,1.0)
@@ -140,9 +157,11 @@ class Meet3Teleop: Methods() {
                     transferServo!!.position = transferServoIntake
                     // Once the vertical slide is up, then we use a timer to wait and then change state
                     if (abs(1200 - slideVertical!!.currentPosition)  < 20){
-                        inClawServo!!.position = inClawOpen
                         // The doOnce thingy is just to make it so that it only resets timer once.
                         if (!doOnce) { elapsedTime.reset(); doOnce = true }
+                        if (elapsedTime.time() > 0.8){
+                            inClawServo!!.position = inClawOpen
+                        }
                         if (elapsedTime.time() > 1.0){
                             automaticTransferToggle = AutomaticTransferState.InRotate
                             doOnce = false
@@ -178,7 +197,7 @@ class Meet3Teleop: Methods() {
                     verticalSlideTo(1500,1.0)
                     verticalHeight = 1500
                     if (!doOnce) { elapsedTime.reset(); doOnce = true }
-                    if (elapsedTime.time() > 0.7) {
+                    if (elapsedTime.time() > 1.0) {
                         automaticTransferToggle = AutomaticTransferState.RotateOut
                         doOnce = false
                     }
@@ -187,7 +206,7 @@ class Meet3Teleop: Methods() {
                     inRotationServo!!.position = inRotationPick
                     transferServo!!.position = transferServoNormal
                     outRotationServo!!.position = outRotationBack
-                    outSwivelServo!!.position = outSwivelPerpFront
+                    outSwivelServo!!.position = outSwivelPerpBack
                     automaticTransferToggle = AutomaticTransferState.Manual
                 }
             }

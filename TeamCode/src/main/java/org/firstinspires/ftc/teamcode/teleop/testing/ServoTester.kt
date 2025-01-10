@@ -12,7 +12,6 @@ class ServoTester : LinearOpMode() {
     override fun runOpMode() {
 
         val transferServo = hardwareMap.servo["Transfer"]
-        transferServo.position = 0.84
         val outClawServo = hardwareMap.servo["OutClaw"]
         val outRotationServo = hardwareMap.servo["OutRotation"]
         val outSwivelServo = hardwareMap.servo["OutSwivel"]
@@ -39,11 +38,11 @@ class ServoTester : LinearOpMode() {
             currentGamepad2.copy(gamepad2)
 
             if (currentGamepad1.a && !previousGamepad1.a) {
-                outSwivelServo.position += 0.05
+                inSwivelServo.position += 0.05
             } else if (currentGamepad1.b && !previousGamepad1.b) {
-                outSwivelServo.position -= 0.05
+                inSwivelServo.position -= 0.05
             }
-//
+
 //            if (currentGamepad1.x && !previousGamepad1.x) {
 //                inClawServo.position += 0.05
 //            } else if (currentGamepad1.y && !previousGamepad1.y) {

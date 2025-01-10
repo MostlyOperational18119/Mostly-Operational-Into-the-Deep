@@ -19,9 +19,7 @@ class BAR3 : Methods() {
         outClawServo!!.position = outClawClose
         outRotationServo = hardwareMap.servo["OutRotation"]
         outSwivelServo = hardwareMap.servo["OutSwivel"]
-        outSwivelServo!!.position = outSwivelPerpFront
         inSwivelServo = hardwareMap.servo["InSwivel"]
-        inSwivelServo!!.position = inSwivelCenter
         inRotationServo = hardwareMap.servo["InRotation"]
         inClawServo = hardwareMap.servo["InClaw"]
 
@@ -29,63 +27,65 @@ class BAR3 : Methods() {
 
         val bar0: TrajectorySequence =
             drive!!.trajectorySequenceBuilder( Pose2d(14.74, -63.19, Math.toRadians(-90.00)))
-                .lineToConstantHeading(Vector2d(5.94, -33.0))
+                .lineToConstantHeading(Vector2d(4.4,-32.0))
                 .build()
 
         val sample1: TrajectorySequence =
-            drive!!.trajectorySequenceBuilder(Pose2d(5.94, -33.0,Math.toRadians(-90.0)))
-                .splineToConstantHeading(Vector2d(35.43, -31.79), Math.toRadians(-90.00))
-                .setReversed(true)
-                .splineToConstantHeading(Vector2d(45.19, -12.83), Math.toRadians(-90.00))
-                .setReversed(false)
+            drive!!.trajectorySequenceBuilder(Pose2d(4.4, -32.0,Math.toRadians(-90.0)))
+                .splineToConstantHeading(Vector2d(37.0, -35.0), Math.toRadians(-90.00))
+                .splineToConstantHeading(Vector2d(37.0, -17.0), Math.toRadians(-90.0))
+                .splineToConstantHeading(Vector2d(45.0, -14.0), Math.toRadians(-90.00))
                 .build()
 
         val sample2: TrajectorySequence =
-            drive!!.trajectorySequenceBuilder(Pose2d(45.19, -12.83, Math.toRadians(-90.00)))
-                .lineToConstantHeading(Vector2d(50.17, -62.04))
-                .setReversed(true)
+            drive!!.trajectorySequenceBuilder(Pose2d(45.0, -14.0, Math.toRadians(-90.00)))
+                .splineToConstantHeading(Vector2d(50.17, -60.04), Math.toRadians(-90.0))
                 .lineToConstantHeading(Vector2d(42.89, -28.72))
-                .splineToConstantHeading(Vector2d(56.11, -13.21), Math.toRadians(-90.00))
-                .setReversed(false)
-                .lineToConstantHeading(Vector2d(61.85, -57.06))
-                .setReversed(true)
-                .splineToConstantHeading(Vector2d(47.5, -63.0), Math.toRadians(-90.00))
-                .setReversed(false)
+                .splineToConstantHeading(Vector2d(55.11, -13.21), Math.toRadians(-90.00))
+                .splineToConstantHeading(Vector2d(60.0, -57.06), Math.toRadians(-90.0))
                 .build()
 
+        val pick1: TrajectorySequence =
+            drive!!.trajectorySequenceBuilder(Pose2d(60.0,-57.06, Math.toRadians(-90.0)))
+                .back(7.0)
+                .strafeRight(2.0)
+                .splineToConstantHeading(Vector2d(46.25, -65.25), Math.toRadians(-90.00))
+                .build()
+
+
         val bar1: TrajectorySequence =
-            drive!!.trajectorySequenceBuilder(Pose2d(47.49, -63.0, Math.toRadians(-90.00)))
-                .lineToConstantHeading(Vector2d(5.94, -33.0))
+            drive!!.trajectorySequenceBuilder(Pose2d(46.25, -65.25, Math.toRadians(-90.00)))
+                .lineToConstantHeading(Vector2d(0.3, -32.0))
                 .build()
 
         val pick2: TrajectorySequence =
-            drive!!.trajectorySequenceBuilder(Pose2d(5.94, -33.0, Math.toRadians(-90.00)))
-                .lineToConstantHeading(Vector2d(47.5, -63.0))
+            drive!!.trajectorySequenceBuilder(Pose2d(0.3, -32.0, Math.toRadians(-90.00)))
+                .lineToConstantHeading(Vector2d(46.25, -65.25))
                 .build()
 
         val bar2: TrajectorySequence =
-            drive!!.trajectorySequenceBuilder(Pose2d(47.5, -63.0, Math.toRadians(-90.00)))
-                .lineToConstantHeading(Vector2d(11.40, -33.00))
+            drive!!.trajectorySequenceBuilder(Pose2d(46.25, -65.25, Math.toRadians(-90.00)))
+                .lineToConstantHeading(Vector2d(-3.5, -32.0))
                 .build()
 
         val end: TrajectorySequence =
-            drive!!.trajectorySequenceBuilder(Pose2d(11.4, -33.0, Math.toRadians(-90.00)))
-                .lineToConstantHeading(Vector2d(55.85, -61.55))
+            drive!!.trajectorySequenceBuilder(Pose2d(-3.5, -32.0, Math.toRadians(-90.00)))
+                .lineToConstantHeading(Vector2d(43.25, -58.55))
                 .build()
 
         waitForStart()
 
         //START
-        verticalSlideTo(1700, 1.0)
-        sleep(300)
+        verticalSlideTo(1500, 1.0)
         outRotationServo!!.position = outRotationBack
-        sleep(300)
+        outSwivelServo!!.position = outSwivelPerpBack
 
         //BAR0
         drive!!.followTrajectorySequence(bar0)
+        sleep(100)
         placeSpecimen()
-        verticalSlideTo(1700, 1.0)
         sleep(300)
+        verticalSlideTo(0,0.4)
         outRotationServo!!.position = outRotationFront
         outSwivelServo!!.position = outSwivelPerpFront
 
@@ -93,47 +93,45 @@ class BAR3 : Methods() {
         drive!!.followTrajectorySequence(sample1)
 
         //SAMPLE2 + PICK1
-        verticalSlideTo(500,1.0)
-        outClawServo!!.position = outClawOpen
         drive!!.followTrajectorySequence(sample2)
+        sleep(100)
+        drive!!.followTrajectorySequence(pick1)
         sleep(300)
         outClawServo!!.position = outClawClose
-        sleep(500)
-        verticalSlideTo(1700, 1.0)
         sleep(300)
-        outClawServo!!.position = outRotationBack
+        verticalSlideTo(1500, 1.0)
+        sleep(300)
+        outRotationServo!!.position = outRotationBack
         outSwivelServo!!.position = outSwivelPerpBack
 
         //BAR1
         drive!!.followTrajectorySequence(bar1)
+        sleep(100)
         placeSpecimen()
-        verticalSlideTo(1700, 1.0)
         sleep(300)
+        verticalSlideTo(0,0.4)
         outRotationServo!!.position = outRotationFront
         outSwivelServo!!.position = outSwivelPerpFront
 
         //PICK2
-        verticalSlideTo(500,1.0)
-        outClawServo!!.position = outClawOpen
         drive!!.followTrajectorySequence(pick2)
         sleep(300)
         outClawServo!!.position = outClawClose
-        sleep(500)
-        verticalSlideTo(1700, 1.0)
         sleep(300)
-        outClawServo!!.position = outRotationBack
+        verticalSlideTo(1500, 1.0)
+        sleep(300)
+        outRotationServo!!.position = outRotationBack
         outSwivelServo!!.position = outSwivelPerpBack
 
         //BAR2
         drive!!.followTrajectorySequence(bar2)
+        sleep(100)
         placeSpecimen()
-        verticalSlideTo(1700, 1.0)
-        sleep(300)
-        outRotationServo!!.position = outRotationCenter
-        sleep(300)
 
         //END
-        verticalSlideTo(0, 1.0)
+        inSwivelServo!!.position = inSwivelCenter
+        outRotationServo!!.position = outRotationCenter
+        verticalSlideTo(0, 0.5)
         drive!!.followTrajectorySequence(end)
 
         while (opModeIsActive() && !isStopRequested) { drive!!.update() }

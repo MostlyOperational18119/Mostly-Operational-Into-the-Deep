@@ -73,6 +73,13 @@ class BAR3 : Methods() {
                 .lineToConstantHeading(Vector2d(43.25, -58.55))
                 .build()
 
+        val push: TrajectorySequence =
+            drive!!.trajectorySequenceBuilder(Pose2d(55.85, -61.55, Math.toRadians(-90.00)))
+                .lineToConstantHeading(Vector2d(55.85, -13.0))
+                .lineToConstantHeading(Vector2d(70.0, -13.0))
+                .lineToConstantHeading(Vector2d(70.0, -61.55))
+                .build()
+
         waitForStart()
 
         //START
@@ -133,6 +140,8 @@ class BAR3 : Methods() {
         outRotationServo!!.position = outRotationCenter
         verticalSlideTo(0, 0.5)
         drive!!.followTrajectorySequence(end)
+        sleep(100)
+        drive!!.followTrajectorySequence(push)
 
         while (opModeIsActive() && !isStopRequested) { drive!!.update() }
         PoseStorage.currentPose = drive!!.poseEstimate

@@ -35,10 +35,44 @@ class Meet3Teleop: Methods() {
             controller1.copy(gamepad1)
             controller2.copy(gamepad2)
 
-            motorFL!!.power = (leftY1!! + leftX1!! + rightX1!!)
-            motorBL!!.power = (leftY1!! - leftX1!! + rightX1!!)
-            motorFR!!.power = (leftY1!! - leftX1!! - rightX1!!)
-            motorBR!!.power = (leftY1!! + leftX1!! - rightX1!!)
+            drive!!.update()
+            drive!!.updatePoseEstimate()
+            when (automatedMovementToggle) {
+                AutomaticMovementState.Manual -> {
+                    if (controller1.left_bumper && !previousController1.left_bumper)   { speedDiv = 4.6 }
+                    if (controller1.right_bumper && !previousController1.right_bumper) { speedDiv = 1.0 }
+                    if (!controller1.left_bumper && !controller1.right_bumper)         { speedDiv = 2.3 }
+
+                    motorFL!!.power = (leftY1!! + leftX1!! + rightX1!!)
+                    motorBL!!.power = (leftY1!! - leftX1!! + rightX1!!)
+                    motorFR!!.power = (leftY1!! - leftX1!! - rightX1!!)
+                    motorBR!!.power = (leftY1!! + leftX1!! - rightX1!!)
+
+                    if (controller1.dpad_right && !(previousController1.dpad_right)) {
+                        val teleopBasket = drive!!.trajectorySequenceBuilder(drive!!.poseEstimate)
+                            .setReversed(true)
+                            .lineToLinearHeading(basketPose)
+                            .setReversed(false)
+                            .build()
+                        drive!!.followTrajectorySequenceAsync(teleopBasket)
+                        automatedMovementToggle = AutomaticMovementState.Auto
+                    }
+                    if (controller1.dpad_left && !previousController1.dpad_left) {
+                        val teleopBar =  drive!!.trajectorySequenceBuilder(drive!!.poseEstimate)
+                            .setReversed(true)
+                            .lineToLinearHeading(barPose)
+                            .setReversed(false)
+                            .build()
+                        drive!!.followTrajectorySequenceAsync(teleopBar)
+                        automatedMovementToggle = AutomaticMovementState.Auto
+                    }
+                }
+                AutomaticMovementState.Auto ->{
+                    if (controller1.dpad_left && !previousController1.dpad_left) { drive!!.breakFollowing();automatedMovementToggle = AutomaticMovementState.Manual }
+                    if (controller1.dpad_right && !previousController1.dpad_right) { drive!!.breakFollowing();automatedMovementToggle = AutomaticMovementState.Manual }
+                    if (!drive!!.isBusy) { automatedMovementToggle = AutomaticMovementState.Manual }
+                }
+            }
 
             when (automaticTransferToggle) {
                 AutomaticTransferState.Manual -> {
@@ -47,7 +81,7 @@ class Meet3Teleop: Methods() {
                         automaticTransferToggle = AutomaticTransferState.StartTransfer
                     }
 
-                    // All Servo stuff here. Ask Build for which Servo is which
+                    //SERVOS
                     if (controller2.right_bumper && !previousController2.right_bumper) { outClawToggle = !outClawToggle }
                     if (outClawToggle){ outClawServo!!.position = outClawOpen}
                     if (!outClawToggle){ outClawServo!!.position = outClawClose}
@@ -86,17 +120,7 @@ class Meet3Teleop: Methods() {
                         }
                     }
 
-                    if (controller1.left_bumper && !previousController1.left_bumper) {
-                        speedDiv = 4.6
-                    }
-                    if (controller1.right_bumper && !previousController1.right_bumper) {
-                        speedDiv = 1.0
-                    }
-                    if (!controller1.left_bumper && !controller1.right_bumper) {
-                        speedDiv = 2.3
-                    }
-
-                    // Horizontal slide
+                    //HOR SLIDE
                     if (controller2.left_stick_button && !previousController2.left_stick_button) { horizontalSlideToggle = HorizontalSlideState.Floor }
                     //if (controller2.x && !previousController2.x) { horizontalSlideToggle = HorizontalSlideState.Extend }
                     if (leftY2!! >= 0.2 || leftY2!! <= -0.2) { horizontalSlideToggle = HorizontalSlideState.Manual }

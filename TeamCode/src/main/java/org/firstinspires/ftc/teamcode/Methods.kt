@@ -17,7 +17,7 @@ abstract class Methods : LinearOpMode() {
     enum class VerticalSlideState { Floor, Low, High, Manual, Bar }
     enum class HorizontalSlideState { Floor, Extend, Manual }
     enum class AutomaticTransferState { Manual, StartTransfer, InRotate, SlideDown, Pickup, ResetSlide, RotateOut }
-    //enum class AutomaticMovementState { Manual, Auto }
+    enum class AutomaticMovementState { Manual, Auto }
     //enum class HangStates { Up, Down, Reset, None}
 
     val transferServoNormal = 0.84
@@ -65,7 +65,7 @@ abstract class Methods : LinearOpMode() {
     var horizontalSlideToggle = HorizontalSlideState.Manual
     var verticalSlideToggle = VerticalSlideState.Manual
     var automaticTransferToggle = AutomaticTransferState.Manual
-//    var automatedMovementToggle = AutomaticMovementState.Manual
+    var automatedMovementToggle = AutomaticMovementState.Manual
 //    var hangerState = HangStates.None
 
     val controller1 = Gamepad()

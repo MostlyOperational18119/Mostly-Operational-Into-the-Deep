@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.teleop
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.Methods
+import org.firstinspires.ftc.teamcode.autonomous.PoseStorage
 import kotlin.math.abs
 
 @TeleOp(name = "The Brainiacs \uD83E\uDDE0", group = "AAA")
@@ -10,6 +11,8 @@ class Meet3Teleop: Methods() {
         initMotors()
         initServosAndTouchWithoutSet()
         insideJokes()
+
+        drive!!.poseEstimate = PoseStorage.currentPose
 
         outClawToggle = false
         inClawToggle = false

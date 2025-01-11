@@ -74,8 +74,8 @@ class Meet3Teleop: Methods() {
                     }*/
                 }
                 AutomaticMovementState.Auto ->{
-                    if (controller1.dpad_left && !previousController1.dpad_left) { drive!!.breakFollowing();automatedMovementToggle = AutomaticMovementState.Manual }
-                    if (controller1.dpad_right && !previousController1.dpad_right) { drive!!.breakFollowing();automatedMovementToggle = AutomaticMovementState.Manual }
+//                    if (controller1.dpad_left && !previousController1.dpad_left) { drive!!.breakFollowing();automatedMovementToggle = AutomaticMovementState.Manual }
+//                    if (controller1.dpad_right && !previousController1.dpad_right) { drive!!.breakFollowing();automatedMovementToggle = AutomaticMovementState.Manual }
                     if (!drive!!.isBusy) { automatedMovementToggle = AutomaticMovementState.Manual }
                 }
             }
@@ -100,6 +100,18 @@ class Meet3Teleop: Methods() {
                     if (controller2.a && !previousController2.a) { inRotationToggle = false }
                     if (inRotationToggle){ inRotationServo!!.position = inRotationDormant}
                     if (!inRotationToggle){ inRotationServo!!.position = inRotationPick}
+
+                    if (controller1.dpad_left && !previousController1.dpad_left){
+                        transferServo!!.position = 0.94
+                        sleep(200)
+                        transferServo!!.position = 0.74
+                        sleep(200)
+                        transferServo!!.position = 0.94
+                        sleep(200)
+                        transferServo!!.position = 0.74
+                        sleep(200)
+                        transferServo!!.position = 0.84
+                    }
 //
 //                    if (controller1.y && !previousController1.y) { outSwivelToggle = !outSwivelToggle }
 //                    if (outSwivelToggle){ outSwivelServo!!.position = outSwivelParallel}
@@ -130,12 +142,11 @@ class Meet3Teleop: Methods() {
                             verticalSlideTo(1000,1.0)
                             verticalHeight = 1000
                         }
+
                         sleep(300)
                         if (outRotation) {
                             outRotationServo!!.position = outRotationFront
                             outSwivelServo!!.position = outSwivelPerpFront
-                            verticalSlideTo(200,0.4)
-                            verticalHeight = 200
                             outRotation = false
                         } else {
                             outRotationServo!!.position = outRotationBack
@@ -168,9 +179,9 @@ class Meet3Teleop: Methods() {
                     when (horizontalSlideToggle) {
                         HorizontalSlideState.Manual -> {
                             if (leftY2!! > 0 && slideHorizontal!!.currentPosition < 950) {
-                                horizontalSlideTo(950,leftY2 as Double)
+                                horizontalSlideTo(950,(leftY2 as Double)*0.75)
                             } else if (leftY2!! < 0 && slideHorizontal!!.currentPosition > 0) {
-                                horizontalSlideTo(0, -(leftY2 as Double))
+                                horizontalSlideTo(0, -(leftY2 as Double)*0.75)
                             } else {
                                 slideHorizontal!!.targetPosition = slideHorizontal!!.currentPosition
                                 slideHorizontal!!.power = 0.1

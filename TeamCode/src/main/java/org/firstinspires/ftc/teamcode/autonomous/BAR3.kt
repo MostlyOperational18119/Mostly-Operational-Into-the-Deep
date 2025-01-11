@@ -83,7 +83,7 @@ class BAR3 : Methods() {
         waitForStart()
 
         //START
-        verticalSlideTo(1500, 1.0)
+        verticalSlideTo(1550, 1.0)
         outRotationServo!!.position = outRotationBack
         outSwivelServo!!.position = outSwivelPerpBack
 
@@ -106,7 +106,7 @@ class BAR3 : Methods() {
         sleep(300)
         outClawServo!!.position = outClawClose
         sleep(300)
-        verticalSlideTo(1500, 1.0)
+        verticalSlideTo(1550, 1.0)
         sleep(300)
         outRotationServo!!.position = outRotationBack
         outSwivelServo!!.position = outSwivelPerpBack
@@ -125,7 +125,7 @@ class BAR3 : Methods() {
         sleep(300)
         outClawServo!!.position = outClawClose
         sleep(300)
-        verticalSlideTo(1500, 1.0)
+        verticalSlideTo(1550, 1.0)
         sleep(300)
         outRotationServo!!.position = outRotationBack
         outSwivelServo!!.position = outSwivelPerpBack

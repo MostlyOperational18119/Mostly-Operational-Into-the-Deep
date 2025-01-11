@@ -39,7 +39,7 @@ abstract class Methods : LinearOpMode() {
     val inSwivelLeft = 0.62
     val inSwivelLeft90 = 0.8
     val inClawOpen = 0.7
-    val inClawClose = 0.93
+    val inClawClose = 0.95
 
     val verticalSlideWall = 500
     val verticalSlideHigh = 3500

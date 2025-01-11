@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleop
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.CRServo
@@ -11,6 +12,8 @@ import kotlin.math.PI
 import kotlin.math.cos
 
 @TeleOp(name = "MEET 1 TELEOP (\uD83D\uDC37)", group = "ZZZ")
+@Disabled
+
 class Meet0Teleop : LinearOpMode() {
     override fun runOpMode() {
         telemetry.addData("Status", "Initialized")

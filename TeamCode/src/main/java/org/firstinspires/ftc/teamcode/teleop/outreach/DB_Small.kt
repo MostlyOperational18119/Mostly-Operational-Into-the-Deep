@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleop.outreach
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.DcMotor
@@ -7,6 +8,8 @@ import com.qualcomm.robotcore.hardware.Gamepad
 import com.qualcomm.robotcore.hardware.Servo
 
 @TeleOp(name="Baby_Bot", group = "sdsds")
+@Disabled
+
 class DB_Small : LinearOpMode() {
     override fun runOpMode() {
         //motors

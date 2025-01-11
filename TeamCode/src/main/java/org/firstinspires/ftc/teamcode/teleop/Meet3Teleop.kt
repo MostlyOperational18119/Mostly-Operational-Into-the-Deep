@@ -5,7 +5,7 @@ import org.firstinspires.ftc.teamcode.Methods
 import org.firstinspires.ftc.teamcode.autonomous.PoseStorage
 import kotlin.math.abs
 
-@TeleOp(name = "Meet 3 Teleop", group = "AAA")
+@TeleOp(name = "MEET 3 TELEOP", group = "AAA")
 class Meet3Teleop: Methods() {
     override fun runOpMode() {
         initMotors()

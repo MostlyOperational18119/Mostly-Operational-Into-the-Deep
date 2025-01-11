@@ -3,9 +3,12 @@ package org.firstinspires.ftc.teamcode.autonomous
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.firstinspires.ftc.teamcode.Methods
 
 @Autonomous(name = "BAR_Meet2", group = "AAAA")
+@Disabled
+
 class BAR2 : Methods() {
     override fun runOpMode() {
         initOdometry()

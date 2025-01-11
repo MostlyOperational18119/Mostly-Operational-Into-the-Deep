@@ -1,11 +1,14 @@
 package org.firstinspires.ftc.teamcode.teleop.outreach
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.Gamepad
 
 @Suppress("Unused", "SpellCheckingInspection")
 @TeleOp(name = "SpinnyBotThing")
+@Disabled
+
 class SpinnyBotThing : LinearOpMode() {
     override fun runOpMode() {
         val spinMotor = hardwareMap.dcMotor["spinMotor"]

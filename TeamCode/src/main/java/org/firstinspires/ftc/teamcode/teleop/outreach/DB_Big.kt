@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleop.outreach
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.DcMotor
@@ -8,6 +9,8 @@ import com.qualcomm.robotcore.hardware.Gamepad
 import com.qualcomm.robotcore.hardware.Servo
 
 @TeleOp(name = "DB_BIG", group = "AAAAAAAA")
+@Disabled
+
 class DoernbecherTeleOp : LinearOpMode() {
     override fun runOpMode() {
         val motorFL = hardwareMap.get(DcMotor::class.java, "motorFL")

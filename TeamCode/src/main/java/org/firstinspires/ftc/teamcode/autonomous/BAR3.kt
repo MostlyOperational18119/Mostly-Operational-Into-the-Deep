@@ -33,7 +33,7 @@ class BAR3 : Methods() {
         val sample1: TrajectorySequence =
             drive!!.trajectorySequenceBuilder(Pose2d(4.4, -32.0,Math.toRadians(-90.0)))
                 .splineToConstantHeading(Vector2d(37.0, -37.0), Math.toRadians(-90.00))
-                .splineToConstantHeading(Vector2d(37.0, -17.0), Math.toRadians(-90.0))
+                .splineToConstantHeading(Vector2d(37.0, -16.0), Math.toRadians(-90.0))
                 .splineToConstantHeading(Vector2d(45.0, -14.0), Math.toRadians(-90.00))
                 .build()
 
@@ -47,8 +47,8 @@ class BAR3 : Methods() {
 
         val pick1: TrajectorySequence =
             drive!!.trajectorySequenceBuilder(Pose2d(60.0,-57.06, Math.toRadians(-90.0)))
-                .back(7.0)
-                .strafeRight(2.0)
+                .back(10.0)
+                .strafeRight(3.0)
                 .splineToConstantHeading(Vector2d(46.25, -65.25), Math.toRadians(-90.00))
                 .build()
 
@@ -140,8 +140,6 @@ class BAR3 : Methods() {
         outRotationServo!!.position = outRotationCenter
         verticalSlideTo(0, 0.5)
         drive!!.followTrajectorySequence(end)
-        sleep(100)
-        drive!!.followTrajectorySequence(push)
 
         while (opModeIsActive() && !isStopRequested) { drive!!.update() }
         PoseStorage.currentPose = drive!!.poseEstimate

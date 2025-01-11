@@ -31,7 +31,7 @@ abstract class Methods : LinearOpMode() {
     val outRotationCenter = 0.55
     val outRotationFront = 0.82
     val inRotationPick = 0.14
-    val inRotationDormant = 0.45
+    val inRotationDormant = 0.6
     val inRotationTransfer = 0.95
     val inSwivelRight90 = 0.2
     val inSwivelRight = 0.34

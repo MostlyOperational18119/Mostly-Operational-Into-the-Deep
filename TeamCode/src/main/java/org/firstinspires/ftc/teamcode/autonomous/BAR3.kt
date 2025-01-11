@@ -70,7 +70,7 @@ class BAR3 : Methods() {
 
         val end: TrajectorySequence =
             drive!!.trajectorySequenceBuilder(Pose2d(-3.5, -32.0, Math.toRadians(-90.00)))
-                .lineToConstantHeading(Vector2d(43.25, -58.55))
+                .lineToConstantHeading(Vector2d(43.25, -55.55))
                 .build()
 
         val push: TrajectorySequence =

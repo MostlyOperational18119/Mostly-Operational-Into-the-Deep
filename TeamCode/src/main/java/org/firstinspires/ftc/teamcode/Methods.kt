@@ -14,7 +14,7 @@ import kotlin.math.abs
 
 
 abstract class Methods : LinearOpMode() {
-    enum class VerticalSlideState { Floor, Low, High, Manual, Bar }
+    enum class VerticalSlideState { Floor, Low, High, Manual }
     enum class HorizontalSlideState { Floor, Extend, Manual }
     enum class AutomaticTransferState { Manual, StartTransfer, InRotate, SlideDown, Pickup, ResetSlide, RotateOut }
     enum class AutomaticMovementState { Manual, Auto }
@@ -27,18 +27,19 @@ abstract class Methods : LinearOpMode() {
     val outSwivelParallel = 0.55
     val outSwivelPerpBack = 0.23
     val outSwivelPerpFront = 0.9
-    val outRotationBack = 0.26
+    val outRotationBack = 0.28
     val outRotationCenter = 0.55
     val outRotationFront = 0.82
-    val inRotationPick = 0.12
+    val inRotationPick = 0.14
+    val inRotationDormant = 0.45
     val inRotationTransfer = 0.95
     val inSwivelRight90 = 0.2
     val inSwivelRight = 0.34
     val inSwivelCenter = 0.48
     val inSwivelLeft = 0.62
-    val inSwivelLeft90 = 0.2
+    val inSwivelLeft90 = 0.8
     val inClawOpen = 0.7
-    val inClawClose = 0.9
+    val inClawClose = 0.93
 
     val verticalSlideWall = 500
     val verticalSlideHigh = 3500
@@ -304,7 +305,7 @@ abstract class Methods : LinearOpMode() {
 
     //insideJokes
     fun insideJokes() {
-        telemetry.addLine(when ((0..50).random()) {
+        telemetry.addLine(when ((0..52).random()) {
             1 -> "good luck buddy"
             2 -> "\"what spectrum?\""
             3 -> "MostlyOp >>> AHoT"
@@ -354,6 +355,8 @@ abstract class Methods : LinearOpMode() {
             47 -> ">++++++++[<+++++++++>-]<.>++++[<+++++++>-]<+.+++++++..+++.>>++++++[<+++++++>-]<++.------------.>++++++[<+++++++++>-]<+.<.+++.------.--------.>>>++++[<++++++++>-]<+."
             48 -> "main = putStrLn \"Hello, World!\""
             49 -> "https://lhohq.info"
+            50 -> "the west has fallen"
+            51 -> "bring it back ho"
             else -> "Why did we add these?"
         })
         telemetry.update()

@@ -22,14 +22,20 @@ class Meet3Teleop: Methods() {
         transferServoToggle = false
         doOnce = false
         var outRotation = false
+        var reverseThing = false
+        var otherReverse = 1.0
         verticalHeight = 0
         speedDiv = 2.3
 
         waitForStart()
 
         while (opModeIsActive()) {
-            leftY1 = -gamepad1.left_stick_y.toDouble()/speedDiv
-            leftX1 = gamepad1.left_stick_x.toDouble()/(speedDiv/1.5)
+            telemetry.addData("Vertical: ", slideVertical?.currentPosition)
+            telemetry.addData("Horizontal: ", slideHorizontal?.currentPosition)
+            telemetry.update()
+
+            leftY1 = -gamepad1.left_stick_y.toDouble()/speedDiv * otherReverse
+            leftX1 = gamepad1.left_stick_x.toDouble()/(speedDiv/1.5) * otherReverse
             rightX1 = gamepad1.right_stick_x.toDouble()/speedDiv
             leftY2 = -gamepad2.left_stick_y.toDouble()
             rightY2 = -gamepad2.right_stick_y.toDouble()
@@ -77,7 +83,7 @@ class Meet3Teleop: Methods() {
             when (automaticTransferToggle) {
                 AutomaticTransferState.Manual -> {
                     // Auto transfer toggle
-                    if (controller2.x && !(previousController2.x)) {
+                    if (controller2.left_bumper && !(previousController2.left_bumper)) {
                         automaticTransferToggle = AutomaticTransferState.StartTransfer
                     }
 
@@ -86,21 +92,38 @@ class Meet3Teleop: Methods() {
                     if (outClawToggle){ outClawServo!!.position = outClawOpen}
                     if (!outClawToggle){ outClawServo!!.position = outClawClose}
 
-                    if (controller2.left_bumper && !previousController2.left_bumper) { inClawToggle = !inClawToggle }
+                    if (controller2.x && !previousController2.x) { inClawToggle = !inClawToggle }
                     if (inClawToggle){ inClawServo!!.position = inClawOpen}
                     if (!inClawToggle){ inClawServo!!.position = inClawClose}
 
                     if (controller2.y && !previousController2.y) { inRotationToggle = true }
                     if (controller2.a && !previousController2.a) { inRotationToggle = false }
-                    if (inRotationToggle){ inRotationServo!!.position = inRotationTransfer}
+                    if (inRotationToggle){ inRotationServo!!.position = inRotationDormant}
                     if (!inRotationToggle){ inRotationServo!!.position = inRotationPick}
 //
 //                    if (controller1.y && !previousController1.y) { outSwivelToggle = !outSwivelToggle }
 //                    if (outSwivelToggle){ outSwivelServo!!.position = outSwivelParallel}
 //                    if (!outSwivelToggle){ outSwivelServo!!.position = outSwivelPerpFront}
-                    if (controller1.left_bumper && !previousController1.left_bumper)   { speedDiv = 4.6 }
-                    if (controller1.right_bumper && !previousController1.right_bumper) { speedDiv = 1.0 }
-                    if (!controller1.left_bumper && !controller1.right_bumper)         { speedDiv = 2.3 }
+                    if (controller1.left_trigger >0.5 && !(previousController1.left_trigger > 0.5))   { speedDiv = 4.6 }
+                    if (controller1.right_trigger >0.5 && !(previousController1.right_trigger > 0.5)) { speedDiv = 1.0 }
+                    if (!(controller1.left_trigger > 0.5) && !(controller1.right_trigger > 0.5))         { speedDiv = 2.3 }
+                    if (controller1.left_bumper){
+                        motorFL!!.power = -0.5
+                        motorBL!!.power = 0.5
+                        motorFR!!.power = 0.5
+                        motorBR!!.power = -0.5
+                    }
+                    if (controller1.right_bumper){
+                        motorFL!!.power = 0.5
+                        motorBL!!.power = -0.5
+                        motorFR!!.power = -0.5
+                        motorBR!!.power = 0.5
+                    }
+
+
+                    if (controller1.a && !previousController1.a ){ reverseThing = !reverseThing }
+                    if (!reverseThing ){ otherReverse = 1.0}
+                    if (reverseThing ){ otherReverse = -1.0}
 
                     if (controller2.b && !previousController2.b){
                         if (slideVertical!!.currentPosition < 1500) {
@@ -111,6 +134,8 @@ class Meet3Teleop: Methods() {
                         if (outRotation) {
                             outRotationServo!!.position = outRotationFront
                             outSwivelServo!!.position = outSwivelPerpFront
+                            verticalSlideTo(200,0.4)
+                            verticalHeight = 200
                             outRotation = false
                         } else {
                             outRotationServo!!.position = outRotationBack
@@ -158,14 +183,16 @@ class Meet3Teleop: Methods() {
                     // Vertical slide
                     if (controller2.dpad_up && !previousController2.dpad_up) { verticalSlideToggle = VerticalSlideState.High }
                     if (controller2.dpad_down && !previousController2.dpad_down) { verticalSlideToggle = VerticalSlideState.Floor }
-                    if (controller2.right_stick_button && !previousController2.right_stick_button) { verticalSlideToggle = VerticalSlideState.Floor }
+                    if (controller2.right_stick_button && !previousController2.right_stick_button) {
+                        verticalSlideTo(1500, 1.0)
+                        placeSample()
+                    }
                     if (controller2.dpad_left && !previousController2.dpad_left) { verticalSlideToggle = VerticalSlideState.Low }
-                    if (controller2.dpad_right && !previousController2.dpad_right) { verticalSlideToggle = VerticalSlideState.Bar }
                     if (rightY2!! >= 0.2 || rightY2!! <= -0.2) { verticalSlideToggle = VerticalSlideState.Manual }
                     when (verticalSlideToggle) {
                         VerticalSlideState.Manual -> {
-                            if (rightY2!! > 0 && slideVertical!!.currentPosition < 3700) {
-                                verticalSlideTo(3700, (rightY2 as Double) / 3)
+                            if (rightY2!! > 0 && slideVertical!!.currentPosition < 3500) {
+                                verticalSlideTo(3500, (rightY2 as Double) / 3)
                             } else if (rightY2!! < 0 && slideVertical!!.currentPosition > 0) {
                                 verticalSlideTo(0, -(rightY2 as Double) / 3)
                             }
@@ -180,15 +207,16 @@ class Meet3Teleop: Methods() {
                         VerticalSlideState.Floor -> { verticalSlideTo(0,1.0);    verticalBackToManual() }
                         VerticalSlideState.Low   -> { verticalSlideTo(1000,1.0); verticalBackToManual() }
                         VerticalSlideState.High  -> { verticalSlideTo(3500,1.0); verticalBackToManual() }
-                        VerticalSlideState.Bar   -> { verticalSlideTo(1500,1.0); verticalBackToManual() }
                     }
                 }
 
                 // Automated transfer
                 AutomaticTransferState.StartTransfer-> {
+
                     inClawServo!!.position = inClawClose
                     inSwivelServo!!.position = inSwivelCenter
                     inRotationServo!!.position = inRotationTransfer
+                    sleep(100)
                     horizontalSlideTo(0,1.0)
                     verticalSlideTo(1200,1.0)
                     outRotationServo!!.position = outRotationCenter

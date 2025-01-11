@@ -32,7 +32,7 @@ class BAR3 : Methods() {
 
         val sample1: TrajectorySequence =
             drive!!.trajectorySequenceBuilder(Pose2d(4.4, -32.0,Math.toRadians(-90.0)))
-                .splineToConstantHeading(Vector2d(37.0, -35.0), Math.toRadians(-90.00))
+                .splineToConstantHeading(Vector2d(37.0, -37.0), Math.toRadians(-90.00))
                 .splineToConstantHeading(Vector2d(37.0, -17.0), Math.toRadians(-90.0))
                 .splineToConstantHeading(Vector2d(45.0, -14.0), Math.toRadians(-90.00))
                 .build()

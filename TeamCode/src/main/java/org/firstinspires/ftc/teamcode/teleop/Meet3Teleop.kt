@@ -5,7 +5,7 @@ import org.firstinspires.ftc.teamcode.Methods
 import org.firstinspires.ftc.teamcode.autonomous.PoseStorage
 import kotlin.math.abs
 
-@TeleOp(name = "The Brainiacs \uD83E\uDDE0", group = "AAA")
+@TeleOp(name = "Meet 3 Teleop", group = "AAA")
 class Meet3Teleop: Methods() {
     override fun runOpMode() {
         initMotors()
@@ -42,16 +42,12 @@ class Meet3Teleop: Methods() {
             drive!!.updatePoseEstimate()
             when (automatedMovementToggle) {
                 AutomaticMovementState.Manual -> {
-                    if (controller1.left_bumper && !previousController1.left_bumper)   { speedDiv = 4.6 }
-                    if (controller1.right_bumper && !previousController1.right_bumper) { speedDiv = 1.0 }
-                    if (!controller1.left_bumper && !controller1.right_bumper)         { speedDiv = 2.3 }
-
                     motorFL!!.power = (leftY1!! + leftX1!! + rightX1!!)
                     motorBL!!.power = (leftY1!! - leftX1!! + rightX1!!)
                     motorFR!!.power = (leftY1!! - leftX1!! - rightX1!!)
                     motorBR!!.power = (leftY1!! + leftX1!! - rightX1!!)
 
-                    if (controller1.dpad_right && !(previousController1.dpad_right)) {
+                    /*if (controller1.dpad_right && !(previousController1.dpad_right)) {
                         val teleopBasket = drive!!.trajectorySequenceBuilder(drive!!.poseEstimate)
                             .setReversed(true)
                             .lineToLinearHeading(basketPose)
@@ -68,7 +64,7 @@ class Meet3Teleop: Methods() {
                             .build()
                         drive!!.followTrajectorySequenceAsync(teleopBar)
                         automatedMovementToggle = AutomaticMovementState.Auto
-                    }
+                    }*/
                 }
                 AutomaticMovementState.Auto ->{
                     if (controller1.dpad_left && !previousController1.dpad_left) { drive!!.breakFollowing();automatedMovementToggle = AutomaticMovementState.Manual }
@@ -101,12 +97,11 @@ class Meet3Teleop: Methods() {
 //                    if (controller1.y && !previousController1.y) { outSwivelToggle = !outSwivelToggle }
 //                    if (outSwivelToggle){ outSwivelServo!!.position = outSwivelParallel}
 //                    if (!outSwivelToggle){ outSwivelServo!!.position = outSwivelPerpFront}
+                    if (controller1.left_bumper && !previousController1.left_bumper)   { speedDiv = 4.6 }
+                    if (controller1.right_bumper && !previousController1.right_bumper) { speedDiv = 1.0 }
+                    if (!controller1.left_bumper && !controller1.right_bumper)         { speedDiv = 2.3 }
 
-                    if (controller1.left_trigger>0.5 && !(previousController1.left_trigger>0.5)) { transferServoToggle = !transferServoToggle }
-                    if (transferServoToggle){ transferServo!!.position = transferServoIntake}
-                    if (!transferServoToggle){ transferServo!!.position = transferServoNormal}
-
-                    if (controller1.right_trigger>0.5 && !(previousController1.right_trigger>0.5)){
+                    if (controller2.b && !previousController2.b){
                         if (slideVertical!!.currentPosition < 1500) {
                             verticalSlideTo(1000,1.0)
                             verticalHeight = 1000
@@ -121,6 +116,23 @@ class Meet3Teleop: Methods() {
                             outSwivelServo!!.position = outSwivelPerpBack
                             outRotation = true
                         }
+                    }
+
+                    if (controller2.left_trigger >= 0.5 && previousController2.left_trigger < 0.5 && IntakeRotation > 0)
+                    {
+                        IntakeRotation -= 1
+                    }
+                    if (controller2.right_trigger >= 0.5 && previousController2.right_trigger < 0.5 && IntakeRotation < 5)
+                    {
+                        IntakeRotation += 1
+                    }
+
+                    when (IntakeRotation) {
+                        1 -> {inSwivelServo!!.position = inSwivelLeft90}
+                        2 -> {inSwivelServo!!.position = inSwivelLeft}
+                        3 -> {inSwivelServo!!.position = inSwivelCenter}
+                        4 -> {inSwivelServo!!.position = inSwivelRight}
+                        5 -> {inSwivelServo!!.position = inSwivelRight90}
                     }
 
                     //HOR SLIDE

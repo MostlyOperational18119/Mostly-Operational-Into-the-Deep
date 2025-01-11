@@ -30,11 +30,13 @@ abstract class Methods : LinearOpMode() {
     val outRotationBack = 0.26
     val outRotationCenter = 0.55
     val outRotationFront = 0.82
-    val inRotationPick = 0.1
+    val inRotationPick = 0.12
     val inRotationTransfer = 0.95
-    val inSwivelRight = 0.3
-    val inSwivelCenter = 0.5
-    val inSwivelLeft = 0.8
+    val inSwivelRight90 = 0.2
+    val inSwivelRight = 0.34
+    val inSwivelCenter = 0.48
+    val inSwivelLeft = 0.62
+    val inSwivelLeft90 = 0.2
     val inClawOpen = 0.7
     val inClawClose = 0.9
 
@@ -51,6 +53,7 @@ abstract class Methods : LinearOpMode() {
     var doOnce = false
     var verticalHeight = 0
     var speedDiv = 2.3
+    var IntakeRotation = 3
 
     val elapsedTime = ElapsedTime()
 

@@ -9,6 +9,7 @@ import kotlin.math.abs
 class Meet3Teleop: Methods() {
     override fun runOpMode() {
         initMotors()
+        initOdometry()
         initServosAndTouchWithoutSet()
         insideJokes()
 

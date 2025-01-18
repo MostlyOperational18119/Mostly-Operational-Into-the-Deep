@@ -19,9 +19,7 @@ class BAR3 : Methods() {
         outClawServo!!.position = outClawClose
         outRotationServo = hardwareMap.servo["OutRotation"]
         outSwivelServo = hardwareMap.servo["OutSwivel"]
-        inSwivelServo = hardwareMap.servo["InSwivel"]
         inRotationServo = hardwareMap.servo["InRotation"]
-        inClawServo = hardwareMap.servo["InClaw"]
 
         drive!!.poseEstimate = Pose2d(14.74, -63.19, Math.toRadians(-90.00))
 
@@ -136,7 +134,6 @@ class BAR3 : Methods() {
         placeSpecimen()
 
         //END
-        inSwivelServo!!.position = inSwivelCenter
         outRotationServo!!.position = outRotationCenter
         verticalSlideTo(0, 0.5)
         drive!!.followTrajectorySequence(end)

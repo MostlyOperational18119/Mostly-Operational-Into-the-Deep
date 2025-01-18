@@ -16,7 +16,7 @@ import kotlin.math.abs
 abstract class Methods : LinearOpMode() {
     enum class VerticalSlideState { Floor, Low, High, Manual }
     enum class HorizontalSlideState { Floor, Extend, Manual }
-    enum class AutomaticTransferState { Manual, StartTransfer, InRotate, SlideDown, Pickup, ResetSlide, RotateOut }
+    enum class AutomaticTransferState { Manual, StartTransfer, Pickup, ResetSlide, RotateOut }
     enum class AutomaticMovementState { Manual, Auto }
     //enum class HangStates { Up, Down, Reset, None}
 
@@ -24,7 +24,6 @@ abstract class Methods : LinearOpMode() {
     val transferServoIntake = 0.94
     val outClawClose = 0.57
     val outClawOpen = 0.38
-    val outSwivelParallel = 0.55
     val outSwivelPerpBack = 0.23
     val outSwivelPerpFront = 0.9
     val outRotationBack = 0.28
@@ -33,13 +32,8 @@ abstract class Methods : LinearOpMode() {
     val inRotationPick = 0.14
     val inRotationDormant = 0.6
     val inRotationTransfer = 0.95
-    val inSwivelRight90 = 0.2
-    val inSwivelRight = 0.34
-    val inSwivelCenter = 0.48
-    val inSwivelLeft = 0.62
-    val inSwivelLeft90 = 0.8
-    val inClawOpen = 0.7
-    val inClawClose = 0.95
+    val inStopClose = 0.1
+    val inStopOpen = 0.5
 
     val verticalSlideWall = 500
     val verticalSlideHigh = 3500
@@ -48,13 +42,14 @@ abstract class Methods : LinearOpMode() {
 
     var outClawToggle = false
     var inClawToggle = false
+    var intakeInToggle = false
+    var intakeOutToggle = false
     var inRotationToggle = false
     var outSwivelToggle = false
     var transferServoToggle = false
     var doOnce = false
     var verticalHeight = 0
     var speedDiv = 2.3
-    var IntakeRotation = 3
 
     val elapsedTime = ElapsedTime()
 
@@ -89,13 +84,13 @@ abstract class Methods : LinearOpMode() {
     var motorBR: DcMotor? = null
     var slideVertical: DcMotor? = null
     var slideHorizontal: DcMotor? = null
+    var intakeMotor: DcMotor? = null
 
     var transferServo : Servo? = null
     var outClawServo : Servo? = null
     var outRotationServo : Servo? = null
     var outSwivelServo : Servo? = null
-    var inSwivelServo : Servo? = null
-    var inClawServo : Servo? = null
+    var inStopServo : Servo? = null
     var inRotationServo : Servo? = null
 
     // Places the sample
@@ -116,54 +111,12 @@ abstract class Methods : LinearOpMode() {
 
     fun intakeSample() {
         horizontalSlideTo(horizontalSlideExtend, 0.5)
-        inClawServo!!.position = inClawOpen
+//        inClawServo!!.position = inClawOpen
         inRotationServo!!.position = inRotationPick
 
         sleep(300)
 
-        inClawServo!!.position = inClawClose
-    }
-
-
-    //The slow but consistent transfer when the slide is already down
-    fun transferFromDownToHigh() {
-        inClawServo!!.position = inClawClose
-        inRotationServo!!.position = inRotationTransfer
-        horizontalSlideTo(0,1.0)
-        verticalSlideTo(1200,1.0)
-        outRotationServo!!.position = outRotationCenter
-        outSwivelServo!!.position = outSwivelParallel
-        outClawServo!!.position = outClawOpen
-        transferServo!!.position = transferServoIntake
-
-        // Once the vertical slide is up, then we use a timer to wait and then change state
-        while (abs(1200 - slideVertical!!.currentPosition) >= 20) {
-            sleep(50)
-        }
-
-        inClawServo!!.position = inClawOpen
-        inRotationServo!!.position = inRotationPick
-
-        sleep(500)
-
-        transferServo!!.position = transferServoNormal
-        verticalSlideTo(0,1.0)
-
-        sleep(500)
-
-        outClawServo!!.position = outClawClose
-
-        sleep(500)
-
-        verticalSlideTo(1500,1.0)
-        verticalHeight = 1500
-
-        sleep(700)
-
-        inRotationServo!!.position = inRotationPick
-        transferServo!!.position = transferServoNormal
-        outRotationServo!!.position = outRotationBack
-        outSwivelServo!!.position = outSwivelPerpFront
+//        inClawServo!!.position = inClawClose
     }
 
     //Sets the position of vertical motor and moves. Only uses 1 power since it checks.
@@ -211,11 +164,8 @@ abstract class Methods : LinearOpMode() {
         outRotationServo = hardwareMap.servo["OutRotation"]
         outRotationServo!!.position = outRotationCenter
         outSwivelServo = hardwareMap.servo["OutSwivel"]
-        outSwivelServo!!.position = outSwivelParallel
-        inSwivelServo = hardwareMap.servo["InSwivel"]
-        inSwivelServo!!.position = inSwivelCenter
+        inStopServo = hardwareMap.servo["InStop"]
         inRotationServo = hardwareMap.servo["InRotation"]
-        inClawServo = hardwareMap.servo["InClaw"]
     }
 
     fun initServosAndTouchWithoutSet() {
@@ -223,8 +173,7 @@ abstract class Methods : LinearOpMode() {
         outClawServo = hardwareMap.servo["OutClaw"]
         outRotationServo = hardwareMap.servo["OutRotation"]
         outSwivelServo = hardwareMap.servo["OutSwivel"]
-        inSwivelServo = hardwareMap.servo["InSwivel"]
-        inClawServo = hardwareMap.servo["InClaw"]
+        inStopServo = hardwareMap.servo["InStop"]
         inRotationServo = hardwareMap.servo["InRotation"]
     }
 
@@ -236,8 +185,10 @@ abstract class Methods : LinearOpMode() {
         motorBR = hardwareMap.dcMotor["motorBR"]
         slideVertical = hardwareMap.dcMotor["verticalSlide"]
         slideHorizontal = hardwareMap.dcMotor["horizontalSlide"]
+        intakeMotor = hardwareMap.dcMotor["intakeMotor"]
         setMotorModePositionNoReset(slideHorizontal!!)
         setMotorModePositionNoReset(slideVertical!!)
+        setMotorModeEncoderNoReset(intakeMotor!!)
         motorFL!!.direction = DcMotorSimple.Direction.REVERSE
         motorBL!!.direction = DcMotorSimple.Direction.REVERSE
         slideHorizontal!!.direction = DcMotorSimple.Direction.REVERSE
@@ -251,6 +202,8 @@ abstract class Methods : LinearOpMode() {
         motorBR = hardwareMap.dcMotor["motorBR"]
         slideVertical = hardwareMap.dcMotor["verticalSlide"]
         slideHorizontal = hardwareMap.dcMotor["horizontalSlide"]
+        intakeMotor = hardwareMap.dcMotor["intakeMotor"]
+        setMotorModeEncoder(intakeMotor!!)
         setMotorModePosition(slideHorizontal!!)
         setMotorModePosition(slideVertical!!)
         motorFL!!.direction = DcMotorSimple.Direction.REVERSE
@@ -290,17 +243,6 @@ abstract class Methods : LinearOpMode() {
         motor.targetPosition = 0
         motor.mode = DcMotor.RunMode.RUN_TO_POSITION
         motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-    }
-
-    fun teleopTelemetry() {
-        telemetry.addLine("Odometry Pose: ${drive!!.poseEstimate}, Velocity: ${drive!!.getWheelVelocities()}")
-        telemetry.addLine("Vertical Current: ${slideVertical!!.currentPosition}")
-        telemetry.addLine("Vertical Target: ${slideVertical!!.targetPosition}")
-        telemetry.addLine("Vertical Power: ${slideVertical!!.power}")
-        telemetry.addLine("Horizontal Current: ${slideHorizontal!!.currentPosition}")
-        telemetry.addLine("Horizontal Target: ${slideHorizontal!!.targetPosition}")
-        telemetry.addLine("Horizontal Power: ${slideHorizontal!!.power}")
-        telemetry.update()
     }
 
     //insideJokes

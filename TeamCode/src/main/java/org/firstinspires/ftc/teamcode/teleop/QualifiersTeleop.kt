@@ -120,8 +120,8 @@ class QualifiersTeleop: Methods() {
 
                     if (controller2.right_trigger > 0.5 && !(previousController2.right_trigger > 0.5)){ intakeInToggle  = !intakeInToggle;  intakeOutToggle = false }
                     if (controller2.left_trigger > 0.5 && !(previousController2.left_trigger > 0.5)){ intakeOutToggle = !intakeOutToggle; intakeInToggle = false  }
-                    if (intakeInToggle) { intakeMotor?.power = 1.0 }
-                    else if (intakeOutToggle) { intakeMotor?.power = -1.0 }
+                    if (intakeInToggle) { intakeMotor?.power = 0.5 }
+                    else if (intakeOutToggle) { intakeMotor?.power = -0.5 }
                     else { intakeMotor?.power = 0.0 }
 
                     if (slideHorizontal!!.currentPosition < 200){
@@ -205,13 +205,18 @@ class QualifiersTeleop: Methods() {
 
                 // Automated transfer
                 AutomaticTransferState.StartTransfer-> {
+                    intakeMotor?.power = 0.3
+                    intakeInToggle = true
+                    sleep(100)
                     inRotationServo!!.position = inRotationTransfer
-                    horizontalSlideTo(0,1.0)
+                    horizontalSlideTo(-100,1.0)
                     verticalSlideTo(0,1.0)
                     verticalHeight = 0
                     outRotationServo!!.position = outRotationCenter
                     outSwivelServo!!.position = outSwivelPerpBack
                     outClawServo!!.position = outClawOpen
+                    intakeMotor?.power = 0.0
+                    intakeInToggle = false
                     if (!doOnce) { elapsedTime.reset(); doOnce = true }
                     if (elapsedTime.time() > 0.5){inStopServo!!.position = inStopOpen}
                     if (elapsedTime.time() > 1.0){

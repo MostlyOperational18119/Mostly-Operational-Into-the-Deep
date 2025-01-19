@@ -78,7 +78,7 @@ class BASKET3 : Methods() {
         //SAMPLE1
         drive!!.followTrajectorySequence(sample1)
 
-        transferFromDownToHigh()
+//        transferFromDownToHigh()
 
         //BASKET1
         drive!!.followTrajectorySequence(basket1)
@@ -88,7 +88,7 @@ class BASKET3 : Methods() {
         //SAMPLE2
         drive!!.followTrajectorySequence(sample2)
         intakeSample()
-        transferFromDownToHigh()
+//        transferFromDownToHigh()
 
         //BASKET2
         drive!!.followTrajectorySequence(basket2)
@@ -98,7 +98,7 @@ class BASKET3 : Methods() {
         //SAMPLE3
         drive!!.followTrajectorySequence(sample3)
         intakeSample()
-        transferFromDownToHigh()
+//        transferFromDownToHigh()
 
         //BASKET3
         drive!!.followTrajectorySequence(basket3)

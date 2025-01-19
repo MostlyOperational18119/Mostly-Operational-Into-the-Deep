@@ -22,18 +22,18 @@ abstract class Methods : LinearOpMode() {
 
     val transferServoNormal = 0.84
     val transferServoIntake = 0.94
-    val outClawClose = 0.57
-    val outClawOpen = 0.38
+    val outClawClose = 0.6
+    val outClawOpen = 0.35
     val outSwivelPerpBack = 0.23
-    val outSwivelPerpFront = 0.9
-    val outRotationBack = 0.28
-    val outRotationCenter = 0.55
-    val outRotationFront = 0.82
-    val inRotationPick = 0.14
-    val inRotationDormant = 0.6
+    val outSwivelPerpFront = 0.56 // Not really necessary anymore
+    val outRotationBack = 0.26
+    val outRotationCenter = 0.59 // "center"
+    val outRotationFront = 0.84
+    val inRotationPick = 0.64
+    val inRotationDormant = 0.8
     val inRotationTransfer = 0.95
-    val inStopClose = 0.1
-    val inStopOpen = 0.5
+    val inStopClose = 0.5
+    val inStopOpen = 0.85
 
     val verticalSlideWall = 500
     val verticalSlideHigh = 3500

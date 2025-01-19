@@ -17,6 +17,8 @@ class ServoTester : LinearOpMode() {
         val outSwivelServo = hardwareMap.servo["OutSwivel"]
         val inRotationServo = hardwareMap.servo["InRotation"]
         val inStopServo = hardwareMap.servo["InStop"]
+        val intakeMotor = hardwareMap.dcMotor["intakeMotor"]
+        var intakeRunPower = 0.3
 
         telemetry.addData("Status", "Initialized")
         telemetry.update()
@@ -37,23 +39,36 @@ class ServoTester : LinearOpMode() {
             currentGamepad2.copy(gamepad2)
 
             if (currentGamepad1.a && !previousGamepad1.a) {
-                inRotationServo.position += 0.05
+                outRotationServo.position += 0.01
             } else if (currentGamepad1.b && !previousGamepad1.b) {
-                inRotationServo.position -= 0.05
+                outRotationServo.position -= 0.01
             }
 
             if (currentGamepad1.x && !previousGamepad1.x) {
-                inStopServo.position += 0.05
+                inRotationServo.position += 0.01
             } else if (currentGamepad1.y && !previousGamepad1.y) {
-                inStopServo.position -= 0.05
+                inRotationServo.position -= 0.01
+            }
+
+            if (currentGamepad1.dpad_right && !previousGamepad1.dpad_right) {
+                intakeRunPower += 0.05
+            }
+            if (currentGamepad1.dpad_left && !previousGamepad1.dpad_left) {
+                intakeRunPower -= 0.05
+            }
+            if (currentGamepad1.dpad_up && !previousGamepad1.dpad_up) {
+                intakeMotor!!.power = intakeRunPower
+            }
+            if (currentGamepad1.dpad_down && !previousGamepad1.dpad_down) {
+                intakeMotor!!.power = 0.0
             }
 
             telemetry.addData("transferServo position:", transferServo.position)
             telemetry.addData("outClaw position:", outClawServo.position)
-            telemetry.addData("outRotation position:", outRotationServo.position)
+            telemetry.addData("outRotation (AB) position:", outRotationServo.position)
             telemetry.addData("outSwivel position:", outSwivelServo.position)
-            telemetry.addData("inRotation position:", inRotationServo.position)
-            telemetry.addData("inClose position:", inStopServo.position)
+            telemetry.addData("inRotation (XY) position:", inRotationServo.position)
+            telemetry.addData("inStopServo position:", inStopServo.position)
             telemetry.update()
         }
     }

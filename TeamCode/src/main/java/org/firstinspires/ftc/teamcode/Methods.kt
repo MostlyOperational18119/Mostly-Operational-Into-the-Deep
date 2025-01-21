@@ -16,24 +16,24 @@ import kotlin.math.abs
 abstract class Methods : LinearOpMode() {
     enum class VerticalSlideState { Floor, Low, High, Manual }
     enum class HorizontalSlideState { Floor, Extend, Manual }
-    enum class AutomaticTransferState { Manual, StartTransfer, Pickup, ResetSlide, RotateOut }
+    enum class AutomaticTransferState { Manual, other, StartTransfer, Pickup, ResetSlide, RotateOut }
     enum class AutomaticMovementState { Manual, Auto }
     //enum class HangStates { Up, Down, Reset, None}
 
-    val transferServoNormal = 0.84
-    val transferServoIntake = 0.94
+    val transferServoClose = 0.53
+    val transferServoOpen = 0.84
     val outClawClose = 0.6
     val outClawOpen = 0.35
     val outSwivelPerpBack = 0.23
-    val outSwivelPerpFront = 0.56 // Not really necessary anymore
+    val outSwivelPerpFront = 0.82 // Not really necessary anymore
     val outRotationBack = 0.26
     val outRotationCenter = 0.59 // "center"
-    val outRotationFront = 0.84
+    val outRotationFront = 0.9
     val inRotationPick = 0.64
     val inRotationDormant = 0.8
-    val inRotationTransfer = 0.95
-    val inStopClose = 0.5
-    val inStopOpen = 0.85
+    val inRotationTransfer = 0.98
+    val inStopClose = 0.07
+    val inStopOpen = 0.36
 
     val verticalSlideWall = 500
     val verticalSlideHigh = 3500
@@ -158,7 +158,6 @@ abstract class Methods : LinearOpMode() {
     //Initializes the Servos and Touch Sensor
     fun initServosAndTouchWithSet() {
         transferServo = hardwareMap.servo["Transfer"]
-        transferServo!!.position = transferServoNormal
         outClawServo = hardwareMap.servo["OutClaw"]
         outClawServo!!.position = outClawClose
         outRotationServo = hardwareMap.servo["OutRotation"]

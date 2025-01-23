@@ -3,39 +3,38 @@ package org.firstinspires.ftc.teamcode.autonomous
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
-import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.firstinspires.ftc.teamcode.Methods
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
 
-@Autonomous(name = "BASKET3", group = "AAAA")
-class BASKET3 : Methods() {
+@Autonomous(name = "BASKET3+1", group = "AAAA")
+class BASKET3AND1 : Methods() {
     override fun runOpMode() {
         initOdometry()
         initMotors()
         transferServo = hardwareMap.servo["Transfer"]
         transferServo!!.position = transferServoClose
         outClawServo = hardwareMap.servo["OutClaw"]
-        outClawServo!!.position = outClawOpen
+        outClawServo!!.position = outClawClose
         outRotationServo = hardwareMap.servo["OutRotation"]
         outRotationServo!!.position = outRotationCenter
         outSwivelServo = hardwareMap.servo["OutSwivel"]
         inStopServo = hardwareMap.servo["InStop"]
         inStopServo!!.position = inStopClose
         inRotationServo = hardwareMap.servo["InRotation"]
-        inRotationServo!!.position = inRotationTransfer
+        inRotationServo!!.position = 1.0
 
-        drive!!.poseEstimate = Pose2d(-34.09, -63.19, Math.toRadians(90.00))
+        drive!!.poseEstimate = Pose2d(-34.09, -63.19, Math.toRadians(-90.00))
 
-//        val bar: TrajectorySequence =
-//            drive!!.trajectorySequenceBuilder( Pose2d(-34.09, -63.19, Math.toRadians(90.00)))
-//                .setReversed(true)
-//                .lineToConstantHeading(Vector2d(-10.04, -33.0))
-//                .setReversed(false)
-//                .build()
+        val bar: TrajectorySequence =
+            drive!!.trajectorySequenceBuilder( Pose2d(-34.09, -63.19, Math.toRadians(-90.00)))
+                .setReversed(true)
+                .lineToConstantHeading(Vector2d(-10.04, -33.0))
+                .setReversed(false)
+                .build()
 
         val sample1: TrajectorySequence =
-            drive!!.trajectorySequenceBuilder(Pose2d(-34.09, -63.19,Math.toRadians(90.0)))
-                .lineToConstantHeading(Vector2d(-48.25, -32.5))
+            drive!!.trajectorySequenceBuilder(Pose2d(-10.04, -33.0,Math.toRadians(-90.0)))
+                .splineToLinearHeading(Pose2d(-48.25, -32.5,Math.toRadians(90.0)),Math.toRadians(90.0))
                 .build()
 
         val basket1: TrajectorySequence =
@@ -83,9 +82,19 @@ class BASKET3 : Methods() {
         waitForStart()
 
         //START
+        verticalSlideTo(1550, 1.0)
+        outRotationServo!!.position = outRotationBack
+
+        //BAR
+        drive!!.followTrajectorySequence(bar)
+        verticalSlideTo(750,1.0)
+        sleep(400)
+        outClawServo!!.position = outClawOpen
+        outRotationServo!!.position = outRotationCenter
 
         //SAMPLE1
         drive!!.followTrajectorySequence(sample1)
+        verticalSlideTo(0,0.5)
         outClawServo!!.position = outClawOpen
         inRotationServo!!.position = inRotationPick
         horizontalSlideTo(1000,1.0)
@@ -158,8 +167,7 @@ class BASKET3 : Methods() {
         verticalSlideTo(verticalSlideHigh, 1.0)
         intakeMotor!!.power = 0.0
         outRotationServo!!.position = outRotationBack
-
-
+        
         //BASKET3
         drive!!.followTrajectorySequence(basket3)
         inRotationServo!!.position = inRotationPick

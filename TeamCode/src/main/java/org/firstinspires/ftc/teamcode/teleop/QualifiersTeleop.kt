@@ -108,7 +108,7 @@ class QualifiersTeleop: Methods() {
                 AutomaticTransferState.Manual -> {
                     // Auto transfer toggle
                     if (controller2.left_bumper && !(previousController2.left_bumper)) {
-                        automaticTransferToggle = AutomaticTransferState.other
+                        automaticTransferToggle = AutomaticTransferState.StartTransfer
                     }
 
                     //SERVOS
@@ -153,7 +153,7 @@ class QualifiersTeleop: Methods() {
 
                     if (controller2.b && !previousController2.b){
                         if (slideVertical!!.currentPosition < 1500) {
-                            verticalSlideTo(1000,0.75)
+                            verticalSlideTo(1000,1.0)
                             verticalHeight = 1000
                         }
 
@@ -219,36 +219,27 @@ class QualifiersTeleop: Methods() {
                 }
 
                 // Automated transfer
-
-                AutomaticTransferState.other ->{
-                    verticalSlideTo(1500,0.75)
-                    if (outRotationServo!!.position > 0.5){
-                        automaticTransferToggle = AutomaticTransferState.StartTransfer
-                    } else {
-                        outRotationServo!!.position = outRotationCenter
-                    }
-                }
                 AutomaticTransferState.StartTransfer-> {
+                    outRotationServo!!.position = outRotationCenter
                     intakeMotor?.power = 0.5
                     intakeInToggle = true
                     sleep(100)
                     inRotationServo!!.position = inRotationTransfer
                     transferServo!!.position = transferServoClose
                     horizontalSlideTo(0,1.0)
-                    verticalSlideTo(200,0.75)
+                    verticalSlideTo(1200,0.6)
                     verticalHeight = 0
-                    outRotationServo!!.position = outRotationCenter
                     outSwivelServo!!.position = outSwivelPerpBack
                     outClawServo!!.position = outClawOpen
                     intakeInToggle = false
                     if (!doOnce) {
                         elapsedTime.reset(); doOnce = true
-                        timeVer = 0.0002 * slideVertical!!.currentPosition + 0.8
+                        timeVer = 0.0002 * slideVertical!!.currentPosition + 0.5
                         timeHor = slideHorizontal!!.currentPosition * 0.0001
                     }
                     if (elapsedTime.time() > timeHor) {
                         inStopServo!!.position = inStopOpen
-                        verticalSlideTo(0,0.75)
+                        verticalSlideTo(0,1.0)
                     }
                     if (elapsedTime.time() > timeVer){
                         automaticTransferToggle = AutomaticTransferState.Pickup
@@ -265,7 +256,7 @@ class QualifiersTeleop: Methods() {
                 }
                 AutomaticTransferState.ResetSlide ->{
                     intakeMotor!!.power = 0.0
-                    verticalSlideTo(1500,0.75)
+                    verticalSlideTo(1500,1.0)
                     verticalHeight = 1500
                     if (!doOnce) { elapsedTime.reset(); doOnce = true }
                     if (elapsedTime.time() > 1.0) {

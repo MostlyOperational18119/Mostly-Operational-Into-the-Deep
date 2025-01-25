@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode
 
+import android.util.Base64
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
 import com.qualcomm.hardware.limelightvision.Limelight3A
@@ -9,7 +10,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.Gamepad
 import com.qualcomm.robotcore.hardware.Servo
 import com.qualcomm.robotcore.util.ElapsedTime
-import org.firstinspires.ftc.robotcore.internal.system.AppUtil
 import org.firstinspires.ftc.teamcode.drive.advanced.SampleMecanumDriveCancelable
 import kotlin.math.abs
 
@@ -247,22 +247,20 @@ abstract class Methods : LinearOpMode() {
     }
 
     // Uploads a pipeline to the robot
-    fun switchPipeline(limelight: Limelight3A, fileName: String) {
-        val inputStream = AppUtil.getDefContext().assets.open("assets/raw/${fileName}.json")
+    fun switchPipeline(limelight: Limelight3A, data: String) {
+        val decodedData = Base64.decode(data, 0).toString()
 
-        val jsonString = inputStream.readBytes().toString()
-
-        limelight.uploadPipeline(jsonString, 0)
+        limelight.uploadPipeline(decodedData, 0)
         limelight.pipelineSwitch(0) // Just in case
     }
 
     // Uploads a pipeline specified by an enum to the robot
     fun switchPipelineEnum(limelight: Limelight3A, enum: PipelineType) {
         val fileName = when (enum) {
-            PipelineType.Red -> "redpipeline"
-            PipelineType.Blue -> "bluepipeline"
-            PipelineType.Orange -> "orangepipeline"
-            PipelineType.AprilTag -> "apriltagpipeline"
+            PipelineType.Red -> LimeLightPipelines.RedPipeline
+            PipelineType.Blue -> LimeLightPipelines.BluePipeline
+            PipelineType.Orange -> LimeLightPipelines.OrangePipeline
+            PipelineType.AprilTag -> LimeLightPipelines.AprilTagPipeline
         }
 
         switchPipeline(limelight, fileName)

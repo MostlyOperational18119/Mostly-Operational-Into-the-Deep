@@ -1,15 +1,12 @@
 package org.firstinspires.ftc.teamcode.autonomous
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
-import com.google.gson.JsonParser
 import com.qualcomm.hardware.limelightvision.Limelight3A
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
 import org.firstinspires.ftc.teamcode.Methods
 import org.firstinspires.ftc.teamcode.drive.advanced.SampleMecanumDriveCancelable
-import org.json.JSONObject
 
 @Autonomous(name = "LimeLight Test Autonomous")
 @Disabled

@@ -2,13 +2,14 @@ package org.firstinspires.ftc.teamcode
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
+import com.qualcomm.hardware.limelightvision.Limelight3A
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.Gamepad
 import com.qualcomm.robotcore.hardware.Servo
 import com.qualcomm.robotcore.util.ElapsedTime
-import org.firstinspires.ftc.teamcode.drive.SampleGoBildaPinpointMecanumDriveCancelable
+import org.firstinspires.ftc.robotcore.internal.system.AppUtil
 import org.firstinspires.ftc.teamcode.drive.advanced.SampleMecanumDriveCancelable
 import kotlin.math.abs
 
@@ -18,6 +19,7 @@ abstract class Methods : LinearOpMode() {
     enum class HorizontalSlideState { Floor, Extend, Manual }
     enum class AutomaticTransferState { Manual, StartTransfer, Pickup, ResetSlide, RotateOut }
     enum class AutomaticMovementState { Manual, Auto }
+    enum class PipelineType { Red, Orange, Blue, AprilTag }
     //enum class HangStates { Up, Down, Reset, None}
 
     val transferServoClose = 0.53
@@ -242,6 +244,28 @@ abstract class Methods : LinearOpMode() {
         motor.targetPosition = 0
         motor.mode = DcMotor.RunMode.RUN_TO_POSITION
         motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+    }
+
+    // Uploads a pipeline to the robot
+    fun switchPipeline(limelight: Limelight3A, fileName: String) {
+        val inputStream = AppUtil.getDefContext().assets.open("assets/raw/${fileName}.json")
+
+        val jsonString = inputStream.readBytes().toString()
+
+        limelight.uploadPipeline(jsonString, 0)
+        limelight.pipelineSwitch(0) // Just in case
+    }
+
+    // Uploads a pipeline specified by an enum to the robot
+    fun switchPipelineEnum(limelight: Limelight3A, enum: PipelineType) {
+        val fileName = when (enum) {
+            PipelineType.Red -> "redpipeline"
+            PipelineType.Blue -> "bluepipeline"
+            PipelineType.Orange -> "orangepipeline"
+            PipelineType.AprilTag -> "apriltagpipeline"
+        }
+
+        switchPipeline(limelight, fileName)
     }
 
     //insideJokes

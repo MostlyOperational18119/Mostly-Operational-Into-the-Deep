@@ -5,6 +5,7 @@ import org.firstinspires.ftc.teamcode.Methods
 import org.firstinspires.ftc.teamcode.autonomous.PoseStorage
 import org.firstinspires.ftc.teamcode.drive.advanced.SampleMecanumDriveCancelable
 import kotlin.math.abs
+import kotlin.math.roundToInt
 
 @TeleOp(name = "QUALIFIERS TELEOP", group = "AAA")
 class QualifiersTeleop: Methods() {
@@ -36,6 +37,8 @@ class QualifiersTeleop: Methods() {
         while (opModeIsActive()) {
             telemetry.addData("Vertical: ", slideVertical?.currentPosition)
             telemetry.addData("Horizontal: ", slideHorizontal?.currentPosition)
+            telemetry.addLine((((outRotationServo!!.position * 100.0).roundToInt()/100.0)).toString())
+            telemetry.addLine(outRotationBack.toString())
             telemetry.update()
 
             leftY1 = -gamepad1.left_stick_y.toDouble()/speedDiv * otherReverse
@@ -129,6 +132,21 @@ class QualifiersTeleop: Methods() {
                         }
                     }
 
+                    if (controller1.dpad_up && !previousController1.dpad_up) {
+                        verticalSlideTo(1900, 1.0)
+                        sleep(750)
+                        verticalSlideTo(800,1.0)
+                        sleep(500)
+                        outClawServo!!.position = outClawOpen
+                        outClawToggle = true
+                        sleep(300)
+                        verticalSlideToggle = VerticalSlideState.AutoPlaceTransfer
+                        sleep(100)
+                        outRotationServo!!.position = outRotationCenter
+                        sleep(500)
+                        verticalSlideToggle = VerticalSlideState.Floor
+                    }
+
                     if (controller2.x && !previousController2.x){transferServoToggle = !transferServoToggle}
                     if (!transferServoToggle){transferServo!!.position = transferServoClose}
                     if (transferServoToggle) {transferServo!!.position = transferServoOpen }
@@ -215,15 +233,24 @@ class QualifiersTeleop: Methods() {
                         VerticalSlideState.Floor -> { verticalSlideTo(0,0.75);    verticalBackToManual() }
                         VerticalSlideState.Low   -> { verticalSlideTo(1000,0.75); verticalBackToManual() }
                         VerticalSlideState.High  -> { verticalSlideTo(3500,0.75); verticalBackToManual() }
+                        VerticalSlideState.AutoPlaceTransfer  -> { verticalSlideTo(750,0.75); verticalBackToManual() }
                     }
                 }
 
                 // Automated transfer
                 AutomaticTransferState.StartTransfer-> {
+                    motorFL!!.power = -0.0
+                    motorBL!!.power = 0.0
+                    motorFR!!.power = 0.0
+                    motorBR!!.power = 0.0
+                    verticalSlideTo(1100, 1.0)
+                    sleep(700)
                     outRotationServo!!.position = outRotationCenter
+                    sleep(400)
+                    verticalSlideTo(0, 0.6)
                     intakeMotor?.power = 0.5
                     intakeInToggle = true
-                    sleep(100)
+                    sleep(250)
                     inRotationServo!!.position = inRotationTransfer
                     transferServo!!.position = transferServoClose
                     horizontalSlideTo(0,1.0)
@@ -232,8 +259,9 @@ class QualifiersTeleop: Methods() {
                     outSwivelServo!!.position = outSwivelPerpBack
                     outClawServo!!.position = outClawOpen
                     intakeInToggle = false
-                    if (!doOnce) {
-                        elapsedTime.reset(); doOnce = true
+                    /*if (!doOnce) {
+                        elapsedTime.reset()
+                        doOnce = true
                         timeVer = 0.0002 * slideVertical!!.currentPosition + 0.5
                         timeHor = slideHorizontal!!.currentPosition * 0.0001
                     }
@@ -244,7 +272,18 @@ class QualifiersTeleop: Methods() {
                     if (elapsedTime.time() > timeVer){
                         automaticTransferToggle = AutomaticTransferState.Pickup
                         doOnce = false
+                    }*/
+                    while (!doOnce) {
+                        if (slideHorizontal!!.currentPosition < 200) {
+                            inStopServo!!.position = inStopOpen
+                            doOnce = true
+                        }
+                        sleep(25)
                     }
+                    sleep(800)
+                    verticalSlideTo(0, 1.0)
+                    sleep(825)
+                    automaticTransferToggle = AutomaticTransferState.Pickup
                 }
                 AutomaticTransferState.Pickup -> {
                     outClawServo!!.position = outClawClose

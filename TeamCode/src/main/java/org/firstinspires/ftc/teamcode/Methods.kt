@@ -14,7 +14,7 @@ import kotlin.math.abs
 
 
 abstract class Methods : LinearOpMode() {
-    enum class VerticalSlideState { Floor, Low, High, Manual }
+    enum class VerticalSlideState { Floor, Low, High, Manual, AutoPlaceTransfer }
     enum class HorizontalSlideState { Floor, Extend, Manual }
     enum class AutomaticTransferState { Manual, StartTransfer, Pickup, ResetSlide, RotateOut }
     enum class AutomaticMovementState { Manual, Auto }
@@ -96,7 +96,6 @@ abstract class Methods : LinearOpMode() {
     // Places the sample
     fun placeSample() {
         outClawServo!!.position = outClawOpen
-
         sleep(500)
 
         outClawServo!!.position = outClawClose
@@ -246,7 +245,7 @@ abstract class Methods : LinearOpMode() {
 
     //insideJokes
     fun insideJokes() {
-        telemetry.addLine(when ((0..52).random()) {
+        telemetry.addLine(when ((0..54).random()) {
             1 -> "good luck buddy"
             2 -> "\"what spectrum?\""
             3 -> "MostlyOp >>> AHoT"
@@ -298,6 +297,8 @@ abstract class Methods : LinearOpMode() {
             49 -> "https://lhohq.info"
             50 -> "the west has fallen"
             51 -> "bring it back ho"
+            52 -> "fallacy fallacy"
+            53 -> "with a side of love"
             else -> "Why did we add these?"
         })
         telemetry.update()

@@ -4,13 +4,13 @@ import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.qualcomm.hardware.limelightvision.Limelight3A
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
+import org.firstinspires.ftc.teamcode.Methods
 import org.firstinspires.ftc.teamcode.drive.advanced.SampleMecanumDriveCancelable
 
 @Autonomous(name = "LimeLight Test Autonomous")
 @Disabled
-class LimeLightTestAuto : LinearOpMode() {
+class LimeLightTestAuto : Methods() {
     override fun runOpMode() {
         val drive = SampleMecanumDriveCancelable(hardwareMap)
         val limelight = hardwareMap.get(Limelight3A::class.java, "limelight")
@@ -23,19 +23,19 @@ class LimeLightTestAuto : LinearOpMode() {
         telemetry.addLine("Finding clip")
         telemetry.update()
 
-        var choice = -1
+        var choice: PipelineType? = null
 
-        while (choice == -1 && !isStopRequested) {
+        while (choice == null && !isStopRequested) {
             telemetry.addLine("A for RED \nB for BLUE \nX for ORANGE")
             telemetry.update()
-            choice = if (gamepad1.a) 0 else if (gamepad1.b) 1 else if (gamepad1.x) 2 else -1
+            choice = if (gamepad1.a) PipelineType.Red else if (gamepad1.b) PipelineType.Blue else if (gamepad1.x) PipelineType.Orange else null
 
             sleep(50)
         }
 
         if (isStopRequested) return
 
-        limelight.pipelineSwitch(choice)
+        switchPipelineEnum(limelight, choice!!)
         limelight.start()
 
         sleep(1000) // Just to be safe

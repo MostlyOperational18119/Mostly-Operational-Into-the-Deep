@@ -23,7 +23,9 @@ class QualifiersTeleop: Methods() {
         inRotationToggle = false
         outSwivelToggle = false
         transferServoToggle = false
+
         doOnce = false
+        var barUp = true;
         var outRotation = false
         var reverseThing = false
         var otherReverse = 1.0
@@ -132,19 +134,18 @@ class QualifiersTeleop: Methods() {
                         }
                     }
 
-                    if (controller1.dpad_up && !previousController1.dpad_up) {
-                        verticalSlideTo(1900, 1.0)
-                        sleep(750)
-                        verticalSlideTo(800,1.0)
+                    if (controller1.dpad_up && !previousController1.dpad_up && barUp) {
+                        verticalSlideToggle = VerticalSlideState.Bar
+                        barUp = false
+                    }
+
+                    if (controller1.dpad_up && !previousController1.dpad_up && !barUp) {
+                        verticalSlideToggle = VerticalSlideState.AutoPlaceTransfer
                         sleep(500)
                         outClawServo!!.position = outClawOpen
                         outClawToggle = true
-                        sleep(300)
-                        verticalSlideToggle = VerticalSlideState.AutoPlaceTransfer
-                        sleep(100)
+                        sleep(200)
                         outRotationServo!!.position = outRotationCenter
-                        sleep(500)
-                        verticalSlideToggle = VerticalSlideState.Floor
                     }
 
                     if (controller2.x && !previousController2.x){transferServoToggle = !transferServoToggle}
@@ -209,10 +210,7 @@ class QualifiersTeleop: Methods() {
                     // Vertical slide
                     if (controller2.dpad_up && !previousController2.dpad_up) { verticalSlideToggle = VerticalSlideState.High }
                     if (controller2.dpad_down && !previousController2.dpad_down) { verticalSlideToggle = VerticalSlideState.Floor }
-                    if (controller2.right_stick_button && !previousController2.right_stick_button) {
-                        verticalSlideTo(1500, 1.0)
-                        placeSample()
-                    }
+                    if (controller2.right_stick_button && !previousController2.right_stick_button) { verticalSlideToggle = VerticalSlideState.Floor }
                     if (controller2.dpad_left && !previousController2.dpad_left) { verticalSlideToggle = VerticalSlideState.Low }
                     if (rightY2!! >= 0.2 || rightY2!! <= -0.2) { verticalSlideToggle = VerticalSlideState.Manual }
                     when (verticalSlideToggle) {
@@ -233,57 +231,40 @@ class QualifiersTeleop: Methods() {
                         VerticalSlideState.Floor -> { verticalSlideTo(0,0.75);    verticalBackToManual() }
                         VerticalSlideState.Low   -> { verticalSlideTo(1000,0.75); verticalBackToManual() }
                         VerticalSlideState.High  -> { verticalSlideTo(3500,0.75); verticalBackToManual() }
+                        VerticalSlideState.Bar  -> { verticalSlideTo(1600,0.75); verticalBackToManual() }
                         VerticalSlideState.AutoPlaceTransfer  -> { verticalSlideTo(750,0.75); verticalBackToManual() }
                     }
                 }
 
                 // Automated transfer
                 AutomaticTransferState.StartTransfer-> {
-                    motorFL!!.power = -0.0
-                    motorBL!!.power = 0.0
-                    motorFR!!.power = 0.0
-                    motorBR!!.power = 0.0
-                    verticalSlideTo(1100, 1.0)
-                    sleep(700)
+                    verticalSlideTo(1500, 1.0)
                     outRotationServo!!.position = outRotationCenter
-                    sleep(400)
-                    verticalSlideTo(0, 0.6)
                     intakeMotor?.power = 0.5
                     intakeInToggle = true
-                    sleep(250)
                     inRotationServo!!.position = inRotationTransfer
                     transferServo!!.position = transferServoClose
                     horizontalSlideTo(0,1.0)
-                    verticalSlideTo(1200,0.6)
                     verticalHeight = 0
                     outSwivelServo!!.position = outSwivelPerpBack
                     outClawServo!!.position = outClawOpen
                     intakeInToggle = false
-                    /*if (!doOnce) {
+                    if (!doOnce) {
                         elapsedTime.reset()
                         doOnce = true
-                        timeVer = 0.0002 * slideVertical!!.currentPosition + 0.5
-                        timeHor = slideHorizontal!!.currentPosition * 0.0001
+                        timeVer = 0.0002 * slideVertical!!.currentPosition + 0.6
+                        timeHor = slideHorizontal!!.currentPosition * 0.0002
                     }
                     if (elapsedTime.time() > timeHor) {
                         inStopServo!!.position = inStopOpen
-                        verticalSlideTo(0,1.0)
+                    }
+                    if (elapsedTime.time() > timeVer - 0.3){
+                        verticalSlideTo(0, 1.0)
                     }
                     if (elapsedTime.time() > timeVer){
                         automaticTransferToggle = AutomaticTransferState.Pickup
                         doOnce = false
-                    }*/
-                    while (!doOnce) {
-                        if (slideHorizontal!!.currentPosition < 200) {
-                            inStopServo!!.position = inStopOpen
-                            doOnce = true
-                        }
-                        sleep(25)
                     }
-                    sleep(800)
-                    verticalSlideTo(0, 1.0)
-                    sleep(825)
-                    automaticTransferToggle = AutomaticTransferState.Pickup
                 }
                 AutomaticTransferState.Pickup -> {
                     outClawServo!!.position = outClawClose

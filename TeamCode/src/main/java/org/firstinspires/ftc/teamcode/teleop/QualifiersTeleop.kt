@@ -127,11 +127,11 @@ class QualifiersTeleop: Methods() {
 
                     if (controller2.y && !previousController2.y) { inRotationToggle = !inRotationToggle}
                     if (slideHorizontal!!.currentPosition < 100){
-                        inRotationServo!!.position = inRotationTransfer
+                        inRotationServo!!.position = inRotationUp
                         inRotationToggle = false
                     }else {
                         if (!inRotationToggle) {
-                            inRotationServo!!.position = inRotationTransfer
+                            inRotationServo!!.position = inRotationUp
                         }
                         if (inRotationToggle) {
                             inRotationServo!!.position = inRotationPick

@@ -31,12 +31,11 @@ abstract class Methods : LinearOpMode() {
     val outRotationBack = 0.26
     val outRotationCenter = 0.59 // "center"
     val outRotationFront = 0.84
-    val inRotationPick = 0.64
-    val inRotationDormant = 0.8
-    val inRotationTransfer = 0.98
-    val inStopClose = 0.00
-    val inStopOpen = 0.36
-
+    val inRotationPick = 0.42
+    val inRotationUp = 0.92
+    val inRotationTransfer = 0.8
+    val inStopClose = 0.09
+    val inStopOpen = 0.48
     val verticalSlideWall = 500
     val verticalSlideHigh = 3500
     val verticalSlideBar = 1500
@@ -106,7 +105,7 @@ abstract class Methods : LinearOpMode() {
     // Places the specimen
     fun placeSpecimen() {
         verticalSlideTo(750,1.0)
-        sleep(400)
+        sleep(500)
         outClawServo!!.position = outClawOpen
     }
 

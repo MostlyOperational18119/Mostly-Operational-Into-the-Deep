@@ -18,6 +18,7 @@ class BAR3 : Methods() {
         outRotationServo = hardwareMap.servo["OutRotation"]
         outSwivelServo = hardwareMap.servo["OutSwivel"]
         inRotationServo = hardwareMap.servo["InRotation"]
+        inRotationServo!!.position = inRotationUp
 
         drive!!.poseEstimate = Pose2d(14.74, -63.19, Math.toRadians(-90.00))
 
@@ -51,21 +52,21 @@ class BAR3 : Methods() {
 
         val bar1: TrajectorySequence =
             drive!!.trajectorySequenceBuilder(Pose2d(46.25, -65.25, Math.toRadians(-90.00)))
-                .lineToConstantHeading(Vector2d(0.3, -32.0))
+                .lineToConstantHeading(Vector2d(0.3, -31.8))
                 .build()
 
         val pick2: TrajectorySequence =
-            drive!!.trajectorySequenceBuilder(Pose2d(0.3, -32.0, Math.toRadians(-90.00)))
+            drive!!.trajectorySequenceBuilder(Pose2d(0.3, -31.8, Math.toRadians(-90.00)))
                 .lineToConstantHeading(Vector2d(46.25, -65.25))
                 .build()
 
         val bar2: TrajectorySequence =
             drive!!.trajectorySequenceBuilder(Pose2d(46.25, -65.25, Math.toRadians(-90.00)))
-                .lineToConstantHeading(Vector2d(-3.5, -32.0))
+                .lineToConstantHeading(Vector2d(-3.5, -31.8))
                 .build()
 
         val end: TrajectorySequence =
-            drive!!.trajectorySequenceBuilder(Pose2d(-3.5, -32.0, Math.toRadians(-90.00)))
+            drive!!.trajectorySequenceBuilder(Pose2d(-3.5, -31.8, Math.toRadians(-90.00)))
                 .lineToConstantHeading(Vector2d(43.25, -55.55))
                 .build()
 
@@ -94,7 +95,7 @@ class BAR3 : Methods() {
 
         //SAMPLE1
         drive!!.followTrajectorySequence(sample1)
-        verticalSlideTo(0, 1.0)
+        verticalSlideTo(0, 0.3)
 
         //SAMPLE2 + PICK1
         drive!!.followTrajectorySequence(sample2)
@@ -113,7 +114,7 @@ class BAR3 : Methods() {
         sleep(100)
         placeSpecimen()
         sleep(300)
-        verticalSlideTo(0,0.4)
+        verticalSlideTo(0,0.3)
         outRotationServo!!.position = outRotationFront
         outSwivelServo!!.position = outSwivelPerpFront
 

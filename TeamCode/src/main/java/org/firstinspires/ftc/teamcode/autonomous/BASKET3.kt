@@ -22,8 +22,9 @@ class BASKET3 : Methods() {
         outSwivelServo = hardwareMap.servo["OutSwivel"]
         outSwivelServo!!.position = outSwivelPerpBack
         inStopServo = hardwareMap.servo["InStop"]
-        inStopServo!!.position = inStopClose
+        inStopServo!!.position = inStopOpen
         inRotationServo = hardwareMap.servo["InRotation"]
+        inRotationServo!!.position = inRotationUp
 
         drive!!.poseEstimate = Pose2d(-34.09, -63.19, Math.toRadians(90.00))
 
@@ -101,9 +102,9 @@ class BASKET3 : Methods() {
         outClawServo!!.position = outClawOpen
         inRotationServo!!.position = inRotationPick
         outSwivelServo!!.position = outSwivelPerpBack
-        horizontalSlideTo(400,1.0)
         sleep(100)
         inStopServo!!.position = inStopClose
+        horizontalSlideTo(400,1.0)
         intakeMotor!!.power = 0.7
         sleep(1500)
         inRotationServo!!.position = inRotationTransfer
@@ -131,8 +132,8 @@ class BASKET3 : Methods() {
         outClawServo!!.position = outClawOpen
         inRotationServo!!.position = inRotationPick
         outSwivelServo!!.position = outSwivelPerpBack
-        horizontalSlideTo(400,1.0)
         sleep(100)
+        horizontalSlideTo(400,1.0)
         inStopServo!!.position = inStopClose
         intakeMotor!!.power = 0.7
         sleep(1500)
@@ -160,8 +161,8 @@ class BASKET3 : Methods() {
         outClawServo!!.position = outClawOpen
         outSwivelServo!!.position = outSwivelPerpBack
         inRotationServo!!.position = inRotationPick
-        horizontalSlideTo(750,1.0)
         sleep(100)
+        horizontalSlideTo(750,1.0)
         inStopServo!!.position = inStopClose
         intakeMotor!!.power = 0.7
         sleep(1500)

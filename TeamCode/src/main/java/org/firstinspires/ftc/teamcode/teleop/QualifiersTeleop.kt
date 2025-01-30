@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleop
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import com.qualcomm.robotcore.hardware.DcMotor
 import org.firstinspires.ftc.teamcode.Methods
 import org.firstinspires.ftc.teamcode.autonomous.PoseStorage
 import org.firstinspires.ftc.teamcode.drive.advanced.SampleMecanumDriveCancelable
@@ -16,6 +17,7 @@ class QualifiersTeleop: Methods() {
         insideJokes()
 
         drive = SampleMecanumDriveCancelable(hardwareMap)
+        drive!!.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER)
         drive!!.poseEstimate = PoseStorage.currentPose
 
         outClawToggle = false
@@ -83,7 +85,8 @@ class QualifiersTeleop: Methods() {
                     if (!reverseThing ){ otherReverse = 1.0}
                     if (reverseThing ){ otherReverse = -1.0}
 
-                    /*if (controller1.dpad_right && !(previousController1.dpad_right)) {
+                    if (controller1.dpad_right && !(previousController1.dpad_right)) {
+                        verticalSlideTo(1600, 1.0)
                         val teleopBasket = drive!!.trajectorySequenceBuilder(drive!!.poseEstimate)
                             .setReversed(true)
                             .lineToLinearHeading(basketPose)
@@ -93,6 +96,7 @@ class QualifiersTeleop: Methods() {
                         automatedMovementToggle = AutomaticMovementState.Auto
                     }
                     if (controller1.dpad_left && !previousController1.dpad_left) {
+                        verticalSlideTo(3500, 1.0)
                         val teleopBar =  drive!!.trajectorySequenceBuilder(drive!!.poseEstimate)
                             .setReversed(true)
                             .lineToLinearHeading(barPose)
@@ -100,11 +104,11 @@ class QualifiersTeleop: Methods() {
                             .build()
                         drive!!.followTrajectorySequenceAsync(teleopBar)
                         automatedMovementToggle = AutomaticMovementState.Auto
-                    }*/
+                    }
                 }
                 AutomaticMovementState.Auto ->{
-//                    if (controller1.dpad_left && !previousController1.dpad_left) { drive!!.breakFollowing();automatedMovementToggle = AutomaticMovementState.Manual }
-//                    if (controller1.dpad_right && !previousController1.dpad_right) { drive!!.breakFollowing();automatedMovementToggle = AutomaticMovementState.Manual }
+                    if (controller1.dpad_left && !previousController1.dpad_left) { drive!!.breakFollowing();automatedMovementToggle = AutomaticMovementState.Manual }
+                    if (controller1.dpad_right && !previousController1.dpad_right) { drive!!.breakFollowing();automatedMovementToggle = AutomaticMovementState.Manual }
                     if (!drive!!.isBusy) { automatedMovementToggle = AutomaticMovementState.Manual }
                 }
             }

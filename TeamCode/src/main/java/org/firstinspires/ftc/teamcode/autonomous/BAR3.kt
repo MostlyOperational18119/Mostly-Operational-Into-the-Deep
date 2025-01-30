@@ -77,6 +77,7 @@ class BAR3 : Methods() {
                 .build()
 
         waitForStart()
+        if (isStopRequested) {return}
 
         //START
         verticalSlideTo(1550, 1.0)
@@ -88,12 +89,12 @@ class BAR3 : Methods() {
         sleep(100)
         placeSpecimen()
         sleep(300)
-        verticalSlideTo(0,0.4)
         outRotationServo!!.position = outRotationFront
         outSwivelServo!!.position = outSwivelPerpFront
 
         //SAMPLE1
         drive!!.followTrajectorySequence(sample1)
+        verticalSlideTo(0, 1.0)
 
         //SAMPLE2 + PICK1
         drive!!.followTrajectorySequence(sample2)
@@ -136,7 +137,6 @@ class BAR3 : Methods() {
         verticalSlideTo(0, 0.5)
         drive!!.followTrajectorySequence(end)
 
-        while (opModeIsActive() && !isStopRequested) { drive!!.update() }
-        PoseStorage.currentPose = drive!!.poseEstimate
+        PoseStorage.currentPose = Pose2d(43.25, -55.55, Math.toRadians(-90.0))
     }
 }

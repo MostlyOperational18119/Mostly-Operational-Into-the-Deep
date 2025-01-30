@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.autonomous.OldAutonomous
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.CRServo
 import com.qualcomm.robotcore.hardware.DcMotor
@@ -18,6 +19,9 @@ import java.util.Locale
 // Autonomous
 
 @Autonomous(name = "RB_FIRST", group = "B")
+@Disabled
+
+
 class RB_First : LinearOpMode() {
     override fun runOpMode() {
         // Setup Odometry :)
@@ -178,7 +182,7 @@ class RB_First : LinearOpMode() {
             String.format(Locale.ENGLISH, "X: %f, Y: %f, and Rotation: %f", x, y, heading)
         )
         telemetry.update()
-        PoseStorage.currentPose = drive.poseEstimate
+        //PoseStorage.currentPose = drive.poseEstimate
         //colorSide = "red"
     }
 }

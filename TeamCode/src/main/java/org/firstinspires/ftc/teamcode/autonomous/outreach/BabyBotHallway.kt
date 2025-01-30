@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.autonomous.outreach
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 
 @Autonomous(name = "BabyBotHallwayAuto")
+@Disabled
 class BabyBotHallway : LinearOpMode() {
     override fun runOpMode() {
         val right = hardwareMap.dcMotor["right"]

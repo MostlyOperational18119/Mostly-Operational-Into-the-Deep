@@ -21,6 +21,7 @@
  */
 package org.firstinspires.ftc.teamcode.autonomous.goBuilda
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
@@ -54,6 +55,8 @@ For support, contact tech@gobilda.com
 -Ethan Doak
  */
 @TeleOp(name = "goBILDA® PinPoint Odometry Example", group = "Linear OpMode") //@Disabled
+@Disabled
+
 class SensorGoBildaPinpointExample : LinearOpMode() {
     var odo: GoBildaPinpointDriver? = null // Declare OpMode member for the Odometry Computer
 

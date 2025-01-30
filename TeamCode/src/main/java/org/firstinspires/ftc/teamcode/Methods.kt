@@ -60,8 +60,8 @@ abstract class Methods : LinearOpMode() {
     val basketHeading = Math.toRadians(225.00)
     val barVector = Vector2d(-10.04, -34.01)
     val barHeading = Math.toRadians(-90.00)
-    val basketPose = Pose2d(-52.5, -52.5, 45.0)
-    val barPose = Pose2d(-10.04, -42.15, 90.0)
+    val basketPose = Pose2d(-56.5, -56.5, 45.0)
+    val barPose = Pose2d(-5.04, -38.0, 90.0)
 
     var horizontalSlideToggle = HorizontalSlideState.Manual
     var verticalSlideToggle = VerticalSlideState.Manual

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.autonomous.outreach
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
@@ -9,6 +10,7 @@ import com.qualcomm.robotcore.hardware.IMU
 import org.firstinspires.ftc.teamcode.teleop.outreach.OutreachBotBig
 
 @Autonomous(name = "OutreachBotBigAuto")
+@Disabled
 class OutreachBotBigAuto : LinearOpMode() {
     override fun runOpMode() {
         // Motors

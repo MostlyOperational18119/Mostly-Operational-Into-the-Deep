@@ -89,6 +89,6 @@ class BASKET2 : Methods() {
         //clawRotateServo!!.position = clawRotateUpRight
 
         while (opModeIsActive() && !isStopRequested) { drive!!.update() }
-        PoseStorage.currentPose = drive!!.poseEstimate
+        //PoseStorage.currentPose = drive!!.poseEstimate
     }
 }

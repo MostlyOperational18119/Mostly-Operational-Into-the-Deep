@@ -3,11 +3,14 @@ package org.firstinspires.ftc.teamcode.autonomous
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.firstinspires.ftc.teamcode.Methods
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
 
 
 @Autonomous(name = "BAR4Turn", group = "AAAA")
+@Disabled
+
 class BAR4Turn : Methods() {
     override fun runOpMode() {
         initOdometry()
@@ -106,6 +109,7 @@ class BAR4Turn : Methods() {
 //                .build()
 
         waitForStart()
+        if (isStopRequested) {return}
 
         //START
         verticalSlideTo(1550, 1.0)
@@ -216,7 +220,6 @@ class BAR4Turn : Methods() {
         verticalSlideTo(0, 0.5)
         drive!!.followTrajectorySequence(end)
 
-        while (opModeIsActive() && !isStopRequested) { drive!!.update() }
-        PoseStorage.currentPose = drive!!.poseEstimate
+        PoseStorage.currentPose = Pose2d(43.25, -55.55, Math.toRadians(-90.0))
     }
 }

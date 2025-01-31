@@ -28,12 +28,12 @@ abstract class Methods : LinearOpMode() {
     val outClawOpen = 0.35
     val outSwivelPerpBack = 0.23
     val outSwivelPerpFront = 0.9 // Not really necessary anymore
-    val outRotationBack = 0.26
+    var outRotationBack = 0.26
     val outRotationCenter = 0.59 // "center"
-    val outRotationFront = 0.84
-    val inRotationPick = 0.42
-    val inRotationUp = 0.92
-    val inRotationTransfer = 0.8
+    var outRotationFront = 0.84
+    val inRotationPick = 0.41
+    val inRotationUp = 0.77
+    val inRotationTransfer = 0.76
     val inStopClose = 0.09
     val inStopOpen = 0.48
     val verticalSlideWall = 500
@@ -248,7 +248,7 @@ abstract class Methods : LinearOpMode() {
     fun switchPipeline(limelight: Limelight3A, data: String) {
         val decodedData = Base64.decode(data, 0).toString()
 
-        limelight.uploadPipeline(decodedData, 0)
+        //limelight.uploadPipeline(decodedData, 0)
         limelight.pipelineSwitch(0) // Just in case
     }
 

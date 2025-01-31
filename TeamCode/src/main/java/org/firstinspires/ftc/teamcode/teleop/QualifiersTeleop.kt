@@ -95,20 +95,20 @@ class QualifiersTeleop: Methods() {
                         drive!!.followTrajectorySequenceAsync(teleopBasket)
                         automatedMovementToggle = AutomaticMovementState.Auto
                     }
-                    if (controller1.dpad_left && !previousController1.dpad_left) {
-                        verticalSlideTo(3500, 1.0)
-                        val teleopBar =  drive!!.trajectorySequenceBuilder(drive!!.poseEstimate)
-                            .setReversed(true)
-                            .lineToLinearHeading(barPose)
-                            .setReversed(false)
-                            .build()
-                        drive!!.followTrajectorySequenceAsync(teleopBar)
-                        automatedMovementToggle = AutomaticMovementState.Auto
-                    }
+                    //if (controller1.y && !previousController1.y) {
+                    //    verticalSlideTo(3500, 1.0)
+                    //    val teleopBar =  drive!!.trajectorySequenceBuilder(drive!!.poseEstimate)
+                    //        .setReversed(true)
+                    //        .lineToLinearHeading(barPose)
+                    //        .setReversed(false)
+                    //        .build()
+                    //    drive!!.followTrajectorySequenceAsync(teleopBar)
+                    //    automatedMovementToggle = AutomaticMovementState.Auto
+                    //}
                 }
                 AutomaticMovementState.Auto ->{
-                    if (controller1.dpad_left && !previousController1.dpad_left) { drive!!.breakFollowing();automatedMovementToggle = AutomaticMovementState.Manual }
-                    if (controller1.dpad_right && !previousController1.dpad_right) { drive!!.breakFollowing();automatedMovementToggle = AutomaticMovementState.Manual }
+                    //if (controller1.dpad_left && !previousController1.dpad_left) { drive!!.breakFollowing();automatedMovementToggle = AutomaticMovementState.Manual }
+                    //if (controller1.dpad_right && !previousController1.dpad_right) { drive!!.breakFollowing();automatedMovementToggle = AutomaticMovementState.Manual }
                     if (!drive!!.isBusy) { automatedMovementToggle = AutomaticMovementState.Manual }
                 }
             }
@@ -138,7 +138,7 @@ class QualifiersTeleop: Methods() {
                         }
                     }
 
-                    if (controller1.dpad_up && !previousController1.dpad_up) {
+                    if (controller1.y && !previousController1.y) {
                         verticalSlideTo(700,1.0)
                         verticalHeight = 700
                         sleep(750)
@@ -170,6 +170,13 @@ class QualifiersTeleop: Methods() {
 //                    if (outSwivelToggle){ outSwivelServo!!.position = outSwivelParallel}
 //                    if (!outSwivelToggle){ outSwivelServo!!.position = outSwivelPerpFront
 
+                    if (slideVertical!!.currentPosition < 400 && outRotationServo!!.position > 0.78){
+                        outRotationServo!!.position = 0.79
+                    }
+                    if (slideVertical!!.currentPosition > 400 && outRotationServo!!.position > 0.78) {
+                        outRotationServo!!.position = 0.84
+                    }
+
                     if (controller2.b && !previousController2.b){
                         if (slideVertical!!.currentPosition < 1600) {
                             verticalSlideTo(1600,1.0)
@@ -178,7 +185,11 @@ class QualifiersTeleop: Methods() {
 
                         sleep(300)
                         if (outRotation) {
-                            outRotationServo!!.position = outRotationFront
+                            if (slideVertical!!.currentPosition < 400){
+                                outRotationServo!!.position = 0.82
+                            }else {
+                                outRotationServo!!.position = outRotationFront
+                            }
                             outSwivelServo!!.position = outSwivelPerpFront
                             outRotation = false
                         } else {
@@ -189,7 +200,12 @@ class QualifiersTeleop: Methods() {
                     }
 
                     //HOR SLIDE
-                    if (controller2.left_stick_button && !previousController2.left_stick_button) { horizontalSlideToggle = HorizontalSlideState.Floor }
+                    if (controller2.left_stick_button && !previousController2.left_stick_button) {
+                        inRotationServo!!.position = inRotationTransfer
+                        intakeMotor!!.power = 0.7
+                        inStopServo!!.position = inStopOpen
+                        horizontalSlideToggle = HorizontalSlideState.Floor
+                    }
                     //if (controller2.x && !previousController2.x) { horizontalSlideToggle = HorizontalSlideState.Extend }
                     if (leftY2!! >= 0.2 || leftY2!! <= -0.2) { horizontalSlideToggle = HorizontalSlideState.Manual }
                     when (horizontalSlideToggle) {
@@ -207,12 +223,14 @@ class QualifiersTeleop: Methods() {
                         HorizontalSlideState.Extend -> { horizontalSlideTo(950,1.0); horizontalBackToManual() }
                     }
 
+                    if (controller1.x && !previousController1.x) { outRotation = !outRotation }
+
                     // Vertical slide
                     if (controller2.dpad_up && !previousController2.dpad_up) { verticalSlideToggle = VerticalSlideState.High }
                     if (controller2.dpad_right && !previousController2.dpad_right) { verticalSlideToggle = VerticalSlideState.Bar }
                     if (controller2.dpad_down && !previousController2.dpad_down) { verticalSlideToggle = VerticalSlideState.Floor }
                     if (controller2.right_stick_button && !previousController2.right_stick_button) { verticalSlideToggle = VerticalSlideState.Floor }
-                    if (controller2.dpad_left && !previousController2.dpad_left) { verticalSlideToggle = VerticalSlideState.Low }
+                    if (controller2.dpad_left && !previousController2.dpad_left) { verticalSlideToggle = VerticalSlideState.Bar }
                     if (rightY2!! >= 0.2 || rightY2!! <= -0.2) { verticalSlideToggle = VerticalSlideState.Manual }
                     when (verticalSlideToggle) {
                         VerticalSlideState.Manual -> {
@@ -239,7 +257,6 @@ class QualifiersTeleop: Methods() {
                 // Automated transfer
                 AutomaticTransferState.StartTransfer-> {
                     verticalSlideTo(1500, 1.0)
-                    outRotationServo!!.position = outRotationCenter
                     intakeMotor?.power = 0.5
                     intakeInToggle = true
                     inRotationServo!!.position = inRotationTransfer
@@ -253,7 +270,13 @@ class QualifiersTeleop: Methods() {
                         elapsedTime.reset()
                         doOnce = true
                         timeVer = 0.2
-                        timeHor = slideHorizontal!!.currentPosition * 0.0002
+                        if (slideVertical!!.currentPosition < 500){
+                            timeVer = 0.4
+                        }
+                        timeHor = slideHorizontal!!.currentPosition * 0.0005
+                    }
+                    if (elapsedTime.time() > 0.2){
+                        outRotationServo!!.position = outRotationCenter
                     }
                     if (elapsedTime.time() > timeHor) {
                         inStopServo!!.position = inStopOpen
@@ -261,7 +284,7 @@ class QualifiersTeleop: Methods() {
                     if (elapsedTime.time() > timeVer){
                         verticalSlideTo(0, 1.0)
                     }
-                    if ((slideVertical!!.currentPosition < 50) && (elapsedTime.time() > timeHor + 0.1)){
+                    if ((slideVertical!!.currentPosition < 50) && (elapsedTime.time() > timeHor + 0.5)){
                         automaticTransferToggle = AutomaticTransferState.Pickup
                         doOnce = false
                     }
@@ -286,8 +309,13 @@ class QualifiersTeleop: Methods() {
                 }
                 AutomaticTransferState.RotateOut ->{
                     outClawToggle = false
-                    inRotationServo!!.position = inRotationPick
-                    outRotationServo!!.position = outRotationBack
+                    if (outRotation) {
+                        outRotationServo!!.position = outRotationFront
+                        outSwivelServo!!.position = outSwivelPerpFront
+                    } else {
+                        outRotationServo!!.position = outRotationBack
+                        outSwivelServo!!.position = outSwivelPerpBack
+                    }
                     outSwivelServo!!.position = outSwivelPerpBack
                     automaticTransferToggle = AutomaticTransferState.Manual
                 }

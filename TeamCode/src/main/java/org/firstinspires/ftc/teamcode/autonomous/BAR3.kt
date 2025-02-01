@@ -46,22 +46,22 @@ class BAR3 : Methods() {
             drive!!.trajectorySequenceBuilder(Pose2d(60.0,-57.06, Math.toRadians(-90.0)))
                 .back(10.0)
                 .strafeRight(3.0)
-                .splineToConstantHeading(Vector2d(46.25, -65.25), Math.toRadians(-90.00))
+                .splineToConstantHeading(Vector2d(46.25, -64.8), Math.toRadians(-90.00))
                 .build()
 
 
         val bar1: TrajectorySequence =
-            drive!!.trajectorySequenceBuilder(Pose2d(46.25, -65.25, Math.toRadians(-90.00)))
+            drive!!.trajectorySequenceBuilder(Pose2d(46.25, -64.8, Math.toRadians(-90.00)))
                 .lineToConstantHeading(Vector2d(0.3, -31.8))
                 .build()
 
         val pick2: TrajectorySequence =
             drive!!.trajectorySequenceBuilder(Pose2d(0.3, -31.8, Math.toRadians(-90.00)))
-                .lineToConstantHeading(Vector2d(46.25, -65.25))
+                .lineToConstantHeading(Vector2d(46.25, -64.8))
                 .build()
 
         val bar2: TrajectorySequence =
-            drive!!.trajectorySequenceBuilder(Pose2d(46.25, -65.25, Math.toRadians(-90.00)))
+            drive!!.trajectorySequenceBuilder(Pose2d(46.25, -64.8, Math.toRadians(-90.00)))
                 .lineToConstantHeading(Vector2d(-3.5, -31.8))
                 .build()
 

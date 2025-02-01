@@ -29,6 +29,7 @@ class QualifiersTeleop: Methods() {
         doOnce = false
         var barUp = true;
         var outRotation = false
+        var outRotationSecond = false
         var reverseThing = false
         var otherReverse = 1.0
         verticalHeight = 0
@@ -170,12 +171,6 @@ class QualifiersTeleop: Methods() {
 //                    if (outSwivelToggle){ outSwivelServo!!.position = outSwivelParallel}
 //                    if (!outSwivelToggle){ outSwivelServo!!.position = outSwivelPerpFront
 
-                    if (slideVertical!!.currentPosition < 400 && outRotationServo!!.position > 0.78){
-                        outRotationServo!!.position = 0.79
-                    }
-                    if (slideVertical!!.currentPosition > 400 && outRotationServo!!.position > 0.78) {
-                        outRotationServo!!.position = 0.84
-                    }
 
                     if (controller2.b && !previousController2.b){
                         if (slideVertical!!.currentPosition < 1600) {
@@ -185,11 +180,7 @@ class QualifiersTeleop: Methods() {
 
                         sleep(300)
                         if (outRotation) {
-                            if (slideVertical!!.currentPosition < 400){
-                                outRotationServo!!.position = 0.82
-                            }else {
-                                outRotationServo!!.position = outRotationFront
-                            }
+                            outRotationServo!!.position = outRotationFront
                             outSwivelServo!!.position = outSwivelPerpFront
                             outRotation = false
                         } else {
@@ -223,7 +214,7 @@ class QualifiersTeleop: Methods() {
                         HorizontalSlideState.Extend -> { horizontalSlideTo(950,1.0); horizontalBackToManual() }
                     }
 
-                    if (controller1.x && !previousController1.x) { outRotation = !outRotation }
+                    if (controller1.x && !previousController1.x) { outRotationSecond = !outRotationSecond }
 
                     // Vertical slide
                     if (controller2.dpad_up && !previousController2.dpad_up) { verticalSlideToggle = VerticalSlideState.High }
@@ -261,7 +252,7 @@ class QualifiersTeleop: Methods() {
                     intakeInToggle = true
                     inRotationServo!!.position = inRotationTransfer
                     transferServo!!.position = transferServoClose
-                    horizontalSlideTo(0,1.0)
+                    horizontalSlideTo(0,0.7)
                     verticalHeight = 0
                     outSwivelServo!!.position = outSwivelPerpBack
                     outClawServo!!.position = outClawOpen
@@ -273,7 +264,7 @@ class QualifiersTeleop: Methods() {
                         if (slideVertical!!.currentPosition < 500){
                             timeVer = 0.4
                         }
-                        timeHor = slideHorizontal!!.currentPosition * 0.0005
+                        timeHor = slideHorizontal!!.currentPosition * 0.0008
                     }
                     if (elapsedTime.time() > 0.2){
                         outRotationServo!!.position = outRotationCenter
@@ -309,7 +300,7 @@ class QualifiersTeleop: Methods() {
                 }
                 AutomaticTransferState.RotateOut ->{
                     outClawToggle = false
-                    if (outRotation) {
+                    if (outRotationSecond) {
                         outRotationServo!!.position = outRotationFront
                         outSwivelServo!!.position = outSwivelPerpFront
                     } else {
@@ -317,6 +308,7 @@ class QualifiersTeleop: Methods() {
                         outSwivelServo!!.position = outSwivelPerpBack
                     }
                     outSwivelServo!!.position = outSwivelPerpBack
+                    outRotation = outRotationSecond
                     automaticTransferToggle = AutomaticTransferState.Manual
                 }
             }

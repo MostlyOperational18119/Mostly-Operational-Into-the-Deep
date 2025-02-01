@@ -44,7 +44,7 @@ class BASKET3 : Methods() {
         val basket1: TrajectorySequence =
             drive!!.trajectorySequenceBuilder(Pose2d(-50.3, -41.5, Math.toRadians(90.00)))
                 .setReversed(true)
-                .addTemporalMarker(0.5){outRotationServo!!.position = outRotationBack}
+                .addTemporalMarker(0.5){outRotationServo!!.position = outRotationBackOut}
                 .lineToLinearHeading(Pose2d(-56.5, -56.5, Math.toRadians(45.00)))
                 .setReversed(false)
                 .build()
@@ -64,7 +64,7 @@ class BASKET3 : Methods() {
         val basket2: TrajectorySequence =
             drive!!.trajectorySequenceBuilder(Pose2d(-59.3, -41.5, Math.toRadians(90.00)))
                 .setReversed(true)
-                .addTemporalMarker(0.5){outRotationServo!!.position = outRotationBack}
+                .addTemporalMarker(0.5){outRotationServo!!.position = outRotationBackOut}
                 .lineToLinearHeading(Pose2d(-56.5, -56.5, Math.toRadians(45.00)))
                 .setReversed(false)
                 .build()
@@ -79,7 +79,7 @@ class BASKET3 : Methods() {
         val basket3: TrajectorySequence =
             drive!!.trajectorySequenceBuilder(Pose2d(-58.7, -46.5, Math.toRadians(118.00)))
                 .setReversed(true)
-                .addTemporalMarker(0.5) { outRotationServo!!.position = outRotationBack }
+                .addTemporalMarker(0.5) { outRotationServo!!.position = outRotationBackOut }
                 .lineToLinearHeading(Pose2d(-56.5, -56.5, Math.toRadians(45.00)))
                 .setReversed(false)
                 .build()
@@ -102,15 +102,15 @@ class BASKET3 : Methods() {
         outClawServo!!.position = outClawOpen
         inRotationServo!!.position = inRotationPick
         outSwivelServo!!.position = outSwivelPerpBack
-        sleep(100)
         inStopServo!!.position = inStopClose
+        sleep(100)
         horizontalSlideTo(400,1.0)
         intakeMotor!!.power = 0.7
         sleep(1500)
         inRotationServo!!.position = inRotationTransfer
         sleep(100)
         horizontalSlideTo(0,1.0)
-        inStopServo!!.position = inStopOpen
+        inStopServo!!.position = inStopAutoOpen
         sleep(1000)
         outClawServo!!.position = outClawClose
         sleep(300)
@@ -132,15 +132,15 @@ class BASKET3 : Methods() {
         outClawServo!!.position = outClawOpen
         inRotationServo!!.position = inRotationPick
         outSwivelServo!!.position = outSwivelPerpBack
+        inStopServo!!.position = inStopClose
         sleep(100)
         horizontalSlideTo(400,1.0)
-        inStopServo!!.position = inStopClose
         intakeMotor!!.power = 0.7
         sleep(1500)
         inRotationServo!!.position = inRotationTransfer
         sleep(100)
         horizontalSlideTo(0,1.0)
-        inStopServo!!.position = inStopOpen
+        inStopServo!!.position = inStopAutoOpen
         sleep(1350)
         outClawServo!!.position = outClawClose
         sleep(300)
@@ -169,7 +169,7 @@ class BASKET3 : Methods() {
         inRotationServo!!.position = inRotationTransfer
         sleep(100)
         horizontalSlideTo(0,1.0)
-        inStopServo!!.position = inStopOpen
+        inStopServo!!.position = inStopAutoOpen
         sleep(1500)
         outClawServo!!.position = outClawClose
         sleep(300)

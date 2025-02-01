@@ -140,8 +140,8 @@ class QualifiersTeleop: Methods() {
                     }
 
                     if (controller1.y && !previousController1.y) {
-                        verticalSlideTo(700,1.0)
-                        verticalHeight = 700
+                        verticalSlideTo(900,1.0)
+                        verticalHeight = 900
                         sleep(750)
                         outClawServo!!.position = outClawOpen
                         outClawToggle = true
@@ -173,17 +173,18 @@ class QualifiersTeleop: Methods() {
 
 
                     if (controller2.b && !previousController2.b){
-                        if (slideVertical!!.currentPosition < 1600) {
-                            verticalSlideTo(1600,1.0)
-                            verticalHeight = 1600
+                        if (slideVertical!!.currentPosition < 1900) {
+                            verticalSlideTo(1900,1.0)
+                            verticalHeight = 1900
                         }
 
-                        sleep(300)
                         if (outRotation) {
+                            sleep(200)
                             outRotationServo!!.position = outRotationFront
                             outSwivelServo!!.position = outSwivelPerpFront
                             outRotation = false
                         } else {
+                            sleep(450)
                             outRotationServo!!.position = outRotationBack
                             outSwivelServo!!.position = outSwivelPerpBack
                             outRotation = true
@@ -225,10 +226,10 @@ class QualifiersTeleop: Methods() {
                     if (rightY2!! >= 0.2 || rightY2!! <= -0.2) { verticalSlideToggle = VerticalSlideState.Manual }
                     when (verticalSlideToggle) {
                         VerticalSlideState.Manual -> {
-                            if (rightY2!! > 0 && slideVertical!!.currentPosition < 3500) {
-                                verticalSlideTo(3500, (rightY2 as Double) / 3)
+                            if (rightY2!! > 0 && slideVertical!!.currentPosition < verticalSlideHigh) {
+                                verticalSlideTo(verticalSlideHigh, (rightY2 as Double) / 2.5)
                             } else if (rightY2!! < 0 && slideVertical!!.currentPosition > 0) {
-                                verticalSlideTo(0, -(rightY2 as Double) / 3)
+                                verticalSlideTo(0, -(rightY2 as Double) / 2.5)
                             }
                             // This part here is for holding power
                             else if (controller2.right_stick_y.toDouble() == 0.0 && previousController2.right_stick_y.toDouble() != 0.0) {
@@ -238,22 +239,22 @@ class QualifiersTeleop: Methods() {
                                 verticalSlideTo(verticalHeight, 0.3)
                             }
                         }
-                        VerticalSlideState.Floor -> { verticalSlideTo(0,0.75);    verticalBackToManual() }
-                        VerticalSlideState.Low   -> { verticalSlideTo(1000,0.75); verticalBackToManual() }
-                        VerticalSlideState.High  -> { verticalSlideTo(3500,0.75); verticalBackToManual() }
-                        VerticalSlideState.Bar  -> { verticalSlideTo(1600,0.75); verticalBackToManual() }
+                        VerticalSlideState.Floor -> { verticalSlideTo(0,1.0);    verticalBackToManual() }
+                        VerticalSlideState.Low   -> { verticalSlideTo(1300,1.0); verticalBackToManual() }
+                        VerticalSlideState.High  -> { verticalSlideTo(verticalSlideHigh,1.0); verticalBackToManual() }
+                        VerticalSlideState.Bar  -> { verticalSlideTo(verticalSlideBar,1.0); verticalBackToManual() }
                     }
                 }
 
                 // Automated transfer
                 AutomaticTransferState.StartTransfer-> {
-                    verticalSlideTo(1500, 1.0)
+                    inRotationServo!!.position = inRotationTransfer
+                    verticalSlideTo(1400, 1.0)
                     intakeMotor?.power = 0.5
                     intakeInToggle = true
-                    inRotationServo!!.position = inRotationTransfer
+                    horizontalSlideTo(50,0.8)
+                    inStopServo!!.position = inStopOpen
                     transferServo!!.position = transferServoClose
-                    horizontalSlideTo(0,0.7)
-                    verticalHeight = 0
                     outSwivelServo!!.position = outSwivelPerpBack
                     outClawServo!!.position = outClawOpen
                     intakeInToggle = false
@@ -261,16 +262,13 @@ class QualifiersTeleop: Methods() {
                         elapsedTime.reset()
                         doOnce = true
                         timeVer = 0.2
-                        if (slideVertical!!.currentPosition < 500){
+                        if (slideVertical!!.currentPosition < 700){
                             timeVer = 0.4
                         }
-                        timeHor = slideHorizontal!!.currentPosition * 0.0008
+                        timeHor = slideHorizontal!!.currentPosition * 0.0005
                     }
                     if (elapsedTime.time() > 0.2){
                         outRotationServo!!.position = outRotationCenter
-                    }
-                    if (elapsedTime.time() > timeHor) {
-                        inStopServo!!.position = inStopOpen
                     }
                     if (elapsedTime.time() > timeVer){
                         verticalSlideTo(0, 1.0)
@@ -283,15 +281,15 @@ class QualifiersTeleop: Methods() {
                 AutomaticTransferState.Pickup -> {
                     outClawServo!!.position = outClawClose
                     if (!doOnce) { elapsedTime.reset(); doOnce = true }
-                    if (elapsedTime.time() > 0.5) {
+                    if (elapsedTime.time() > 0.4) {
                         automaticTransferToggle = AutomaticTransferState.ResetSlide
                         doOnce = false
                     }
                 }
                 AutomaticTransferState.ResetSlide ->{
                     intakeMotor!!.power = 0.0
-                    verticalSlideTo(1600,1.0)
-                    verticalHeight = 1600
+                    verticalSlideTo(1900,1.0)
+                    verticalHeight = 1900
                     if (!doOnce) { elapsedTime.reset(); doOnce = true }
                     if (elapsedTime.time() > 1.0) {
                         automaticTransferToggle = AutomaticTransferState.RotateOut

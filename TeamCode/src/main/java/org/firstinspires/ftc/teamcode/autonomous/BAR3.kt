@@ -81,21 +81,23 @@ class BAR3 : Methods() {
         if (isStopRequested) {return}
 
         //START
-        verticalSlideTo(1550, 1.0)
+        verticalSlideTo(verticalSlideBar, 1.0)
         outRotationServo!!.position = outRotationBack
         outSwivelServo!!.position = outSwivelPerpBack
 
         //BAR0
         drive!!.followTrajectorySequence(bar0)
         sleep(100)
-        placeSpecimen()
+        verticalSlideTo(750,1.0)
+        sleep(500)
+        outClawServo!!.position = outClawOpen
         sleep(300)
         outRotationServo!!.position = outRotationFront
         outSwivelServo!!.position = outSwivelPerpFront
 
         //SAMPLE1
         drive!!.followTrajectorySequence(sample1)
-        verticalSlideTo(0, 0.3)
+        verticalSlideTo(0, 0.15)
 
         //SAMPLE2 + PICK1
         drive!!.followTrajectorySequence(sample2)
@@ -104,7 +106,7 @@ class BAR3 : Methods() {
         sleep(300)
         outClawServo!!.position = outClawClose
         sleep(300)
-        verticalSlideTo(1550, 1.0)
+        verticalSlideTo(verticalSlideBar, 1.0)
         sleep(300)
         outRotationServo!!.position = outRotationBack
         outSwivelServo!!.position = outSwivelPerpBack
@@ -114,7 +116,7 @@ class BAR3 : Methods() {
         sleep(100)
         placeSpecimen()
         sleep(300)
-        verticalSlideTo(0,0.3)
+        verticalSlideTo(0,0.15)
         outRotationServo!!.position = outRotationFront
         outSwivelServo!!.position = outSwivelPerpFront
 
@@ -123,7 +125,7 @@ class BAR3 : Methods() {
         sleep(300)
         outClawServo!!.position = outClawClose
         sleep(300)
-        verticalSlideTo(1550, 1.0)
+        verticalSlideTo(verticalSlideBar, 1.0)
         sleep(300)
         outRotationServo!!.position = outRotationBack
         outSwivelServo!!.position = outSwivelPerpBack

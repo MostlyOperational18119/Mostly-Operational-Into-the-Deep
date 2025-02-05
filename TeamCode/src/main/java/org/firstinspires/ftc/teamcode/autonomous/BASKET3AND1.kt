@@ -34,12 +34,12 @@ class BASKET3AND1 : Methods() {
 
         val sample1: TrajectorySequence =
             drive!!.trajectorySequenceBuilder(Pose2d(-10.04, -33.0,Math.toRadians(-90.0)))
-                .splineToLinearHeading(Pose2d(-50.5, -43.0,Math.toRadians(90.0)),Math.toRadians(90.0))
+                .splineToLinearHeading(Pose2d(-50.5, -42.6,Math.toRadians(90.0)),Math.toRadians(90.0))
                 .addTemporalMarker(0.5){inRotationServo!!.position = inRotationPick}
                 .build()
 
         val basket1: TrajectorySequence =
-            drive!!.trajectorySequenceBuilder(Pose2d(-50.5, -43.0, Math.toRadians(90.00)))
+            drive!!.trajectorySequenceBuilder(Pose2d(-50.5, -42.6, Math.toRadians(90.00)))
                 .setReversed(true)
                 .addTemporalMarker(0.5){outRotationServo!!.position = outRotationBackOut}
                 .lineToLinearHeading(Pose2d(-56.5, -56.5, Math.toRadians(45.00)))
@@ -48,11 +48,11 @@ class BASKET3AND1 : Methods() {
 
         val move: TrajectorySequence =
             drive!!.trajectorySequenceBuilder(Pose2d(-56.5, -56.5, Math.toRadians(90.00)))
-                .lineToLinearHeading(Pose2d(-60.0,-60.0,Math.toRadians(45.00)))
+                .lineToLinearHeading(Pose2d(-60.5,-59.5,Math.toRadians(45.00)))
                 .build()
 
         val sample2: TrajectorySequence =
-            drive!!.trajectorySequenceBuilder(Pose2d(-60.0, -60.0, Math.toRadians(45.00)))
+            drive!!.trajectorySequenceBuilder(Pose2d(-60.5, -59.5, Math.toRadians(45.00)))
                 .addTemporalMarker(1.0){outRotationServo!!.position = outRotationCenter}
                 .addTemporalMarker(0.5){verticalSlideTo(0,1.0)}
                 .lineToLinearHeading(Pose2d(-60.0, -43.3, Math.toRadians(90.00)))
@@ -67,7 +67,7 @@ class BASKET3AND1 : Methods() {
                 .build()
 
         val sample3: TrajectorySequence =
-            drive!!.trajectorySequenceBuilder(Pose2d(-60.0, -60.0, Math.toRadians(45.00)))
+            drive!!.trajectorySequenceBuilder(Pose2d(-60.5, -59.5, Math.toRadians(45.00)))
                 .addTemporalMarker(1.0){outRotationServo!!.position = outRotationCenter}
                 .addTemporalMarker(0.5){verticalSlideTo(0,1.0)}
                 .lineToLinearHeading(Pose2d(-59.5, -46.5, Math.toRadians(118.00)))
@@ -129,7 +129,7 @@ class BASKET3AND1 : Methods() {
         drive!!.followTrajectorySequence(basket1)
         sleep(900)
         drive!!.followTrajectorySequence(move)
-        sleep(300)
+        sleep(400)
         horizontalSlideTo(75,1.0)
         inRotationServo!!.position = inRotationPick
         outClawServo!!.position = outClawOpen
@@ -161,7 +161,7 @@ class BASKET3AND1 : Methods() {
         drive!!.followTrajectorySequence(move)
         horizontalSlideTo(75,1.0)
         inRotationServo!!.position = inRotationPick
-        sleep(300)
+        sleep(400)
         outClawServo!!.position = outClawOpen
         sleep(100)
 
@@ -190,7 +190,7 @@ class BASKET3AND1 : Methods() {
         sleep(900)
         drive!!.followTrajectorySequence(move)
         inRotationServo!!.position = inRotationPick
-        sleep(300)
+        sleep(400)
         outClawServo!!.position = outClawOpen
         sleep(100)
 

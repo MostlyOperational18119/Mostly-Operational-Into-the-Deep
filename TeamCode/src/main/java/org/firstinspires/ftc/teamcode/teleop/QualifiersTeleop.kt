@@ -127,19 +127,20 @@ class QualifiersTeleop: Methods() {
                     if (!outClawToggle){ outClawServo!!.position = outClawClose}
 
                     if (controller2.y && !previousController2.y) { inRotationToggle = !inRotationToggle}
+
                     if (slideHorizontal!!.currentPosition < 100){
-                        inRotationServo!!.position = inRotationUp
+                        inRotationServo!!.position = inRotationTransfer
                         inRotationToggle = false
                     }else {
                         if (!inRotationToggle) {
-                            inRotationServo!!.position = inRotationUp
+                            inRotationServo!!.position = inRotationTransfer
                         }
                         if (inRotationToggle) {
                             inRotationServo!!.position = inRotationPick
                         }
                     }
 
-                    if (controller1.y && !previousController1.y) {
+                    if (controller1.dpad_up && !previousController1.dpad_up) {
                         verticalSlideTo(900,1.0)
                         verticalHeight = 900
                         sleep(750)
@@ -252,7 +253,7 @@ class QualifiersTeleop: Methods() {
                     verticalSlideTo(1400, 1.0)
                     intakeMotor?.power = 0.5
                     intakeInToggle = true
-                    horizontalSlideTo(50,0.8)
+                    horizontalSlideTo(0,0.8)
                     inStopServo!!.position = inStopOpen
                     transferServo!!.position = transferServoClose
                     outSwivelServo!!.position = outSwivelPerpBack

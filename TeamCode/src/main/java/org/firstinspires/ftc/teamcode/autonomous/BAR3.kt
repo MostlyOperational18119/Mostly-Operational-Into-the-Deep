@@ -102,6 +102,7 @@ class BAR3 : Methods() {
         //SAMPLE2 + PICK1
         drive!!.followTrajectorySequence(sample2)
         sleep(100)
+        horizontalSlideTo(0,1.0)
         drive!!.followTrajectorySequence(pick1)
         sleep(300)
         outClawServo!!.position = outClawClose
@@ -121,6 +122,7 @@ class BAR3 : Methods() {
         outSwivelServo!!.position = outSwivelPerpFront
 
         //PICK2
+        horizontalSlideTo(0,1.0)
         drive!!.followTrajectorySequence(pick2)
         sleep(300)
         outClawServo!!.position = outClawClose

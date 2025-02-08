@@ -11,7 +11,7 @@ import kotlin.math.roundToInt
 @TeleOp(name = "QUALIFIERS TELEOP", group = "AAA")
 class QualifiersTeleop: Methods() {
     override fun runOpMode() {
-        initMotors()
+        initMotorsNoReset()
         initServosAndTouchWithoutSet()
         outRotationServo!!.position = outRotationCenter
         insideJokes()

@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.Methods
 
 @TeleOp(name = "RESET_MOTORS", group = "AAAA")
-@Disabled
 
 class ResetMotors : Methods() {
     override fun runOpMode() {

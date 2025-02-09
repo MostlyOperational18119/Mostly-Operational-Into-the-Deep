@@ -30,12 +30,12 @@ class BAR3 : Methods() {
         val sample1: TrajectorySequence =
             drive!!.trajectorySequenceBuilder(Pose2d(4.4, -32.0,Math.toRadians(-90.0)))
                 .splineToConstantHeading(Vector2d(37.0, -37.0), Math.toRadians(-90.00))
-                .splineToConstantHeading(Vector2d(37.0, -16.0), Math.toRadians(-90.0))
-                .splineToConstantHeading(Vector2d(45.0, -14.0), Math.toRadians(-90.00))
+                .splineToConstantHeading(Vector2d(37.0, -14.0), Math.toRadians(-90.0))
+                .splineToConstantHeading(Vector2d(45.0, -12.0), Math.toRadians(-90.00))
                 .build()
 
         val sample2: TrajectorySequence =
-            drive!!.trajectorySequenceBuilder(Pose2d(45.0, -14.0, Math.toRadians(-90.00)))
+            drive!!.trajectorySequenceBuilder(Pose2d(45.0, -12.0, Math.toRadians(-90.00)))
                 .splineToConstantHeading(Vector2d(50.17, -60.04), Math.toRadians(-90.0))
                 .lineToConstantHeading(Vector2d(42.89, -28.72))
                 .splineToConstantHeading(Vector2d(55.11, -13.21), Math.toRadians(-90.00))
@@ -52,21 +52,21 @@ class BAR3 : Methods() {
 
         val bar1: TrajectorySequence =
             drive!!.trajectorySequenceBuilder(Pose2d(46.25, -64.8, Math.toRadians(-90.00)))
-                .lineToConstantHeading(Vector2d(0.3, -31.8))
+                .lineToConstantHeading(Vector2d(0.3, -31.5))
                 .build()
 
         val pick2: TrajectorySequence =
-            drive!!.trajectorySequenceBuilder(Pose2d(0.3, -31.8, Math.toRadians(-90.00)))
+            drive!!.trajectorySequenceBuilder(Pose2d(0.3, -31.5, Math.toRadians(-90.00)))
                 .lineToConstantHeading(Vector2d(46.25, -64.8))
                 .build()
 
         val bar2: TrajectorySequence =
             drive!!.trajectorySequenceBuilder(Pose2d(46.25, -64.8, Math.toRadians(-90.00)))
-                .lineToConstantHeading(Vector2d(-3.5, -31.8))
+                .lineToConstantHeading(Vector2d(-3.5, -31.5))
                 .build()
 
         val end: TrajectorySequence =
-            drive!!.trajectorySequenceBuilder(Pose2d(-3.5, -31.8, Math.toRadians(-90.00)))
+            drive!!.trajectorySequenceBuilder(Pose2d(-3.5, -31.5, Math.toRadians(-90.00)))
                 .lineToConstantHeading(Vector2d(43.25, -55.55))
                 .build()
 

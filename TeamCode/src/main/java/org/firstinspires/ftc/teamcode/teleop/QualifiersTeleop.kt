@@ -227,8 +227,8 @@ class QualifiersTeleop: Methods() {
                     if (rightY2!! >= 0.2 || rightY2!! <= -0.2) { verticalSlideToggle = VerticalSlideState.Manual }
                     when (verticalSlideToggle) {
                         VerticalSlideState.Manual -> {
-                            if (rightY2!! > 0 && slideVertical!!.currentPosition < verticalSlideHigh) {
-                                verticalSlideTo(verticalSlideHigh, (rightY2 as Double) / 2.5)
+                            if (rightY2!! > 0) {
+                                verticalSlideTo(5500, (rightY2 as Double) / 2.5)
                             } else if (rightY2!! < 0 && slideVertical!!.currentPosition > 0) {
                                 verticalSlideTo(0, -(rightY2 as Double) / 2.5)
                             }

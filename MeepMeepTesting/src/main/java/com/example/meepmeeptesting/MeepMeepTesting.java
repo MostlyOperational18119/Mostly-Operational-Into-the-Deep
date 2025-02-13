@@ -12,7 +12,7 @@ public class MeepMeepTesting {
 
         MeepMeep meepMeep = new MeepMeep(800);
 
-        Pose2d startPose = new Pose2d(-34.09, -63.19, Math.toRadians(-90.00));
+        Pose2d startPose = new Pose2d(14.74, -63.19, Math.toRadians(-90.00));
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width

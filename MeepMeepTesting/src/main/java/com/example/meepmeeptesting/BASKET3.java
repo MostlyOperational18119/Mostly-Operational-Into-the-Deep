@@ -9,22 +9,18 @@ import org.rowlandhall.meepmeep.roadrunner.trajectorysequence.TrajectorySequence
 public class BASKET3 implements Auto {
     public TrajectorySequence buildTrajectorySequence(DriveShim drive, Pose2d startPose) {
         return drive.trajectorySequenceBuilder(startPose)
+                .lineToConstantHeading(new Vector2d(4.4, -32.0))
+                .waitSeconds(0.01)
+                .splineTo(new Vector2d(36.05, -29.0), Math.toRadians(40.00))
+                .lineToLinearHeading(new Pose2d(37.03, -46.07, Math.toRadians(-30.00)))
+                .lineToLinearHeading(new Pose2d(46.26, -29.37, Math.toRadians(35.00)))
+                .lineToLinearHeading(new Pose2d(43.71, -45.68, Math.toRadians(-35.00)))
+                .lineToLinearHeading(new Pose2d(56.87, -29.76, Math.toRadians(35.00)))
                 .setReversed(true)
-                .lineToConstantHeading(new Vector2d(-10.04, -33.0))
+                .splineToLinearHeading(new Pose2d(47.44, -60.20, Math.toRadians(-90.00)), Math.toRadians(-90.0))
+                .splineToConstantHeading(new Vector2d(0.3, -33.5), Math.toRadians(90.0))
                 .setReversed(false)
-                .splineToLinearHeading(new Pose2d(-48.25, -32.5, Math.toRadians(90.0)), Math.toRadians(90.00))
-                .setReversed(true)
-                .lineToLinearHeading(new Pose2d(-52.5, -52.5, Math.toRadians(45.00)))
-                .setReversed(false)
-                .lineToLinearHeading(new Pose2d(-57.0, -32.5, Math.toRadians(90.00))) // Get thing
-                .setReversed(true)
-                .lineToLinearHeading(new Pose2d(-52.5, -52.5, Math.toRadians(45.00)))
-                .setReversed(false)
-                .lineToLinearHeading(new Pose2d(-58.0, -32.5, Math.toRadians(122.00)))
-                .setReversed(true)
-                .lineToLinearHeading(new Pose2d(-52.5, -52.5, Math.toRadians(45.00)))
-                .setReversed(false)
-                .lineTo(new Vector2d(-44.0, -44.0))
+                .splineToConstantHeading(new Vector2d(47.44, -60.20), Math.toRadians(-90.00))
                 .build();
     }
 }

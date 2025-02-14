@@ -2,12 +2,18 @@ package org.firstinspires.ftc.teamcode.autonomous
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
+import com.acmerobotics.roadrunner.trajectory.constraints.AngularVelocityConstraint
+import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint
+import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint
+import com.acmerobotics.roadrunner.trajectory.constraints.TranslationalVelocityConstraint
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import org.firstinspires.ftc.teamcode.Methods
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
+import java.util.Arrays
 
-@Autonomous(name = "BASKET4", group = "AAAA")
-class BASKET4 : Methods() {
+
+@Autonomous(name = "BASKET5", group = "AAAA")
+class BASKET5 : Methods() {
     override fun runOpMode() {
         initOdometry()
         initMotors()
@@ -24,16 +30,59 @@ class BASKET4 : Methods() {
 
         drive!!.poseEstimate = Pose2d(-34.0, -63.19, Math.toRadians(180.00))
 
+        val slowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(
+            Arrays.asList(
+                TranslationalVelocityConstraint(20.0),
+                AngularVelocityConstraint(1.0)
+            )
+        )
+
         val all: TrajectorySequence =
             drive!!.trajectorySequenceBuilder( Pose2d(-34.0, -63.19, Math.toRadians(180.00)))
                     //BASKET 0
                 .addTemporalMarker{ verticalSlideTo(verticalSlideHigh, 1.0)
-                    outRotationServo!!.position = outRotationBack
+                    outRotationServo!!.position = outRotationBackOut
                     outSwivelServo!!.position = outSwivelPerpBack}
                 .waitSeconds(0.3)
+                .setVelConstraint(slowConstraint)
                 .setReversed(true)
                 .splineToLinearHeading(Pose2d(-60.0, -60.0, Math.toRadians(225.00)), Math.toRadians(225.00))
+                .UNSTABLE_addTemporalMarkerOffset(-0.3){outClawServo!!.position = outClawOpen}
                 .setReversed(false)
+                .resetConstraints()
+
+                    //SAMPLE 1
+                .lineToLinearHeading(Pose2d(22.30, -61.78, Math.toRadians(0.00)))
+                .UNSTABLE_addTemporalMarkerOffset(0.0){verticalSlideTo(-30,0.5)
+                    outRotationServo!!.position = outRotationCenter
+                    horizontalSlideTo(300, 1.0)
+                    inRotationServo!!.position = inRotationPick
+                    inStopServo!!.position = inStopClose
+                    intakeMotor!!.power = 1.0
+                }
+                .waitSeconds(0.5)
+                .UNSTABLE_addTemporalMarkerOffset(-1.0){
+                    horizontalSlideTo(800, 1.0)
+                }
+                    //BASKET 1
+                    .setReversed(true)
+                .lineToLinearHeading(Pose2d(-60.0, -60.0, Math.toRadians(225.00)))
+                .setReversed(false)
+                .UNSTABLE_addTemporalMarkerOffset(0.0){
+                    horizontalSlideTo(0, 1.0)
+                    inRotationServo!!.position = inRotationTransfer
+                    inStopServo!!.position = inStopAutoOpen
+                }
+                .UNSTABLE_addTemporalMarkerOffset(1.5) {
+                    outClawServo!!.position = outClawClose
+                }
+                .UNSTABLE_addTemporalMarkerOffset(1.7) {
+                    verticalSlideTo(verticalSlideHigh,1.0)
+                    outRotationServo!!.position = outRotationBackOut
+                    horizontalSlideTo(300,1.0)
+                    inStopServo!!.position = inStopClose
+                    inRotationServo!!.position = inRotationPick
+                }
 
                     //SAMPLE2
                 .lineToLinearHeading(Pose2d(-50.5, -43.3, Math.toRadians(90.0)))
@@ -50,9 +99,12 @@ class BASKET4 : Methods() {
                     horizontalSlideTo(600,1.0)
                 }
                     //BASKET2
+                .setVelConstraint(slowConstraint)
                 .setReversed(true)
                 .lineToLinearHeading(Pose2d(-60.0, -60.0, Math.toRadians(225.00)))
                 .setReversed(false)
+                .resetConstraints()
+
                 .UNSTABLE_addTemporalMarkerOffset(0.0){
                     horizontalSlideTo(0, 1.0)
                     inRotationServo!!.position = inRotationTransfer
@@ -84,9 +136,11 @@ class BASKET4 : Methods() {
                     horizontalSlideTo(600,1.0)
                 }
                 //BASKET3
+                .setVelConstraint(slowConstraint)
                 .setReversed(true)
                 .lineToLinearHeading(Pose2d(-60.0, -60.0, Math.toRadians(225.00)))
                 .setReversed(false)
+                .resetConstraints()
                 .UNSTABLE_addTemporalMarkerOffset(0.0){
                     horizontalSlideTo(0, 1.0)
                     inRotationServo!!.position = inRotationTransfer
@@ -118,9 +172,11 @@ class BASKET4 : Methods() {
                     horizontalSlideTo(600,1.0)
                 }
                 //BASKET4
+                .setVelConstraint(slowConstraint)
                 .setReversed(true)
                 .lineToLinearHeading(Pose2d(-60.0, -60.0, Math.toRadians(225.00)))
                 .setReversed(false)
+                .resetConstraints()
                 .UNSTABLE_addTemporalMarkerOffset(0.0){
                     horizontalSlideTo(0, 1.0)
                     inRotationServo!!.position = inRotationTransfer

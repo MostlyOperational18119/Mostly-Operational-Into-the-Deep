@@ -4,13 +4,14 @@ import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import org.firstinspires.ftc.teamcode.Methods
+import org.firstinspires.ftc.teamcode.drive.advanced.SampleMecanumDriveCancelable
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
 
 
 @Autonomous(name = "BAR3", group = "AAAA")
 class BAR3 : Methods() {
     override fun runOpMode() {
-        initOdometry()
+        drive = SampleMecanumDriveCancelable(hardwareMap)
         initMotors()
 
         outClawServo = hardwareMap.servo["OutClaw"]

@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.firstinspires.ftc.teamcode.Methods
+import org.firstinspires.ftc.teamcode.drive.advanced.SampleMecanumDriveCancelable
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
 
 
@@ -12,7 +13,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
 
 class BAR4Turn : Methods() {
     override fun runOpMode() {
-        initOdometry()
+        drive = SampleMecanumDriveCancelable(hardwareMap)
         initMotors()
 
         transferServo = hardwareMap.servo["Transfer"]

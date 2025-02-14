@@ -8,6 +8,7 @@ import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityCons
 import com.acmerobotics.roadrunner.trajectory.constraints.TranslationalVelocityConstraint
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import org.firstinspires.ftc.teamcode.Methods
+import org.firstinspires.ftc.teamcode.drive.advanced.SampleMecanumDriveCancelable
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
 import java.util.Arrays
 
@@ -15,7 +16,7 @@ import java.util.Arrays
 @Autonomous(name = "BASKET5", group = "AAAA")
 class BASKET5 : Methods() {
     override fun runOpMode() {
-        initOdometry()
+        drive = SampleMecanumDriveCancelable(hardwareMap)
         initMotors()
         transferServo = hardwareMap.servo["Transfer"]
         transferServo!!.position = transferServoClose

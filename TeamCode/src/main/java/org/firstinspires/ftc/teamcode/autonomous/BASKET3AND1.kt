@@ -4,12 +4,13 @@ import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import org.firstinspires.ftc.teamcode.Methods
+import org.firstinspires.ftc.teamcode.drive.advanced.SampleMecanumDriveCancelable
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
 
 @Autonomous(name = "BASKET3+1", group = "AAAA")
 class BASKET3AND1 : Methods() {
     override fun runOpMode() {
-        initOdometry()
+        drive = SampleMecanumDriveCancelable(hardwareMap)
         initMotors()
         transferServo = hardwareMap.servo["Transfer"]
         transferServo!!.position = transferServoClose

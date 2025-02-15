@@ -23,21 +23,21 @@ class BASKET4 : Methods() {
         inRotationServo = hardwareMap.servo["InRotation"]
         inRotationServo!!.position = inRotationUp
 
-        drive!!.poseEstimate = Pose2d(-34.0, -63.19, Math.toRadians(180.00))
+        drive!!.poseEstimate = Pose2d(-32.5, -63.19, Math.toRadians(00.00))
 
         val all: TrajectorySequence =
-            drive!!.trajectorySequenceBuilder( Pose2d(-34.0, -63.19, Math.toRadians(180.00)))
+            drive!!.trajectorySequenceBuilder( Pose2d(-34.0, -63.19, Math.toRadians(0.00)))
                     //BASKET 0
                 .addTemporalMarker{ verticalSlideTo(verticalSlideHigh, 1.0)
                     outRotationServo!!.position = outRotationBack
                     outSwivelServo!!.position = outSwivelPerpBack}
                 .waitSeconds(0.3)
                 .setReversed(true)
-                .splineToLinearHeading(Pose2d(-60.0, -60.0, Math.toRadians(225.00)), Math.toRadians(225.00))
+                .splineToLinearHeading(Pose2d(-57.0, -57.0, Math.toRadians(45.00)), Math.toRadians(225.00))
                 .setReversed(false)
 
                     //SAMPLE2
-                .lineToLinearHeading(Pose2d(-50.5, -43.3, Math.toRadians(90.0)))
+                .lineToLinearHeading(Pose2d(-48.75, -43.3, Math.toRadians(90.0)))
                 .UNSTABLE_addTemporalMarkerOffset(-0.3){
                     outClawServo!!.position = outClawOpen
                     intakeMotor!!.power = -1.0
@@ -52,7 +52,7 @@ class BASKET4 : Methods() {
                 }
                     //BASKET2
                 .setReversed(true)
-                .lineToLinearHeading(Pose2d(-60.0, -60.0, Math.toRadians(225.00)))
+                .lineToLinearHeading(Pose2d(-57.0, -57.0, Math.toRadians(45.00)))
                 .setReversed(false)
                 .UNSTABLE_addTemporalMarkerOffset(0.0){
                     horizontalSlideTo(0, 1.0)
@@ -71,7 +71,7 @@ class BASKET4 : Methods() {
                 }
 
                     //SAMPLE3
-                .lineToLinearHeading(Pose2d(-60.7, -43.3, Math.toRadians(90.00)))
+                .lineToLinearHeading(Pose2d(-59.0, -43.3, Math.toRadians(90.00)))
                 .UNSTABLE_addTemporalMarkerOffset(-0.3){
                     outClawServo!!.position = outClawOpen
                     intakeMotor!!.power = -1.0
@@ -86,7 +86,7 @@ class BASKET4 : Methods() {
                 }
                 //BASKET3
                 .setReversed(true)
-                .lineToLinearHeading(Pose2d(-60.0, -60.0, Math.toRadians(225.00)))
+                .lineToLinearHeading(Pose2d(-57.0, -57.0, Math.toRadians(45.00)))
                 .setReversed(false)
                 .UNSTABLE_addTemporalMarkerOffset(0.0){
                     horizontalSlideTo(0, 1.0)
@@ -105,7 +105,7 @@ class BASKET4 : Methods() {
                 }
 
                 //SAMPLE4
-                .lineToLinearHeading(Pose2d(-60.0, -46.5, Math.toRadians(118.00)))
+                .lineToLinearHeading(Pose2d(-58.5, -46.5, Math.toRadians(118.00)))
                 .UNSTABLE_addTemporalMarkerOffset(-0.3){
                     outClawServo!!.position = outClawOpen
                     intakeMotor!!.power = -1.0
@@ -120,7 +120,7 @@ class BASKET4 : Methods() {
                 }
                 //BASKET4
                 .setReversed(true)
-                .lineToLinearHeading(Pose2d(-60.0, -60.0, Math.toRadians(225.00)))
+                .lineToLinearHeading(Pose2d(-57.0, -57.0, Math.toRadians(45.00)))
                 .setReversed(false)
                 .UNSTABLE_addTemporalMarkerOffset(0.0){
                     horizontalSlideTo(0, 1.0)

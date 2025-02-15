@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.autonomous
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
+import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationConstraint
+import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.firstinspires.ftc.teamcode.Methods
@@ -28,10 +30,12 @@ class BAR4Turn : Methods() {
         inRotationServo = hardwareMap.servo["InRotation"]
         inRotationServo!!.position = 1.0
 
-        drive!!.poseEstimate = Pose2d(14.74, -63.19, Math.toRadians(-90.00))
+        drive!!.poseEstimate = Pose2d(14.5, -63.19, Math.toRadians(-90.00))
+
+        val accelConstraint: TrajectoryAccelerationConstraint = ProfileAccelerationConstraint(50.0)
 
         val all: TrajectorySequence =
-            drive!!.trajectorySequenceBuilder(Pose2d(14.74, -63.19, Math.toRadians(-90.00)))
+            drive!!.trajectorySequenceBuilder(Pose2d(14.5, -63.19, Math.toRadians(-90.00)))
                     //BAR0
                 .addTemporalMarker{
                     verticalSlideTo(1550, 1.0)
@@ -148,6 +152,8 @@ class BAR4Turn : Methods() {
                 }
 
                 .lineToConstantHeading(Vector2d(43.25, -55.55))
+                .resetConstraints()
+
                 .build()
 
         waitForStart()

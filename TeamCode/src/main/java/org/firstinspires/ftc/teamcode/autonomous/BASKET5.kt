@@ -29,7 +29,7 @@ class BASKET5 : Methods() {
         inRotationServo = hardwareMap.servo["InRotation"]
         inRotationServo!!.position = inRotationUp
 
-        drive!!.poseEstimate = Pose2d(-34.0, -63.19, Math.toRadians(180.00))
+        drive!!.poseEstimate = Pose2d(-32.5, -63.19, Math.toRadians(180.00))
 
         val slowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(
             Arrays.asList(
@@ -47,13 +47,13 @@ class BASKET5 : Methods() {
                 .waitSeconds(0.3)
                 .setVelConstraint(slowConstraint)
                 .setReversed(true)
-                .splineToLinearHeading(Pose2d(-60.0, -60.0, Math.toRadians(225.00)), Math.toRadians(225.00))
+                .splineToLinearHeading(Pose2d(-57.0, -57.0, Math.toRadians(225.00)), Math.toRadians(225.00))
                 .UNSTABLE_addTemporalMarkerOffset(-0.3){outClawServo!!.position = outClawOpen}
                 .setReversed(false)
                 .resetConstraints()
 
                     //SAMPLE 1
-                .lineToLinearHeading(Pose2d(22.30, -61.78, Math.toRadians(0.00)))
+                .splineToLinearHeading(Pose2d(22.30, -61.78, Math.toRadians(0.00)),Math.toRadians(0.0))
                 .UNSTABLE_addTemporalMarkerOffset(0.0){verticalSlideTo(-30,0.5)
                     outRotationServo!!.position = outRotationCenter
                     horizontalSlideTo(300, 1.0)
@@ -66,8 +66,8 @@ class BASKET5 : Methods() {
                     horizontalSlideTo(800, 1.0)
                 }
                     //BASKET 1
-                    .setReversed(true)
-                .lineToLinearHeading(Pose2d(-60.0, -60.0, Math.toRadians(225.00)))
+                .setReversed(true)
+                .splineToLinearHeading(Pose2d(-57.0, -57.0, Math.toRadians(45.00)), Math.toRadians(225.00))
                 .setReversed(false)
                 .UNSTABLE_addTemporalMarkerOffset(0.0){
                     horizontalSlideTo(0, 1.0)
@@ -86,7 +86,7 @@ class BASKET5 : Methods() {
                 }
 
                     //SAMPLE2
-                .lineToLinearHeading(Pose2d(-50.5, -43.3, Math.toRadians(90.0)))
+                .lineToLinearHeading(Pose2d(-48.75, -43.3, Math.toRadians(90.0)))
                 .UNSTABLE_addTemporalMarkerOffset(-0.3){
                     outClawServo!!.position = outClawOpen
                     intakeMotor!!.power = -1.0
@@ -102,7 +102,7 @@ class BASKET5 : Methods() {
                     //BASKET2
                 .setVelConstraint(slowConstraint)
                 .setReversed(true)
-                .lineToLinearHeading(Pose2d(-60.0, -60.0, Math.toRadians(225.00)))
+                .lineToLinearHeading(Pose2d(-57.0, -57.0, Math.toRadians(45.00)))
                 .setReversed(false)
                 .resetConstraints()
 
@@ -123,7 +123,7 @@ class BASKET5 : Methods() {
                 }
 
                     //SAMPLE3
-                .lineToLinearHeading(Pose2d(-60.7, -43.3, Math.toRadians(90.00)))
+                .lineToLinearHeading(Pose2d(-59.0, -43.3, Math.toRadians(90.00)))
                 .UNSTABLE_addTemporalMarkerOffset(-0.3){
                     outClawServo!!.position = outClawOpen
                     intakeMotor!!.power = -1.0
@@ -139,7 +139,7 @@ class BASKET5 : Methods() {
                 //BASKET3
                 .setVelConstraint(slowConstraint)
                 .setReversed(true)
-                .lineToLinearHeading(Pose2d(-60.0, -60.0, Math.toRadians(225.00)))
+                .lineToLinearHeading(Pose2d(-57.0, -57.0, Math.toRadians(45.00)))
                 .setReversed(false)
                 .resetConstraints()
                 .UNSTABLE_addTemporalMarkerOffset(0.0){
@@ -159,7 +159,7 @@ class BASKET5 : Methods() {
                 }
 
                 //SAMPLE4
-                .lineToLinearHeading(Pose2d(-60.0, -46.5, Math.toRadians(118.00)))
+                .lineToLinearHeading(Pose2d(-58.5, -46.5, Math.toRadians(118.00)))
                 .UNSTABLE_addTemporalMarkerOffset(-0.3){
                     outClawServo!!.position = outClawOpen
                     intakeMotor!!.power = -1.0
@@ -175,7 +175,7 @@ class BASKET5 : Methods() {
                 //BASKET4
                 .setVelConstraint(slowConstraint)
                 .setReversed(true)
-                .lineToLinearHeading(Pose2d(-60.0, -60.0, Math.toRadians(225.00)))
+                .lineToLinearHeading(Pose2d(-57.0, -57.0, Math.toRadians(45.00)))
                 .setReversed(false)
                 .resetConstraints()
                 .UNSTABLE_addTemporalMarkerOffset(0.0){

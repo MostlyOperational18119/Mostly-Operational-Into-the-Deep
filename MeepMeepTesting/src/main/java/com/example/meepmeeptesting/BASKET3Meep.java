@@ -6,7 +6,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import org.rowlandhall.meepmeep.roadrunner.DriveShim;
 import org.rowlandhall.meepmeep.roadrunner.trajectorysequence.TrajectorySequence;
 
-public class BASKET3 implements Auto {
+public class BASKET3Meep implements Auto {
     public TrajectorySequence buildTrajectorySequence(DriveShim drive, Pose2d startPose) {
         return drive.trajectorySequenceBuilder(startPose)
                 .lineToConstantHeading(new Vector2d(4.4, -32.0))

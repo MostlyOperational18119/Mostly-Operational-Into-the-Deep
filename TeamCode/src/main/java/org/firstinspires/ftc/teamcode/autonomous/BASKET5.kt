@@ -44,7 +44,7 @@ class BASKET5 : Methods() {
                 .addTemporalMarker{ verticalSlideTo(verticalSlideHigh, 1.0)
                     outRotationServo!!.position = outRotationBackOut
                     outSwivelServo!!.position = outSwivelPerpBack}
-                .waitSeconds(0.3)
+                .waitSeconds(0.5)
                 .setVelConstraint(slowConstraint)
                 .setReversed(true)
                 .splineToLinearHeading(Pose2d(-57.0, -57.0, Math.toRadians(225.00)), Math.toRadians(225.00))
@@ -61,7 +61,7 @@ class BASKET5 : Methods() {
                     inStopServo!!.position = inStopClose
                     intakeMotor!!.power = 1.0
                 }
-                .waitSeconds(0.5)
+                .waitSeconds(1.5)
                 .UNSTABLE_addTemporalMarkerOffset(-1.0){
                     horizontalSlideTo(800, 1.0)
                 }
@@ -95,7 +95,7 @@ class BASKET5 : Methods() {
                     outRotationServo!!.position = outRotationCenter
                     intakeMotor!!.power = 1.0
                 }
-                .waitSeconds(0.5)
+                .waitSeconds(1.5)
                 .UNSTABLE_addTemporalMarkerOffset(-1.0){
                     horizontalSlideTo(600,1.0)
                 }
@@ -132,7 +132,7 @@ class BASKET5 : Methods() {
                     outRotationServo!!.position = outRotationCenter
                     intakeMotor!!.power = 1.0
                 }
-                .waitSeconds(0.5)
+                .waitSeconds(1.5)
                 .UNSTABLE_addTemporalMarkerOffset(-1.0){
                     horizontalSlideTo(600,1.0)
                 }
@@ -168,7 +168,7 @@ class BASKET5 : Methods() {
                     outRotationServo!!.position = outRotationCenter
                     intakeMotor!!.power = 1.0
                 }
-                .waitSeconds(0.5)
+                .waitSeconds(1.5)
                 .UNSTABLE_addTemporalMarkerOffset(-1.0){
                     horizontalSlideTo(600,1.0)
                 }
@@ -193,7 +193,7 @@ class BASKET5 : Methods() {
                 }
 
                     //END
-                .lineTo(Vector2d(-36.0, -13.0))
+                .splineTo(Vector2d(-24.5, -11.3), Math.toRadians(0.0))
                 .UNSTABLE_addTemporalMarkerOffset(-0.3){
                     outClawServo!!.position = outClawOpen
                     intakeMotor!!.power = 0.0

@@ -29,7 +29,7 @@ class BASKET5Meep : Auto {
 
             //SAMPLE 1
             .splineToLinearHeading(Pose2d(22.30, -61.78, Math.toRadians(0.00)),Math.toRadians(0.0))
-            .waitSeconds(0.5)
+            .waitSeconds(1.5)
 
             //BASKET 1
             .setReversed(true)
@@ -38,7 +38,7 @@ class BASKET5Meep : Auto {
 
             //SAMPLE2
             .lineToLinearHeading(Pose2d(-48.75, -43.3, Math.toRadians(90.0)))
-            .waitSeconds(0.5)
+            .waitSeconds(1.5)
 
             //BASKET2
             .setVelConstraint(slowConstraint)
@@ -49,7 +49,7 @@ class BASKET5Meep : Auto {
 
             //SAMPLE3
             .lineToLinearHeading(Pose2d(-59.0, -43.3, Math.toRadians(90.00)))
-            .waitSeconds(0.5)
+            .waitSeconds(1.5)
 
             //BASKET3
             .setVelConstraint(slowConstraint)
@@ -60,7 +60,7 @@ class BASKET5Meep : Auto {
 
             //SAMPLE4
             .lineToLinearHeading(Pose2d(-58.5, -46.5, Math.toRadians(118.00)))
-            .waitSeconds(0.5)
+            .waitSeconds(1.5)
 
             //BASKET4
             .setVelConstraint(slowConstraint)
@@ -70,7 +70,7 @@ class BASKET5Meep : Auto {
             .resetConstraints()
 
             //END
-            .lineTo(Vector2d(-36.0, -13.0))
+            .splineTo(Vector2d(-24.5, -11.3), Math.toRadians(0.0))
             .build()
     }
 }

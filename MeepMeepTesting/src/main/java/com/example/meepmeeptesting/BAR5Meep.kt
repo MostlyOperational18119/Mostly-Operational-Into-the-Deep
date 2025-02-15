@@ -44,34 +44,34 @@ class BAR5Meep : Auto {
             //PICK1
             //BAR 1
             .setReversed(true)
-            .splineToConstantHeading(Vector2d(-4.0, -33.5), Math.toRadians(90.0))
+            .lineToConstantHeading(Vector2d(-4.0, -33.5))
             .setReversed(false)
 
             //PICK2
             .splineToLinearHeading(Pose2d(47.44, -60.20,Math.toRadians(90.0)), Math.toRadians(-90.00))
             //BAR 2
-            .splineToConstantHeading(Vector2d(-2.0, -33.5), Math.toRadians(90.0))
+            .lineToConstantHeading(Vector2d(-2.0, -33.5))
 
             //PICK3
             .setReversed(true)
             .splineToConstantHeading(Vector2d(47.44, -60.20), Math.toRadians(-90.00))
             .setReversed(false)
             //BAR 3
-            .splineToConstantHeading(Vector2d(0.0, -33.5), Math.toRadians(90.0))
+            .lineToConstantHeading(Vector2d(0.0, -33.5))
 
             //PICK4
             .setReversed(true)
             .splineToConstantHeading(Vector2d(47.44, -60.20), Math.toRadians(-90.00))
             .setReversed(false)
             //BAR 4
-            .splineToConstantHeading(Vector2d(2.0, -33.5), Math.toRadians(90.0))
+            .lineToConstantHeading(Vector2d(2.0, -33.5))
 
             //PICK5
             .setReversed(true)
             .splineToConstantHeading(Vector2d(47.44, -60.20), Math.toRadians(-90.00))
             .setReversed(false)
             //BAR 5
-            .splineToConstantHeading(Vector2d(4.0, -33.5), Math.toRadians(90.0))
+            .lineToConstantHeading(Vector2d(4.0, -33.5))
 
             .lineToConstantHeading(Vector2d(43.25, -55.55))
             .build()

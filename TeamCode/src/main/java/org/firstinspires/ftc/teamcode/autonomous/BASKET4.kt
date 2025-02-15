@@ -60,7 +60,7 @@ class BASKET4 : Methods() {
                     outRotationServo!!.position = outRotationCenter
                     intakeMotor!!.power = 1.0
                 }
-                .waitSeconds(1.5)
+                .waitSeconds(2.0)
                 .UNSTABLE_addTemporalMarkerOffset(-1.0){
                     horizontalSlideTo(600,1.0)
                 }
@@ -96,7 +96,7 @@ class BASKET4 : Methods() {
                     outRotationServo!!.position = outRotationCenter
                     intakeMotor!!.power = 1.0
                 }
-                .waitSeconds(1.5)
+                .waitSeconds(2.0)
                 .UNSTABLE_addTemporalMarkerOffset(-1.0){
                     horizontalSlideTo(600,1.0)
                 }
@@ -132,7 +132,7 @@ class BASKET4 : Methods() {
                     outRotationServo!!.position = outRotationCenter
                     intakeMotor!!.power = 1.0
                 }
-                .waitSeconds(1.5)
+                .waitSeconds(2.0)
                 .UNSTABLE_addTemporalMarkerOffset(-1.0){
                     horizontalSlideTo(600,1.0)
                 }
@@ -162,9 +162,9 @@ class BASKET4 : Methods() {
                     outClawServo!!.position = outClawOpen
                     intakeMotor!!.power = 0.0
                 }
-                .UNSTABLE_addTemporalMarkerOffset(0.0){
-                    verticalSlideTo(-30,0.5)
-                    outRotationServo!!.position = outRotationCenter
+                .UNSTABLE_addDisplacementMarkerOffset(4.0){
+                    verticalSlideTo(1200,1.0)
+                    outRotationServo!!.position = outRotationFront
                     intakeMotor!!.power = 0.0
                 }
                 .build()

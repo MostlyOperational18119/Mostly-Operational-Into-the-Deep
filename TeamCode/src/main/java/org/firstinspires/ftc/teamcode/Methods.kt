@@ -28,10 +28,15 @@ abstract class Methods : LinearOpMode() {
     val outClawOpen = 0.35
     val outSwivelPerpBack = 0.23
     val outSwivelPerpFront = 0.9 // Not really necessary anymore
-    var outRotationBack = 0.28
-    val outRotationCenter = 0.59 // "center"
-    var outRotationFront = 0.82
-    var outRotationBackOut = 0.25
+
+    var outRotationBackWall = 1.0
+    var outRotationBackPlace = 0.9
+    var outRotationBackOut = 0.85
+    var outRotationUp = 0.7
+    var outRotationFrontPlace = 0.3
+    var outRotationFrontWall = 0.2
+    val outRotationCenter = 0.1 // "center"
+
     val inRotationPick = 0.245
     val inRotationUpAuto = 0.4
     val inRotationUp = 0.77
@@ -57,12 +62,12 @@ abstract class Methods : LinearOpMode() {
     val elapsedTime = ElapsedTime()
 
     var drive: SampleMecanumDriveCancelable? = null
-    val basketVector = Vector2d(-58.26, -57.64)
-    val basketHeading = Math.toRadians(225.00)
-    val barVector = Vector2d(-10.04, -34.01)
-    val barHeading = Math.toRadians(-90.00)
-    val basketPose = Pose2d(-56.5, -56.5, 45.0)
-    val barPose = Pose2d(-5.04, -38.0, 90.0)
+    val basketVector = Vector2d(-57.0, -57.0)
+    val barVector = Vector2d(5.0, -33.5)
+    val clipPickVector = Vector2d(47.44, -60.20)
+    val basketPose = Pose2d(-57.0, -57.0, Math.toRadians(45.00))
+    val barPose = Pose2d(5.0, -33.5, Math.toRadians(90.0))
+    val clipPickPose = Pose2d()
 
     var horizontalSlideToggle = HorizontalSlideState.Manual
     var verticalSlideToggle = VerticalSlideState.Manual

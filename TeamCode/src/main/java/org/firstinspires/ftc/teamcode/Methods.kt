@@ -17,7 +17,7 @@ import kotlin.math.abs
 abstract class Methods : LinearOpMode() {
     enum class VerticalSlideState { Floor, Low, High, Manual, Bar }
     enum class HorizontalSlideState { Floor, Extend, Manual }
-    enum class AutomaticTransferState { Manual, StartTransfer, Pickup, ResetSlide }
+    enum class AutomaticTransferState { Manual, StartTransfer, Pickup, ResetSlide, RotateOut }
     enum class AutomaticMovementState { Manual, Auto }
     enum class PipelineType { Red, Orange, Blue, AprilTag }
     //enum class HangStates { Up, Down, Reset, None}

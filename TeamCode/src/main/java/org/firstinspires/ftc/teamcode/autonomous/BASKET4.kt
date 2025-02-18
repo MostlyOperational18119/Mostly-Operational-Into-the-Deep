@@ -41,7 +41,7 @@ class BASKET4 : Methods() {
             drive!!.trajectorySequenceBuilder( Pose2d(-34.0, -63.19, Math.toRadians(0.00)))
                     //BASKET 0
                 .addTemporalMarker{ verticalSlideTo(verticalSlideHigh, 1.0)
-                    outRotationServo!!.position = outRotationBack
+                    outRotationServo!!.position = outRotationBackOut
                     outSwivelServo!!.position = outSwivelPerpBack}
                 .waitSeconds(0.5)
                 .setVelConstraint(slowConstraint)
@@ -164,7 +164,7 @@ class BASKET4 : Methods() {
                 }
                 .UNSTABLE_addDisplacementMarkerOffset(4.0){
                     verticalSlideTo(1200,1.0)
-                    outRotationServo!!.position = outRotationFront
+                    outRotationServo!!.position = outRotationFrontPlace
                     intakeMotor!!.power = 0.0
                 }
                 .build()

@@ -200,7 +200,7 @@ class BASKET5 : Methods() {
                 }
                 .UNSTABLE_addDisplacementMarkerOffset(4.0){
                     verticalSlideTo(1200,1.0)
-                    outRotationServo!!.position = outRotationFront
+                    outRotationServo!!.position = outRotationFrontPlace
                     intakeMotor!!.power = 0.0
                 }
                 .build()

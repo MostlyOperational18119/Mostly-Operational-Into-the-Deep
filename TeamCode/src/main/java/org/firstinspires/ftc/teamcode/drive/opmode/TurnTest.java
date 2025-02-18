@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.drive.SampleGoBildaPinpointMecanumDriveCancelable;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.drive.advanced.SampleMecanumDriveCancelable;
 
 /*
  * This is a simple routine to test turning capabilities.
@@ -20,7 +21,7 @@ public class TurnTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        SampleGoBildaPinpointMecanumDriveCancelable drive = new SampleGoBildaPinpointMecanumDriveCancelable(hardwareMap);
+        SampleMecanumDriveCancelable drive = new SampleMecanumDriveCancelable(hardwareMap);
 
         waitForStart();
 

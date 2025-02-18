@@ -17,35 +17,41 @@ import kotlin.math.abs
 abstract class Methods : LinearOpMode() {
     enum class VerticalSlideState { Floor, Low, High, Manual, Bar }
     enum class HorizontalSlideState { Floor, Extend, Manual }
-    enum class AutomaticTransferState { Manual, StartTransfer, Pickup, ResetSlide, RotateOut }
+    enum class AutomaticTransferState { Manual, StartTransfer, Pickup, ResetSlide }
     enum class AutomaticMovementState { Manual, Auto }
     enum class PipelineType { Red, Orange, Blue, AprilTag }
     //enum class HangStates { Up, Down, Reset, None}
 
-    val transferServoClose = 0.53
-    val transferServoOpen = 0.84
-    val outClawClose = 0.62
-    val outClawOpen = 0.35
-    val outSwivelPerpBack = 0.23
-    val outSwivelPerpFront = 0.9 // Not really necessary anymore
+    val transferServoClose = 0.73 //
+    val transferServoOpen = 0.5 //
 
-    var outRotationBackWall = 1.0
-    var outRotationBackPlace = 0.9
-    var outRotationBackOut = 0.85
-    var outRotationUp = 0.7
-    var outRotationFrontPlace = 0.3
-    var outRotationFrontWall = 0.2
-    val outRotationCenter = 0.1 // "center"
+    val outClawClose = 0.59 //
+    val outClawOpen = 0.35 //
 
-    val inRotationPick = 0.245
-    val inRotationUpAuto = 0.4
-    val inRotationUp = 0.77
-    val inRotationTransfer = 0.59
-    val inStopClose = 0.1
-    val inStopAutoOpen = 0.4
-    val inStopOpen = 0.60
-    val verticalSlideHigh = 4550
-    val verticalSlideBar = 2030
+    val outSwivelPerpBack = 0.04 //
+    val outSwivelPerpFront = 0.69 //
+
+    var outRotationBackPlace = 0.1
+    var outRotationBackWall = 0.16
+    var outRotationBackOut = 0.25
+    var outRotationUp = 0.45
+    var outRotationUpOut = 0.6
+    var outRotationFrontWall = 0.72
+    var outRotationFrontPlace = 0.78
+    val outRotationCenter = 0.972 // "center"
+
+    val inRotationPick = 0.245 //
+    val inRotationUpAuto = 0.4 //
+    val inRotationUp = 0.77 //
+    val inRotationTransfer = 0.62 //
+
+    val inStopClose = 0.82
+    val inStopAutoOpen = 0.62
+    val inStopOpen = 0.48
+
+    val verticalSlideHigh = 2700 //4550
+    val verticalSlideBar = 650
+    val verticalSlideLow = 1250
     val horizontalSlideExtend = 950
 
     var outClawToggle = false
@@ -179,25 +185,24 @@ abstract class Methods : LinearOpMode() {
         outClawServo = hardwareMap.servo["OutClaw"]
         outRotationServo = hardwareMap.servo["OutRotation"]
         outSwivelServo = hardwareMap.servo["OutSwivel"]
-        inStopServo = hardwareMap.servo["InStop"]
-        inRotationServo = hardwareMap.servo["InRotation"]
+        inStopServo = hardwareMap.servo["InStop"]   //4ex
+        inRotationServo = hardwareMap.servo["InRotation"] //5ex
     }
 
     //Initializes and sets motors but does not reset the motors
     fun initMotorsNoReset() {
-        motorFL = hardwareMap.dcMotor["motorFL"]
-        motorFR = hardwareMap.dcMotor["motorFR"]
-        motorBL = hardwareMap.dcMotor["motorBL"]
-        motorBR = hardwareMap.dcMotor["motorBR"]
-        slideVertical = hardwareMap.dcMotor["verticalSlide"]
-        slideHorizontal = hardwareMap.dcMotor["horizontalSlide"]
-        intakeMotor = hardwareMap.dcMotor["intakeMotor"]
+        motorFL = hardwareMap.dcMotor["motorFL"] //1co
+        motorFR = hardwareMap.dcMotor["motorFR"] //3ex  odX
+        motorBL = hardwareMap.dcMotor["motorBL"] //2co  odY
+        motorBR = hardwareMap.dcMotor["motorBR"] //2ex
+        slideVertical = hardwareMap.dcMotor["verticalSlide"]  //0co
+        slideHorizontal = hardwareMap.dcMotor["horizontalSlide"]  //0ex
+        intakeMotor = hardwareMap.dcMotor["intakeMotor"]   //1ex
         setMotorModePositionNoReset(slideHorizontal!!)
         setMotorModePositionNoReset(slideVertical!!)
         setMotorModeEncoderNoReset(intakeMotor!!)
         motorFL!!.direction = DcMotorSimple.Direction.REVERSE
         motorBL!!.direction = DcMotorSimple.Direction.REVERSE
-        slideHorizontal!!.direction = DcMotorSimple.Direction.REVERSE
     }
 
     //Initializes and sets motors amd resets them
@@ -214,7 +219,6 @@ abstract class Methods : LinearOpMode() {
         setMotorModePosition(slideVertical!!)
         motorFL!!.direction = DcMotorSimple.Direction.REVERSE
         motorBL!!.direction = DcMotorSimple.Direction.REVERSE
-        slideHorizontal!!.direction = DcMotorSimple.Direction.REVERSE
     }
 
     fun initOdometry() {

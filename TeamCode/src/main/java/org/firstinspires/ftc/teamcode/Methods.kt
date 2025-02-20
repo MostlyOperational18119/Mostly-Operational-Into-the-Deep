@@ -35,15 +35,15 @@ abstract class Methods : LinearOpMode() {
     var outRotationBackWall = 0.16
     var outRotationBackOut = 0.25
     var outRotationUp = 0.45
-    var outRotationUpOut = 0.6
+    var outRotationFrontOut = 0.6
     var outRotationFrontWall = 0.72
     var outRotationFrontPlace = 0.78
-    val outRotationCenter = 0.972 // "center"
+    val outRotationCenter = 0.96 // "center"
 
-    val inRotationPick = 0.245 //
-    val inRotationUpAuto = 0.4 //
-    val inRotationUp = 0.77 //
-    val inRotationTransfer = 0.62 //
+    val inRotationPick = 0.305 //
+    val inRotationUpAuto = 0.45 //
+    val inRotationUp = 0.83 //
+    val inRotationTransfer = 0.69 //
 
     val inStopClose = 0.82
     val inStopAutoOpen = 0.62
@@ -277,7 +277,7 @@ abstract class Methods : LinearOpMode() {
 
     //insideJokes
     fun insideJokes() {
-        telemetry.addLine(when ((0..54).random()) {
+        telemetry.addLine(when ((0..55).random()) {
             1 -> "good luck buddy"
             2 -> "\"what spectrum?\""
             3 -> "MostlyOp >>> AHoT"
@@ -331,6 +331,7 @@ abstract class Methods : LinearOpMode() {
             51 -> "bring it back ho"
             52 -> "fallacy fallacy"
             53 -> "with a side of love"
+            54 -> "You should be able to undertake and complete anything you desire"
             else -> "Why did we add these?"
         })
         telemetry.update()

@@ -29,6 +29,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.TwoWheelTrackingLocalizer;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
@@ -36,8 +37,15 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuild
 import org.firstinspires.ftc.teamcode.drive.advanced.TrajectorySequenceRunnerCancelable;
 import org.firstinspires.ftc.teamcode.util.LynxModuleUtil;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.MAX_ACCEL;
@@ -79,6 +87,9 @@ public class SampleMecanumDriveCancelable extends MecanumDrive {
 
     private IMU imu;
     private VoltageSensor batteryVoltageSensor;
+    private FileOutputStream logFileOutputStream;
+    private File logFile;
+    private Boolean doLogging = true;
 
     public SampleMecanumDriveCancelable(HardwareMap hardwareMap) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
@@ -132,6 +143,16 @@ public class SampleMecanumDriveCancelable extends MecanumDrive {
         // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
 
         trajectorySequenceRunner = new TrajectorySequenceRunnerCancelable(follower, HEADING_PID, batteryVoltageSensor);
+
+        try {
+            logFile = new File(
+                    String.format("/sdcard/log-%s.bin", Calendar.getInstance().getTime())
+            );
+
+            logFileOutputStream = new FileOutputStream(logFile);
+        } catch (FileNotFoundException e) {
+            doLogging = false;
+        }
     }
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
@@ -204,8 +225,40 @@ public class SampleMecanumDriveCancelable extends MecanumDrive {
     }
 
     public void waitForIdle() {
-        while (!Thread.currentThread().isInterrupted() && isBusy())
+        while (!Thread.currentThread().isInterrupted() && isBusy()) {
             update();
+            logNow();
+        }
+    }
+
+
+    final int LOG_OBJECT_COUNT = 7;
+    public void logNow() {
+        if (doLogging) {
+            ByteBuffer buf = ByteBuffer.allocate(Double.BYTES * LOG_OBJECT_COUNT);
+
+            Pose2d poseEstimate = getPoseEstimate();
+
+            double[] array = new double[] {
+                    motors.get(0).getPower(),
+                    motors.get(1).getPower(),
+                    motors.get(2).getPower(),
+                    motors.get(3).getPower(),
+                    poseEstimate.getX(),
+                    poseEstimate.getY(),
+                    poseEstimate.getHeading()
+            };
+
+            assert(array.length == LOG_OBJECT_COUNT); // It better be always true, or we messed up
+
+            buf.asDoubleBuffer().put(array);
+
+            try {
+                logFileOutputStream.write(buf.array());
+            } catch (IOException e) {
+                // Womp womp
+            }
+        }
     }
 
     public boolean isBusy() {

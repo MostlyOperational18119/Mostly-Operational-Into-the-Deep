@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.Gamepad
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor
+import com.qualcomm.robotcore.hardware.NormalizedRGBA
 import com.qualcomm.robotcore.hardware.Servo
 import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.teamcode.drive.advanced.SampleMecanumDriveCancelable
@@ -19,6 +21,7 @@ abstract class Methods : LinearOpMode() {
     enum class HorizontalSlideState { Floor, Extend, Manual }
     enum class AutomaticTransferState { Manual, StartTransfer, Pickup, ResetSlide, RotateOut }
     enum class AutomaticMovementState { Manual, Auto }
+    enum class ColorStates {None, Red, Yellow, Blue}
     enum class PipelineType { Red, Orange, Blue, AprilTag }
     //enum class HangStates { Up, Down, Reset, None}
 
@@ -67,6 +70,9 @@ abstract class Methods : LinearOpMode() {
 
     val elapsedTime = ElapsedTime()
 
+    var colors: NormalizedRGBA? = null
+    var currentHighestColorValue = 0.0F
+
     var drive: SampleMecanumDriveCancelable? = null
     val basketVector = Vector2d(-57.0, -57.0)
     val barVector = Vector2d(5.0, -33.5)
@@ -79,6 +85,7 @@ abstract class Methods : LinearOpMode() {
     var verticalSlideToggle = VerticalSlideState.Manual
     var automaticTransferToggle = AutomaticTransferState.Manual
     var automatedMovementToggle = AutomaticMovementState.Manual
+    var currentColor = ColorStates.None
 //    var hangerState = HangStates.None
 
     val controller1 = Gamepad()
@@ -106,6 +113,7 @@ abstract class Methods : LinearOpMode() {
     var outSwivelServo : Servo? = null
     var inStopServo : Servo? = null
     var inRotationServo : Servo? = null
+    var colorSensor : NormalizedColorSensor? = null
 
     // Places the sample
     fun placeSample() {
@@ -187,6 +195,7 @@ abstract class Methods : LinearOpMode() {
         outSwivelServo = hardwareMap.servo["OutSwivel"]
         inStopServo = hardwareMap.servo["InStop"]   //4ex
         inRotationServo = hardwareMap.servo["InRotation"] //5ex
+        colorSensor = hardwareMap.get(NormalizedColorSensor::class.java, "color")
     }
 
     //Initializes and sets motors but does not reset the motors
@@ -358,7 +367,7 @@ abstract class Methods : LinearOpMode() {
             78 -> "Get an actual image"
             79 -> "Does he have a sailor’s mouth?"
             80 -> "Shove it down my throat"
-            81 -> "Not everything has a sexual intention Isaac"
+            81 -> "Not everything has a sexual connotation Isaac"
             82 -> "His standards are not your standards"
             83 -> "Ok Pumpkin"
             84 -> "I’ve known bats that can see better than you"
@@ -366,7 +375,7 @@ abstract class Methods : LinearOpMode() {
             86 -> "You need to start making age appropriate jokes"
             87 -> "Cavalier with his usage"
             88 -> "Stop covering your ass no one’s gonna force you to wipe"
-            89 -> "Fallacy fallacy"
+            89 -> "Beware the Rohan G. Bias"
             90 -> "From the cookies"
             91 -> "We’ll never have to do that again"
             92 -> "Burger, no onions, with a side of love"

@@ -15,12 +15,10 @@ class colorDetect: Methods() {
         var currentColor = ""
         val ColorSens = hardwareMap.get(NormalizedColorSensor::class.java, "color")
         ColorSens.gain = 50.0F
-        val Hsv = FloatArray(3)
 
         waitForStart()
         while (opModeIsActive()) {
             colors = ColorSens.normalizedColors
-            Color.colorToHSV(colors.toColor(), Hsv)
 
             if (colors.red <= 0.25 && colors.green <= 0.25 && colors.blue <= 0.25) {
                 currentColor = "no block"

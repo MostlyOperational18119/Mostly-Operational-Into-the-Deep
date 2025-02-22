@@ -43,6 +43,7 @@ class StatesTeleop: Methods() {
         verticalHeight = 0
         speedDiv = 2.3
         var timeHor = 0.1
+        colorSensor?.gain = 50.0F
 
         waitForStart()
 
@@ -78,6 +79,22 @@ class StatesTeleop: Methods() {
             previousController2.copy(controller2)
             controller1.copy(gamepad1)
             controller2.copy(gamepad2)
+
+            colors = colorSensor?.normalizedColors
+            if (colors?.red!! <= 0.25 && colors?.green!! <= 0.25 && colors?.blue!! <= 0.25) {
+                currentColor = ColorStates.None
+            } else {
+                currentHighestColorValue = colors?.red!!
+                currentColor = ColorStates.Red
+                if (colors!!.green >= currentHighestColorValue) {
+                    currentHighestColorValue = colors?.green!!
+                    currentColor = ColorStates.Yellow
+                }
+                if (colors!!.blue > currentHighestColorValue) {
+                    currentHighestColorValue = colors?.blue!!
+                    currentColor = ColorStates.Blue
+                }
+            }
 
             drive1.update()
             drive1.updatePoseEstimate()
@@ -259,7 +276,7 @@ class StatesTeleop: Methods() {
                     if (controller2.dpad_right && !previousController2.dpad_right) { verticalSlideToggle = VerticalSlideState.Low; outRotationServo!!.position = outRotationBackOut}
                     if (controller2.dpad_down && !previousController2.dpad_down) { verticalSlideToggle = VerticalSlideState.Floor; outRotationServo!!.position = outRotationCenter }
                     if (controller2.right_stick_button && !previousController2.right_stick_button) { verticalSlideToggle = VerticalSlideState.Floor; outRotationServo!!.position = outRotationCenter }
-                    if (controller2.dpad_left && !previousController2.dpad_left) { verticalSlideToggle = VerticalSlideState.Bar }
+                    if (controller2.dpad_left && !previousController2.dpad_left) { verticalSlideToggle = VerticalSlideState.Bar; outRotationServo!!.position = outRotationUp }
                     if (rightY2!! >= 0.2 || rightY2!! <= -0.2) { verticalSlideToggle = VerticalSlideState.Manual }
                     when (verticalSlideToggle) {
                         VerticalSlideState.Manual -> {

@@ -28,8 +28,8 @@ abstract class Methods : LinearOpMode() {
     val transferServoClose = 0.73 //
     val transferServoOpen = 0.5 //
 
-    val outClawClose = 0.59 //
-    val outClawOpen = 0.35 //
+    val outClawClose = 0.58 //
+    val outClawOpen = 0.41 //
 
     val outSwivelPerpBack = 0.04 //
     val outSwivelPerpFront = 0.69 //

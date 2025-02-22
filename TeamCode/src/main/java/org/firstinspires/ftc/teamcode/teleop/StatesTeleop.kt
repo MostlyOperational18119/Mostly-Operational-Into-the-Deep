@@ -43,7 +43,7 @@ class StatesTeleop: Methods() {
         verticalHeight = 0
         speedDiv = 2.3
         var timeHor = 0.1
-        colorSensor?.gain = 50.0F
+        //colorSensor?.gain = 50.0F
 
         waitForStart()
 
@@ -80,7 +80,7 @@ class StatesTeleop: Methods() {
             controller1.copy(gamepad1)
             controller2.copy(gamepad2)
 
-            colors = colorSensor?.normalizedColors
+            /*colors = colorSensor?.normalizedColors
             if (colors?.red!! <= 0.25 && colors?.green!! <= 0.25 && colors?.blue!! <= 0.25) {
                 currentColor = ColorStates.None
             } else {
@@ -94,7 +94,7 @@ class StatesTeleop: Methods() {
                     currentHighestColorValue = colors?.blue!!
                     currentColor = ColorStates.Blue
                 }
-            }
+            }*/
 
             drive1.update()
             drive1.updatePoseEstimate()

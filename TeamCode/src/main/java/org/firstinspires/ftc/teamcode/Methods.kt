@@ -43,10 +43,10 @@ abstract class Methods : LinearOpMode() {
     var outRotationFrontPlace = 0.78
     val outRotationCenter = 0.96 // "center"
 
-    val inRotationPick = 0.305 //
+    val inRotationPick = 0.295//
     val inRotationUpAuto = 0.45 //
-    val inRotationUp = 0.83 //
-    val inRotationTransfer = 0.69 //
+    val inRotationUp = 1.0 //
+    val inRotationTransfer = 0.91 //
 
     val inStopClose = 0.82
     val inStopAutoOpen = 0.62
@@ -195,7 +195,7 @@ abstract class Methods : LinearOpMode() {
         outSwivelServo = hardwareMap.servo["OutSwivel"]
         inStopServo = hardwareMap.servo["InStop"]   //4ex
         inRotationServo = hardwareMap.servo["InRotation"] //5ex
-        colorSensor = hardwareMap.get(NormalizedColorSensor::class.java, "color")
+        //colorSensor = hardwareMap.get(NormalizedColorSensor::class.java, "color")
     }
 
     //Initializes and sets motors but does not reset the motors

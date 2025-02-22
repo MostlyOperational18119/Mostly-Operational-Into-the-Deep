@@ -39,9 +39,9 @@ class ServoTester : LinearOpMode() {
             currentGamepad2.copy(gamepad2)
 
             if (currentGamepad1.a && !previousGamepad1.a) {
-                outClawServo.position += 0.01
+                inRotationServo.position += 0.01
             } else if (currentGamepad1.b && !previousGamepad1.b) {
-                outClawServo.position -= 0.01
+                inRotationServo.position -= 0.01
             }
 
             if (currentGamepad1.x && !previousGamepad1.x) {

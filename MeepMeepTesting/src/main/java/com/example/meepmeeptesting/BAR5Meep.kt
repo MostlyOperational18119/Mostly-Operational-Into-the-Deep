@@ -14,16 +14,16 @@ class BAR5Meep : Auto {
 
     val slowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(
         Arrays.asList(
-            TranslationalVelocityConstraint(20.0),
-            AngularVelocityConstraint(1.0)
+            TranslationalVelocityConstraint(30.0),
+            AngularVelocityConstraint(2.0)
         )
     )
 
     override fun buildTrajectorySequence(drive: DriveShim, startPose: Pose2d): TrajectorySequence {
         return drive.trajectorySequenceBuilder(startPose)
+            .setReversed(true)
             .lineToConstantHeading(Vector2d(-6.0,-33.5))
-
-            .waitSeconds(0.01)
+            .setReversed(false)
 
             //SAMPLE1
             .splineTo(Vector2d(36.05, -29.0), Math.toRadians(40.00))

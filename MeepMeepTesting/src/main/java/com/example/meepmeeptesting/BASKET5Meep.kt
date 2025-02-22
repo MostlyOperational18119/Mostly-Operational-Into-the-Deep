@@ -29,7 +29,7 @@ class BASKET5Meep : Auto {
 
             //SAMPLE 1
             .splineToLinearHeading(Pose2d(22.30, -61.78, Math.toRadians(0.00)),Math.toRadians(0.0))
-            .waitSeconds(1.5)
+            .waitSeconds(1.0)
 
             //BASKET 1
             .setReversed(true)
@@ -71,6 +71,10 @@ class BASKET5Meep : Auto {
 
             //END
             .splineTo(Vector2d(-24.5, -11.3), Math.toRadians(0.0))
+            .waitSeconds(4.0)
+            .setReversed(true)
+            .splineTo(Vector2d(-57.0, -57.0), Math.toRadians(225.0))
+            .setReversed(false)
             .build()
     }
 }

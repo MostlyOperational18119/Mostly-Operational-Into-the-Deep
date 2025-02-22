@@ -8,16 +8,16 @@ import org.rowlandhall.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 public class MeepMeepTesting {
     public static void main(String[] args) {
-        Auto targetAuto = new BAR5Meep();
+        Auto targetAuto = new BASKET5Meep();
 
         MeepMeep meepMeep = new MeepMeep(600);
 
-        Pose2d startPose = new Pose2d(14.5, -63.19, Math.toRadians(-90.00));
-        //Pose2d startPose = new Pose2d(-32.5, -63.19, Math.toRadians(0.00));
+        //Pose2d startPose = new Pose2d(14.5, -63.19, Math.toRadians(-90.00));
+        Pose2d startPose = new Pose2d(-32.5, -63.19, Math.toRadians(0.00));
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(80, 80, 3.5, 3.5, 17)
+                .setConstraints(60, 80, 3.0, 3.0, 17)
                 .followTrajectorySequence(drive -> targetAuto.buildTrajectorySequence(drive, startPose));
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTOTHEDEEP_JUICE_DARK)

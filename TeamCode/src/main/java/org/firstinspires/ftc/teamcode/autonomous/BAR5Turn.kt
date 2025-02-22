@@ -27,8 +27,9 @@ class BAR5Turn : Methods() {
         outClawServo = hardwareMap.servo["OutClaw"]
         outClawServo!!.position = outClawClose
         outRotationServo = hardwareMap.servo["OutRotation"]
-        outRotationServo!!.position = outRotationCenter
+        outRotationServo!!.position = outRotationBackOut
         outSwivelServo = hardwareMap.servo["OutSwivel"]
+        outSwivelServo!!.position = outSwivelPerpBack
         inStopServo = hardwareMap.servo["InStop"]
         inStopServo!!.position = inStopClose
         inRotationServo = hardwareMap.servo["InRotation"]
@@ -49,15 +50,14 @@ class BAR5Turn : Methods() {
                     //BAR0
                 .addTemporalMarker{
                     verticalSlideTo(verticalSlideBar, 1.0)
+                    outRotationServo!!.position = outRotationUp
                     outSwivelServo!!.position = outSwivelPerpBack
                 }
                 .lineToConstantHeading(Vector2d(-6.0,-32.0))
-                .UNSTABLE_addTemporalMarkerOffset(-0.5){outRotationServo!!.position = outRotationBackPlace}
-
-                .waitSeconds(0.01)
+                .UNSTABLE_addTemporalMarkerOffset(0.0){outRotationServo!!.position = outRotationBackPlace}
 
                     //SAMPLE1
-                .UNSTABLE_addTemporalMarkerOffset(0.5){horizontalSlideTo(600,1.0)}
+                .UNSTABLE_addTemporalMarkerOffset(1.0){horizontalSlideTo(600,1.0)}
                 .splineTo(Vector2d(36.05, -29.0), Math.toRadians(40.00))
                 .UNSTABLE_addTemporalMarkerOffset(-0.3){inRotationServo!!.position = inRotationPick}
                 .UNSTABLE_addTemporalMarkerOffset(0.0){verticalSlideTo(0,0.3)}

@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.teleop
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
-import com.qualcomm.hardware.limelightvision.Limelight3A
+//import com.qualcomm.hardware.limelightvision.Limelight3A
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
@@ -22,9 +22,9 @@ class StatesTeleop: Methods() {
         drive1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER)
         drive1.poseEstimate = PoseStorage.currentPose
 
-        val limelight3A = hardwareMap.get(Limelight3A::class.java, "limelight")
+        //val limelight3A = hardwareMap.get(Limelight3A::class.java, "limelight")
 
-        switchPipelineEnum(limelight3A, PipelineType.Orange)
+        //switchPipelineEnum(limelight3A, PipelineType.Orange)
 
         outClawToggle = false
         inClawToggle = false
@@ -47,8 +47,8 @@ class StatesTeleop: Methods() {
         waitForStart()
 
         while (opModeIsActive()) {
-            val results = limelight3A.latestResult!!
-            val colorResults = results.colorResults
+            //val results = limelight3A.latestResult!!
+            //val colorResults = results.colorResults
 
             telemetry.addData("Vertical Pos: ", slideVertical?.currentPosition)
             telemetry.addData("Horizontal Pos : ", slideHorizontal?.currentPosition)
@@ -56,16 +56,17 @@ class StatesTeleop: Methods() {
             telemetry.addData("Y: ", drive1.poseEstimate.y)
             telemetry.addData("heading: ", drive1.poseEstimate.heading)
             telemetry.addData("leftX1: ", leftX1)
+            telemetry.update()
 
-            colorResults.forEach {
-                val resultPose = it.targetPoseCameraSpace
-                val resultPosition = resultPose.position
-                val resultOrientation = resultPose.orientation
-
-                telemetry.addLine("Detection Position: (${resultPosition.x}, ${resultPosition.y}, ${resultPosition.z})")
-                telemetry.addLine("Detection Orientation: (${resultOrientation.pitch}, ${resultOrientation.yaw}, ${resultOrientation.roll})")
-                telemetry.addLine()
-            }
+//            colorResults.forEach {
+//                val resultPose = it.targetPoseCameraSpace
+//                val resultPosition = resultPose.position
+//                val resultOrientation = resultPose.orientation
+//
+//                telemetry.addLine("Detection Position: (${resultPosition.x}, ${resultPosition.y}, ${resultPosition.z})")
+//                telemetry.addLine("Detection Orientation: (${resultOrientation.pitch}, ${resultOrientation.yaw}, ${resultOrientation.roll})")
+//                telemetry.addLine()
+//            }
 
             leftY1 = -gamepad1.left_stick_y.toDouble()/speedDiv * otherReverse
             leftX1 = gamepad1.left_stick_x.toDouble() * 1.5/(speedDiv) * otherReverse
@@ -81,13 +82,13 @@ class StatesTeleop: Methods() {
             drive1.update()
             drive1.updatePoseEstimate()
             
-            if (controller1.cross && !previousController1.cross){
-                setMotorModeEncoder(intakeMotor!!)
-                setMotorModePosition(slideHorizontal!!)
-                setMotorModePosition(slideVertical!!)
-                motorFL!!.direction = DcMotorSimple.Direction.REVERSE
-                motorBL!!.direction = DcMotorSimple.Direction.REVERSE
-            }
+//            if (controller1.cross && !previousController1.cross){
+//                setMotorModeEncoder(intakeMotor!!)
+//                setMotorModePosition(slideHorizontal!!)
+//                setMotorModePosition(slideVertical!!)
+//                motorFL!!.direction = DcMotorSimple.Direction.REVERSE
+//                motorBL!!.direction = DcMotorSimple.Direction.REVERSE
+//            }
 
             when (automatedMovementToggle) {
                 AutomaticMovementState.Manual -> {

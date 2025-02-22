@@ -14,7 +14,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation
 
 @TeleOp(name = "OutreachBotBig")
-@Disabled
 
 class OutreachBotBig : LinearOpMode() {
     override fun runOpMode() {
@@ -29,6 +28,7 @@ class OutreachBotBig : LinearOpMode() {
         // Set motor directions and mode
         motorFR.direction = DcMotorSimple.Direction.REVERSE
         motorBR.direction = DcMotorSimple.Direction.REVERSE
+        launcherRotateMotor.direction = DcMotorSimple.Direction.REVERSE
 
         launcherRotateMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
 

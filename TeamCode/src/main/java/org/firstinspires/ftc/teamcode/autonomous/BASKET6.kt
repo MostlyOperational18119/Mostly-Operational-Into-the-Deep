@@ -7,13 +7,15 @@ import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint
 import com.acmerobotics.roadrunner.trajectory.constraints.TranslationalVelocityConstraint
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor
+import com.qualcomm.robotcore.hardware.NormalizedRGBA
 import org.firstinspires.ftc.teamcode.Methods
 import org.firstinspires.ftc.teamcode.drive.advanced.SampleMecanumDriveCancelable
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
 import java.util.Arrays
 
 
-@Autonomous(name = "BASKET5", group = "AAAA")
+@Autonomous(name = "BASKET6", group = "AAAA")
 class BASKET6 : Methods() {
     override fun runOpMode() {
         drive = SampleMecanumDriveCancelable(hardwareMap)
@@ -28,6 +30,8 @@ class BASKET6 : Methods() {
         inStopServo!!.position = inStopOpen
         inRotationServo = hardwareMap.servo["InRotation"]
         inRotationServo!!.position = inRotationUp
+        val ColorSens = hardwareMap.get(NormalizedColorSensor::class.java, "color")
+        ColorSens.gain = 50.0F
 
         drive!!.poseEstimate = Pose2d(-32.5, -63.19, Math.toRadians(180.00))
 
@@ -53,7 +57,6 @@ class BASKET6 : Methods() {
                     Pose2d(-57.0, -57.0, Math.toRadians(225.00)),
                     Math.toRadians(225.00)
                 )
-                .UNSTABLE_addTemporalMarkerOffset(-0.3) { outClawServo!!.position = outClawOpen }
                 .setReversed(false)
                 .resetConstraints()
 
@@ -62,6 +65,7 @@ class BASKET6 : Methods() {
                     Pose2d(22.30, -61.78, Math.toRadians(0.00)),
                     Math.toRadians(0.0)
                 )
+                .UNSTABLE_addTemporalMarkerOffset(-0.1) { outClawServo!!.position = outClawOpen }
                 .UNSTABLE_addTemporalMarkerOffset(0.0) {
                     verticalSlideTo(-30, 0.5)
                     outRotationServo!!.position = outRotationCenter
@@ -99,7 +103,7 @@ class BASKET6 : Methods() {
 
                 //SAMPLE2
                 .lineToLinearHeading(Pose2d(-48.75, -43.3, Math.toRadians(90.0)))
-                .UNSTABLE_addTemporalMarkerOffset(-0.3) {
+                .UNSTABLE_addTemporalMarkerOffset(-0.1) {
                     outClawServo!!.position = outClawOpen
                     intakeMotor!!.power = -1.0
                 }
@@ -137,7 +141,7 @@ class BASKET6 : Methods() {
 
                 //SAMPLE3
                 .lineToLinearHeading(Pose2d(-59.0, -43.3, Math.toRadians(90.00)))
-                .UNSTABLE_addTemporalMarkerOffset(-0.3) {
+                .UNSTABLE_addTemporalMarkerOffset(-0.1) {
                     outClawServo!!.position = outClawOpen
                     intakeMotor!!.power = -1.0
                 }
@@ -174,7 +178,7 @@ class BASKET6 : Methods() {
 
                 //SAMPLE4
                 .lineToLinearHeading(Pose2d(-58.5, -46.5, Math.toRadians(118.00)))
-                .UNSTABLE_addTemporalMarkerOffset(-0.3) {
+                .UNSTABLE_addTemporalMarkerOffset(-0.1) {
                     outClawServo!!.position = outClawOpen
                     intakeMotor!!.power = -1.0
                 }
@@ -207,9 +211,9 @@ class BASKET6 : Methods() {
                     inStopServo!!.position = inStopClose
                 }
 
-                //END
+                //SAMPLE 5
                 .splineTo(Vector2d(-24.5, -11.3), Math.toRadians(0.0))
-                .UNSTABLE_addTemporalMarkerOffset(-0.3) {
+                .UNSTABLE_addTemporalMarkerOffset(-0.1) {
                     outClawServo!!.position = outClawOpen
                     intakeMotor!!.power = 0.0
                 }
@@ -219,9 +223,30 @@ class BASKET6 : Methods() {
                     intakeMotor!!.power = 0.7
                     horizontalSlideTo(300, 1.0)
                 }
+                .waitSeconds(4.0)
+                .UNSTABLE_addDisplacementMarkerOffset(-0.2) {
+                    inRotationServo!!.position = inRotationPick
+                    intakeMotor!!.power = 0.7
+                }
+                .UNSTABLE_addTemporalMarkerOffset(0.0) {
+                    horizontalSlideTo(0, 1.0)
+                    inRotationServo!!.position = inRotationTransfer
+                    inStopServo!!.position = inStopAutoOpen
+                }
+                .UNSTABLE_addTemporalMarkerOffset(1.5) {
+                    outClawServo!!.position = outClawClose
+                }
+                .UNSTABLE_addTemporalMarkerOffset(1.7) {
+                    verticalSlideTo(verticalSlideHigh, 1.0)
+                    outRotationServo!!.position = outRotationBackOut
+                    inStopServo!!.position = inStopClose
+                }
+                .setReversed(true)
+                .splineTo(Vector2d(-57.0, -57.0), Math.toRadians(225.0))
+                .setReversed(false)
                 .build()
 
-        val submersible: TrajectorySequence =
+        val backToBasket: TrajectorySequence =
             drive!!.trajectorySequenceBuilder(Pose2d(-24.5, -11.3, Math.toRadians(0.00)))
                 .setReversed(true)
                 .splineTo(Vector2d(-57.0, -57.0), Math.toRadians(225.0))
@@ -229,12 +254,45 @@ class BASKET6 : Methods() {
                 .build()
 
         waitForStart()
+//
+//        var startingColor = "blue"
+//        while(!opModeIsActive()){
+//            if (controller1.a){
+//                startingColor = "blue"
+//            }
+//            if (controller1.b){
+//                startingColor = "red"
+//            }
+//        }
+
         if (isStopRequested) {return}
 
         drive!!.followTrajectorySequence(all)
-
-
-
+//        var colors: NormalizedRGBA?
+//        var moveOn = false
+//        var highestValue = 0.0F
+//        var colorSeen = "red"
+//
+//        while(!moveOn){
+//            colors = ColorSens.normalizedColors
+//            if (colors.red > 0.25 || colors.green > 0.25 || colors.blue > 0.25) {
+//                highestValue = colors.red
+//                colorSeen = "red"
+//                if (colors.green >= highestValue) {
+//                    highestValue = colors.green
+//                    colorSeen = "green"
+//                }
+//                if (colors.blue > highestValue) {
+//                    colorSeen = "blue"
+//                    highestValue = colors.blue
+//                }
+//                moveOn = true
+//            }
+//        }
+//
+//        if (startingColor == "blue" && highestValue )
+//
+//
         drive!!.updatePoseEstimate()
         PoseStorage.currentPose = drive!!.poseEstimate
     }

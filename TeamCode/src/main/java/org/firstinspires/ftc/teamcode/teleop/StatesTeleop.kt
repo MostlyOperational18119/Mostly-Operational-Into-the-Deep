@@ -50,7 +50,7 @@ class StatesTeleop: Methods() {
             telemetry.update()
 
             leftY1 = -gamepad1.left_stick_y.toDouble()/speedDiv * otherReverse
-            leftX1 = gamepad1.left_stick_x.toDouble() * 1.5/(speedDiv) * otherReverse
+            leftX1 = gamepad1.left_stick_x.toDouble() * 2/(speedDiv) * otherReverse
             rightX1 = gamepad1.right_stick_x.toDouble()/speedDiv
             leftY2 = -gamepad2.left_stick_y.toDouble()
             rightY2 = -gamepad2.right_stick_y.toDouble()
@@ -62,14 +62,6 @@ class StatesTeleop: Methods() {
 
             drive1.update()
             drive1.updatePoseEstimate()
-            
-            if (controller1.cross && !previousController1.cross){
-                setMotorModeEncoder(intakeMotor!!)
-                setMotorModePosition(slideHorizontal!!)
-                setMotorModePosition(slideVertical!!)
-                motorFL!!.direction = DcMotorSimple.Direction.REVERSE
-                motorBL!!.direction = DcMotorSimple.Direction.REVERSE
-            }
 
             when (automatedMovementToggle) {
                 AutomaticMovementState.Manual -> {
@@ -172,7 +164,7 @@ class StatesTeleop: Methods() {
                     else { intakeMotor?.power = 0.0 }
 
                     //IN STOP SERVO
-                    if (slideHorizontal!!.currentPosition < 200){ inStopServo!!.position = inStopAutoOpen }
+                    if (slideHorizontal!!.currentPosition < 20){ inStopServo!!.position = inStopAutoOpen }
                     else { inStopServo!!.position = inStopClose }
 
                     //SWIVEL SERVO
@@ -196,19 +188,20 @@ class StatesTeleop: Methods() {
 
                     //OUT ROTATION SERVO
                     if (controller2.b && !previousController2.b){
-                        if (outRotation) {
-                            verticalSlideTo(verticalSlideBar,1.0)
-                            verticalHeight = verticalSlideBar
-                            outRotationServo!!.position = outRotationUp
-                            outSwivelServo!!.position = outSwivelPerpFront
-                            outRotation = false
-                        } else {
-                            verticalSlideTo(50,1.0)
-                            verticalHeight = 50
+                        if (slideVertical!!.currentPosition > 1500){
+                            if (outRotation) {
+                                outRotationServo!!.position = outRotationFrontOut
+                                outSwivelServo!!.position = outSwivelPerpFront
+                                outRotation = false
+                            } else {
+                                outRotationServo!!.position = outRotationBackOut
+                                outSwivelServo!!.position = outSwivelPerpBack
+                                outRotation = true
+                            }
+                        }
+                        else{
                             outRotationServo!!.position = outRotationBackWall
                             outSwivelServo!!.position = outSwivelPerpBack
-                            inRotationToggle = false
-                            outRotation = true
                         }
                     }
 
@@ -238,9 +231,9 @@ class StatesTeleop: Methods() {
                     // VERTICAL SLIDE
                     if (controller2.dpad_up && !previousController2.dpad_up) { verticalSlideToggle = VerticalSlideState.High; outRotationServo!!.position = outRotationBackOut}
                     if (controller2.dpad_right && !previousController2.dpad_right) { verticalSlideToggle = VerticalSlideState.Low; outRotationServo!!.position = outRotationBackOut}
-                    if (controller2.dpad_down && !previousController2.dpad_down) { verticalSlideToggle = VerticalSlideState.Floor; outRotationServo!!.position = outRotationCenter }
+                    if (controller2.dpad_down && !previousController2.dpad_down) { verticalSlideToggle = VerticalSlideState.Floor }
                     if (controller2.right_stick_button && !previousController2.right_stick_button) { verticalSlideToggle = VerticalSlideState.Floor; outRotationServo!!.position = outRotationCenter }
-                    if (controller2.dpad_left && !previousController2.dpad_left) { verticalSlideToggle = VerticalSlideState.Bar }
+                    if (controller2.dpad_left && !previousController2.dpad_left) { verticalSlideToggle = VerticalSlideState.Bar; outRotationServo!!.position = outRotationUp; outSwivelServo!!.position = outSwivelPerpFront}
                     if (rightY2!! >= 0.2 || rightY2!! <= -0.2) { verticalSlideToggle = VerticalSlideState.Manual }
                     when (verticalSlideToggle) {
                         VerticalSlideState.Manual -> {
@@ -257,7 +250,7 @@ class StatesTeleop: Methods() {
                                 verticalSlideTo(verticalHeight, 1.0)
                             }
                         }
-                        VerticalSlideState.Floor -> { verticalSlideTo(0,1.0);    verticalBackToManual() }
+                        VerticalSlideState.Floor -> { verticalSlideTo(0,0.8);    verticalBackToManual() }
                         VerticalSlideState.Low   -> { verticalSlideTo(verticalSlideLow,1.0); verticalBackToManual() }
                         VerticalSlideState.High  -> { verticalSlideTo(verticalSlideHigh,1.0); verticalBackToManual() }
                         VerticalSlideState.Bar  -> { verticalSlideTo(verticalSlideBar,1.0); verticalBackToManual() }
@@ -268,10 +261,10 @@ class StatesTeleop: Methods() {
                 AutomaticTransferState.StartTransfer-> {
                     outRotationServo!!.position = outRotationCenter
                     outClawServo!!.position = outClawOpen
-                    inRotationServo!!.position = inRotationTransfer
+                    inRotationServo!!.position = inRotationTransferMinus
                     intakeMotor?.power = 0.7
                     horizontalSlideTo(0,0.8)
-                    verticalSlideTo(40, 1.0)
+                    verticalSlideTo(40, 0.8)
                     transferServo!!.position = transferServoClose
                     outSwivelServo!!.position = outSwivelPerpBack
                     if (!doOnce) {
@@ -279,7 +272,8 @@ class StatesTeleop: Methods() {
                         doOnce = true
                         timeHor = slideHorizontal!!.currentPosition * 0.0005
                     }
-                    if (elapsedTime.time() > timeHor - 0.3){
+                    if (slideHorizontal!!.currentPosition < 20){
+                        inRotationServo!!.position = inRotationTransfer
                         inStopServo!!.position = inStopAutoOpen
                     }
                     if ((slideVertical!!.currentPosition < 50) && (elapsedTime.time() > timeHor + 0.6)){

@@ -12,7 +12,6 @@ import com.qualcomm.robotcore.hardware.NormalizedRGBA
 import org.firstinspires.ftc.teamcode.Methods
 import org.firstinspires.ftc.teamcode.drive.advanced.SampleMecanumDriveCancelable
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
-import java.util.Arrays
 
 
 @Autonomous(name = "BASKET6", group = "AAAA")
@@ -30,13 +29,13 @@ class BASKET6 : Methods() {
         inStopServo!!.position = inStopOpen
         inRotationServo = hardwareMap.servo["InRotation"]
         inRotationServo!!.position = inRotationUp
-        val ColorSens = hardwareMap.get(NormalizedColorSensor::class.java, "color")
-        ColorSens.gain = 50.0F
+        val colorSens = hardwareMap.get(NormalizedColorSensor::class.java, "color")
+        colorSens.gain = 50.0F
 
         drive!!.poseEstimate = Pose2d(-32.5, -63.19, Math.toRadians(180.00))
 
         val slowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(
-            Arrays.asList(
+            listOf(
                 TranslationalVelocityConstraint(20.0),
                 AngularVelocityConstraint(1.0)
             )
@@ -223,11 +222,13 @@ class BASKET6 : Methods() {
                     intakeMotor!!.power = 0.7
                     horizontalSlideTo(300, 1.0)
                 }
-                .waitSeconds(4.0)
-                .UNSTABLE_addDisplacementMarkerOffset(-0.2) {
-                    inRotationServo!!.position = inRotationPick
-                    intakeMotor!!.power = 0.7
-                }
+                .build()
+
+        val backToBasket: TrajectorySequence =
+            drive!!.trajectorySequenceBuilder(drive!!.poseEstimate)
+                .setReversed(true)
+                .splineTo(Vector2d(-57.0, -57.0), Math.toRadians(225.0))
+                .setReversed(false)
                 .UNSTABLE_addTemporalMarkerOffset(0.0) {
                     horizontalSlideTo(0, 1.0)
                     inRotationServo!!.position = inRotationTransfer
@@ -241,58 +242,51 @@ class BASKET6 : Methods() {
                     outRotationServo!!.position = outRotationBackOut
                     inStopServo!!.position = inStopClose
                 }
-                .setReversed(true)
-                .splineTo(Vector2d(-57.0, -57.0), Math.toRadians(225.0))
-                .setReversed(false)
-                .build()
-
-        val backToBasket: TrajectorySequence =
-            drive!!.trajectorySequenceBuilder(Pose2d(-24.5, -11.3, Math.toRadians(0.00)))
-                .setReversed(true)
-                .splineTo(Vector2d(-57.0, -57.0), Math.toRadians(225.0))
-                .setReversed(false)
                 .build()
 
         waitForStart()
-//
-//        var startingColor = "blue"
-//        while(!opModeIsActive()){
-//            if (controller1.a){
-//                startingColor = "blue"
-//            }
-//            if (controller1.b){
-//                startingColor = "red"
-//            }
-//        }
+
+        var startingColor = "blue"
+        while(!opModeIsActive()){
+            if (controller1.a){ startingColor = "blue" }
+            if (controller1.b){ startingColor = "red" }
+        }
 
         if (isStopRequested) {return}
 
         drive!!.followTrajectorySequence(all)
-//        var colors: NormalizedRGBA?
-//        var moveOn = false
-//        var highestValue = 0.0F
-//        var colorSeen = "red"
-//
-//        while(!moveOn){
-//            colors = ColorSens.normalizedColors
-//            if (colors.red > 0.25 || colors.green > 0.25 || colors.blue > 0.25) {
-//                highestValue = colors.red
-//                colorSeen = "red"
-//                if (colors.green >= highestValue) {
-//                    highestValue = colors.green
-//                    colorSeen = "green"
-//                }
-//                if (colors.blue > highestValue) {
-//                    colorSeen = "blue"
-//                    highestValue = colors.blue
-//                }
-//                moveOn = true
-//            }
-//        }
-//
-//        if (startingColor == "blue" && highestValue )
-//
-//
+        inRotationServo!!.position = inRotationPick
+        horizontalSlideTo(900,0.1)
+
+        var colors: NormalizedRGBA?
+        var moveOn = false
+        var colorSeen = "red"
+
+        while(!moveOn){
+            telemetry.addLine(colorSeen)
+            telemetry.update()
+            colors = colorSens.normalizedColors
+            if (colors.red > 0.6){ colorSeen = "red"; moveOn = true }
+            if (colors.green > 0.2){ colorSeen = "yellow"; moveOn = true }
+            if (colors.blue > 0.6){ colorSeen = "blue"; moveOn = true }
+        }
+
+        if (startingColor == "blue" && colorSeen == "red"){
+            intakeMotor!!.power = -0.7
+            sleep(2000)
+            intakeMotor!!.power = 0.0
+        }
+        else if (startingColor == "red" && colorSeen == "blue"){
+            intakeMotor!!.power = -0.7
+            sleep(2000)
+            intakeMotor!!.power = 0.0
+        }
+        else{
+            drive!!.followTrajectorySequence(backToBasket)
+            outClawServo!!.position = outClawOpen
+            outRotationServo!!.position = outRotationCenter
+        }
+
         drive!!.updatePoseEstimate()
         PoseStorage.currentPose = drive!!.poseEstimate
     }

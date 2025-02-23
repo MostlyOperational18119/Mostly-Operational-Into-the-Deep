@@ -264,7 +264,7 @@ class StatesTeleop: Methods() {
                     inRotationServo!!.position = inRotationTransferMinus
                     intakeMotor?.power = 0.7
                     horizontalSlideTo(0,0.8)
-                    verticalSlideTo(40, 0.8)
+                    verticalSlideTo(100, 0.8)
                     transferServo!!.position = transferServoClose
                     outSwivelServo!!.position = outSwivelPerpBack
                     if (!doOnce) {
@@ -275,6 +275,7 @@ class StatesTeleop: Methods() {
                     if (slideHorizontal!!.currentPosition < 20){
                         inRotationServo!!.position = inRotationTransfer
                         inStopServo!!.position = inStopAutoOpen
+                        verticalSlideTo(40, 1.0)
                     }
                     if ((slideVertical!!.currentPosition < 50) && (elapsedTime.time() > timeHor + 0.6)){
                         automaticTransferToggle = AutomaticTransferState.Pickup
@@ -293,8 +294,7 @@ class StatesTeleop: Methods() {
                     intakeMotor!!.power = 0.0
                     verticalSlideTo(verticalSlideHigh,1.0)
                     verticalHeight = verticalSlideHigh
-                    if (!doOnce) { elapsedTime.reset(); doOnce = true }
-                    if (elapsedTime.time() > 0.15) {
+                    if (slideVertical!!.currentPosition > 200) {
                         automaticTransferToggle = AutomaticTransferState.RotateOut
                         doOnce = false
                     }

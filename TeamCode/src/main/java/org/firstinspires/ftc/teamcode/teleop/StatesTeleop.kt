@@ -1,10 +1,9 @@
 package org.firstinspires.ftc.teamcode.teleop
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
-import com.acmerobotics.roadrunner.geometry.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.DcMotor
-import com.qualcomm.robotcore.hardware.DcMotorSimple
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor
 import org.firstinspires.ftc.teamcode.Methods
 import org.firstinspires.ftc.teamcode.autonomous.PoseStorage
 import org.firstinspires.ftc.teamcode.drive.advanced.SampleMecanumDriveCancelable
@@ -13,7 +12,7 @@ import org.firstinspires.ftc.teamcode.drive.advanced.SampleMecanumDriveCancelabl
 class StatesTeleop: Methods() {
     override fun runOpMode() {
         initMotors()
-        initServosAndTouchWithoutSet()
+        initServosAndSensorsSet()
         outRotationServo!!.position = outRotationCenter
         insideJokes()
 
@@ -129,7 +128,7 @@ class StatesTeleop: Methods() {
 
             when (automaticTransferToggle) {
                 AutomaticTransferState.Manual -> {
-                    // Auto transfer toggle
+                    //AUTO TRANSFER
                     if (controller2.left_bumper && !(previousController2.left_bumper)) {
                         automaticTransferToggle = AutomaticTransferState.StartTransfer
                     }
@@ -139,6 +138,14 @@ class StatesTeleop: Methods() {
                     if (transferSide){ transferSideString = "Back Side" }
                     else {transferSideString = "Front Side"}
                     telemetry.addData("Transfer Side: ", transferSideString)
+
+                    //COLOR DETECT
+                    colors = colorSensor!!.normalizedColors
+                    if (colors!!.red > 0.6){ colorSeen = "red"}
+                    else if (colors!!.blue > 0.6){ colorSeen = "blue"}
+                    else if (colors!!.green > 0.2){ colorSeen = "yellow"}
+                    else{ colorSeen = "none "}
+                    telemetry.addData("Color Seen: ", colorSeen)
 
                     //OUT CLAW
                     if (controller2.right_bumper && !previousController2.right_bumper) { outClawToggle = !outClawToggle }

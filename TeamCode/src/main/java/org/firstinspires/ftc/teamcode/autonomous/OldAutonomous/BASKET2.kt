@@ -13,7 +13,7 @@ class BASKET2 : Methods() {
     override fun runOpMode() {
         initOdometry()
         initMotors()
-        initServosAndTouchWithoutSet()
+        initServosAndSensorsSet()
 
         drive!!.poseEstimate = Pose2d(-34.09, -63.19, Math.toRadians(-90.00))
 

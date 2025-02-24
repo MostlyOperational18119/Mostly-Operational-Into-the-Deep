@@ -72,7 +72,8 @@ abstract class Methods : LinearOpMode() {
     val elapsedTime = ElapsedTime()
 
     var colors: NormalizedRGBA? = null
-    var currentHighestColorValue = 0.0F
+    var startingColor = "blue"
+    var colorSeen = "none"
 
     var drive: SampleMecanumDriveCancelable? = null
     val basketVector = Vector2d(-57.0, -57.0)
@@ -189,14 +190,15 @@ abstract class Methods : LinearOpMode() {
         inRotationServo = hardwareMap.servo["InRotation"]
     }
 
-    fun initServosAndTouchWithoutSet() {
+    fun initServosAndSensorsSet() {
         transferServo = hardwareMap.servo["Transfer"]
         outClawServo = hardwareMap.servo["OutClaw"]
         outRotationServo = hardwareMap.servo["OutRotation"]
         outSwivelServo = hardwareMap.servo["OutSwivel"]
         inStopServo = hardwareMap.servo["InStop"]   //4ex
         inRotationServo = hardwareMap.servo["InRotation"] //5ex
-        //colorSensor = hardwareMap.get(NormalizedColorSensor::class.java, "color")
+        colorSensor = hardwareMap.get(NormalizedColorSensor::class.java, "color")
+        colorSensor!!.gain = 50.0F
     }
 
     //Initializes and sets motors but does not reset the motors

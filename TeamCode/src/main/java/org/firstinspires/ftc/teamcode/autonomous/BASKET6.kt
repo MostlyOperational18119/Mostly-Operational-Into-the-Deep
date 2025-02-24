@@ -7,8 +7,6 @@ import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint
 import com.acmerobotics.roadrunner.trajectory.constraints.TranslationalVelocityConstraint
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor
-import com.qualcomm.robotcore.hardware.NormalizedRGBA
 import org.firstinspires.ftc.teamcode.Methods
 import org.firstinspires.ftc.teamcode.drive.advanced.SampleMecanumDriveCancelable
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
@@ -29,8 +27,6 @@ class BASKET6 : Methods() {
         inStopServo!!.position = inStopOpen
         inRotationServo = hardwareMap.servo["InRotation"]
         inRotationServo!!.position = inRotationUp
-        val colorSens = hardwareMap.get(NormalizedColorSensor::class.java, "color")
-        colorSens.gain = 50.0F
 
         drive!!.poseEstimate = Pose2d(-32.5, -63.19, Math.toRadians(180.00))
 
@@ -246,7 +242,6 @@ class BASKET6 : Methods() {
 
         waitForStart()
 
-        var startingColor = "blue"
         while(!opModeIsActive()){
             if (controller1.a){ startingColor = "blue" }
             if (controller1.b){ startingColor = "red" }
@@ -258,17 +253,15 @@ class BASKET6 : Methods() {
         inRotationServo!!.position = inRotationPick
         horizontalSlideTo(900,0.1)
 
-        var colors: NormalizedRGBA?
         var moveOn = false
-        var colorSeen = "red"
 
         while(!moveOn){
             telemetry.addLine(colorSeen)
             telemetry.update()
-            colors = colorSens.normalizedColors
-            if (colors.red > 0.6){ colorSeen = "red"; moveOn = true }
-            if (colors.green > 0.2){ colorSeen = "yellow"; moveOn = true }
-            if (colors.blue > 0.6){ colorSeen = "blue"; moveOn = true }
+            colors = colorSensor!!.normalizedColors
+            if (colors!!.red > 0.6){ colorSeen = "red"; moveOn = true }
+            else if (colors!!.blue > 0.6){ colorSeen= "blue"; moveOn = true }
+            else if (colors!!.green > 0.2){ colorSeen = "yellow"; moveOn = true }
         }
 
         if (startingColor == "blue" && colorSeen == "red"){

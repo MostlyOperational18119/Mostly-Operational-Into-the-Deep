@@ -51,7 +51,7 @@ import java.util.Objects;
 
 
 public class ManualFeedforwardTuner extends LinearOpMode {
-    public static double DISTANCE = 72; // in
+    public static double DISTANCE = 120; // in
 
     private FtcDashboard dashboard = FtcDashboard.getInstance();
 

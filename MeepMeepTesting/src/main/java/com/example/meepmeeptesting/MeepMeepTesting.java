@@ -8,7 +8,7 @@ import org.rowlandhall.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 public class MeepMeepTesting {
     public static void main(String[] args) {
-        Auto targetAuto = new BASKET5Meep();
+        Auto targetAuto = new BASKET7Meep();
 
         MeepMeep meepMeep = new MeepMeep(600);
 
@@ -17,7 +17,7 @@ public class MeepMeepTesting {
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(60, 70, 3.0, 3.0, 17)
+                .setConstraints(70, 70, 3.5, 3.5, 17)
                 .followTrajectorySequence(drive -> targetAuto.buildTrajectorySequence(drive, startPose));
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTOTHEDEEP_JUICE_DARK)

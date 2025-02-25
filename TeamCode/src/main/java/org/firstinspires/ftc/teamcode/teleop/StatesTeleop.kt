@@ -15,10 +15,7 @@ class StatesTeleop: Methods() {
         initServosAndSensorsSet()
         outRotationServo!!.position = outRotationCenter
         insideJokes()
-
-        val drive1 = SampleMecanumDriveCancelable(hardwareMap)
-        drive1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER)
-        drive1.poseEstimate = PoseStorage.currentPose
+        initOdometry()
 
         outClawToggle = false
         inClawToggle = false
@@ -43,9 +40,9 @@ class StatesTeleop: Methods() {
         while (opModeIsActive()) {
             telemetry.addData("Vertical Pos: ", slideVertical?.currentPosition)
             telemetry.addData("Horizontal Pos : ", slideHorizontal?.currentPosition)
-            telemetry.addData("x: ", drive1.poseEstimate.x)
-            telemetry.addData("y: ", drive1.poseEstimate.y)
-            telemetry.addData("heading: ", drive1.poseEstimate.heading)
+            telemetry.addData("x: ", drive!!.poseEstimate.x)
+            telemetry.addData("y: ", drive!!.poseEstimate.y)
+            telemetry.addData("heading: ", drive!!.poseEstimate.heading)
             telemetry.update()
 
             leftY1 = -gamepad1.left_stick_y.toDouble()/speedDiv * otherReverse
@@ -59,8 +56,8 @@ class StatesTeleop: Methods() {
             controller1.copy(gamepad1)
             controller2.copy(gamepad2)
 
-            drive1.update()
-            drive1.updatePoseEstimate()
+            drive!!.update()
+            drive!!.updatePoseEstimate()
 
             when (automatedMovementToggle) {
                 AutomaticMovementState.Manual -> {
@@ -89,40 +86,40 @@ class StatesTeleop: Methods() {
                     if (reverseThing ){ otherReverse = -1.0}
 
                     if (controller1.dpad_up && !(previousController1.dpad_up)) {
-                        drive1.poseEstimate = Pose2d(47.44, -60.20, Math.toRadians(90.0))
+                        drive!!.poseEstimate = Pose2d(47.44, -60.20, Math.toRadians(90.0))
                     }
 
                     if (controller1.dpad_right && !(previousController1.dpad_right)) {
-                        val teleopBasket = drive1.trajectorySequenceBuilder(drive1.poseEstimate)
+                        val teleopBasket = drive!!.trajectorySequenceBuilder(drive!!.poseEstimate)
                             .setReversed(true)
                             .lineToLinearHeading(basketPose)
                             .setReversed(false)
                             .build()
-                        drive1.followTrajectorySequenceAsync(teleopBasket)
+                        drive!!.followTrajectorySequenceAsync(teleopBasket)
                         automatedMovementToggle = AutomaticMovementState.Auto
                     }
                     if (controller1.dpad_left && !previousController1.dpad_left) {
-                        val teleopBar =  drive1.trajectorySequenceBuilder(drive1.poseEstimate)
+                        val teleopBar =  drive!!.trajectorySequenceBuilder(drive!!.poseEstimate)
                             .lineToLinearHeading(barPose)
                             .build()
-                        drive1.followTrajectorySequenceAsync(teleopBar)
+                        drive!!.followTrajectorySequenceAsync(teleopBar)
                         automatedMovementToggle = AutomaticMovementState.Auto
                     }
                     if (controller1.dpad_down && !previousController1.dpad_down) {
-                        val teleopPickup = drive1.trajectorySequenceBuilder(drive1.poseEstimate)
+                        val teleopPickup = drive!!.trajectorySequenceBuilder(drive!!.poseEstimate)
                             .setReversed(true)
                             .splineToConstantHeading(clipPickVector, Math.toRadians(-90.00))
                             .setReversed(false)
                             .build()
-                        drive1.followTrajectorySequenceAsync(teleopPickup)
+                        drive!!.followTrajectorySequenceAsync(teleopPickup)
                         automatedMovementToggle = AutomaticMovementState.Auto
                     }
                 }
                 AutomaticMovementState.Auto ->{
-                    if (controller1.dpad_left && !previousController1.dpad_left) { drive1.breakFollowing();automatedMovementToggle = AutomaticMovementState.Manual }
-                    if (controller1.dpad_right && !previousController1.dpad_right) { drive1.breakFollowing();automatedMovementToggle = AutomaticMovementState.Manual }
-                    if (controller1.dpad_down && !previousController1.dpad_down) { drive1.breakFollowing();automatedMovementToggle = AutomaticMovementState.Manual }
-                    if (!drive1.isBusy) { automatedMovementToggle = AutomaticMovementState.Manual }
+                    if (controller1.dpad_left && !previousController1.dpad_left) { drive!!.breakFollowing();automatedMovementToggle = AutomaticMovementState.Manual }
+                    if (controller1.dpad_right && !previousController1.dpad_right) { drive!!.breakFollowing();automatedMovementToggle = AutomaticMovementState.Manual }
+                    if (controller1.dpad_down && !previousController1.dpad_down) { drive!!.breakFollowing();automatedMovementToggle = AutomaticMovementState.Manual }
+                    if (!drive!!.isBusy) { automatedMovementToggle = AutomaticMovementState.Manual }
                 }
             }
 

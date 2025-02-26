@@ -65,6 +65,7 @@ abstract class Methods : LinearOpMode() {
     var inRotationToggle = false
     var outSwivelToggle = false
     var transferServoToggle = false
+    var moveOn = false
     var doOnce = false
     var verticalHeight = 0
     var speedDiv = 2.3
@@ -118,28 +119,25 @@ abstract class Methods : LinearOpMode() {
     var colorSensor : NormalizedColorSensor? = null
 
     // Places the sample
-    fun placeSample() {
-        outClawServo!!.position = outClawOpen
-        sleep(500)
-
-        outClawServo!!.position = outClawClose
+    fun colorDetectionWithWait(length : Double){
+        elapsedTime.reset()
+        colorSeen = "none"
+        while(!moveOn){
+            telemetry.addLine(colorSeen)
+            telemetry.update()
+            colors = colorSensor!!.normalizedColors
+            if (colors!!.green > 0.6){ colorSeen = "yellow"; moveOn = true }
+            else if (colors!!.red > 0.6){ colorSeen = "red"; moveOn = true }
+            else if (colors!!.blue > 0.6){ colorSeen= "blue"; moveOn = true }
+            if (elapsedTime.time() > length){ moveOn = true }
+        }
+        moveOn = false
     }
 
-    // Places the specimen
-    fun placeSpecimen() {
-        verticalSlideTo(750,1.0)
-        sleep(500)
-        outClawServo!!.position = outClawOpen
-    }
-
-    fun intakeSample() {
-        horizontalSlideTo(horizontalSlideExtend, 0.5)
-//        inClawServo!!.position = inClawOpen
-        inRotationServo!!.position = inRotationPick
-
-        sleep(300)
-
-//        inClawServo!!.position = inClawClose
+    fun spitOut(milliseconds : Long){
+        intakeMotor!!.power = -1.0
+        sleep(milliseconds)
+        intakeMotor!!.power = 0.0
     }
 
     //Sets the position of vertical motor and moves. Only uses 1 power since it checks.

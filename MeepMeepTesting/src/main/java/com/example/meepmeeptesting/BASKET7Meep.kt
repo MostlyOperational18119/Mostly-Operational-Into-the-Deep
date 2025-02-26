@@ -13,7 +13,7 @@ import java.util.Arrays
 class BASKET7Meep : Auto {
     val slowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(
         Arrays.asList(
-            TranslationalVelocityConstraint(30.0),
+            TranslationalVelocityConstraint(15.0),
             AngularVelocityConstraint(1.2)
         )
     )
@@ -23,7 +23,7 @@ class BASKET7Meep : Auto {
             .waitSeconds(0.2)
             .setVelConstraint(slowConstraint)
             .setReversed(true)
-            .splineToLinearHeading(Pose2d(-57.0, -57.0, Math.toRadians(45.00)), Math.toRadians(225.00))
+            .splineToLinearHeading(Pose2d(-54.0, -60.0, Math.toRadians(45.00)), Math.toRadians(225.00))
             .setReversed(false)
             .resetConstraints()
 
@@ -33,7 +33,7 @@ class BASKET7Meep : Auto {
 
             //BASKET 1
             .setReversed(true)
-            .splineToLinearHeading(Pose2d(-57.0, -57.0, Math.toRadians(45.00)), Math.toRadians(225.00))
+            .splineToLinearHeading(Pose2d(-54.0, 60.0, Math.toRadians(45.00)), Math.toRadians(225.00))
             .setReversed(false)
 
             //SAMPLE2
@@ -43,7 +43,7 @@ class BASKET7Meep : Auto {
             //BASKET2
             .setVelConstraint(slowConstraint)
             .setReversed(true)
-            .lineToLinearHeading(Pose2d(-57.0, -57.0, Math.toRadians(45.00)))
+            .lineToLinearHeading(Pose2d(-54.0, -60.0, Math.toRadians(45.00)))
             .setReversed(false)
             .resetConstraints()
 
@@ -54,7 +54,7 @@ class BASKET7Meep : Auto {
             //BASKET3
             .setVelConstraint(slowConstraint)
             .setReversed(true)
-            .lineToLinearHeading(Pose2d(-57.0, -57.0, Math.toRadians(45.00)))
+            .lineToLinearHeading(Pose2d(-54.0, -60.0, Math.toRadians(45.00)))
             .setReversed(false)
             .resetConstraints()
 
@@ -65,7 +65,7 @@ class BASKET7Meep : Auto {
             //BASKET4
             .setVelConstraint(slowConstraint)
             .setReversed(true)
-            .lineToLinearHeading(Pose2d(-57.0, -57.0, Math.toRadians(45.00)))
+            .lineToLinearHeading(Pose2d(-54.0, -60.0, Math.toRadians(45.00)))
             .setReversed(false)
             .resetConstraints()
 

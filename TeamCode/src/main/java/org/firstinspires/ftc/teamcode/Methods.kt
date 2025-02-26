@@ -28,8 +28,8 @@ abstract class Methods : LinearOpMode() {
     val transferServoClose = 0.73 //
     val transferServoOpen = 0.5 //
 
-    val outClawClose = 0.58 //
-    val outClawOpen = 0.41 //
+    val outClawClose = 0.6 //
+    val outClawOpen = 0.43 //
 
     val outSwivelPerpBack = 0.04 //
     val outSwivelPerpFront = 0.69 //
@@ -43,15 +43,15 @@ abstract class Methods : LinearOpMode() {
     var outRotationFrontPlace = 0.78
     val outRotationCenter = 0.96 // "center"
 
-    val inRotationPick = 0.88//
-    val inRotationUpAuto = 0.58 //
-    val inRotationUp = 0.01 //
-    val inRotationTransfer = 0.31 //
-    val inRotationTransferMinus = 0.34
+    val inRotationPick = 0.98//
+    val inRotationUpAuto = 0.8 //
+    val inRotationUp = 0.18 //
+    val inRotationTransfer = 0.4 //
+    val inRotationTransferMinus = 0.52
 
-    val inStopClose = 0.16
-    val inStopAutoOpen = 0.47
-    val inStopOpen = 0.47
+    val inStopClose = 0.81
+    val inStopAutoOpen = 0.62
+    val inStopOpen = 0.62
 
     val verticalSlideHigh = 2700 //4550
     val verticalSlideBar = 650
@@ -119,20 +119,6 @@ abstract class Methods : LinearOpMode() {
     var colorSensor : NormalizedColorSensor? = null
 
     // Places the sample
-    fun colorDetectionWithWait(length : Double){
-        elapsedTime.reset()
-        colorSeen = "none"
-        while(!moveOn){
-            telemetry.addLine(colorSeen)
-            telemetry.update()
-            colors = colorSensor!!.normalizedColors
-            if (colors!!.green > 0.6){ colorSeen = "yellow"; moveOn = true }
-            else if (colors!!.red > 0.6){ colorSeen = "red"; moveOn = true }
-            else if (colors!!.blue > 0.6){ colorSeen= "blue"; moveOn = true }
-            if (elapsedTime.time() > length){ moveOn = true }
-        }
-        moveOn = false
-    }
 
     fun spitOut(milliseconds : Long){
         intakeMotor!!.power = -1.0

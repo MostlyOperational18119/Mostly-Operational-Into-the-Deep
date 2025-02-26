@@ -172,8 +172,6 @@ class BAR4Turn : Methods() {
         if (isStopRequested) {return}
 
         drive!!.followTrajectorySequence(all)
-
         drive!!.updatePoseEstimate()
-        PoseStorage.currentPose = drive!!.poseEstimate
     }
 }

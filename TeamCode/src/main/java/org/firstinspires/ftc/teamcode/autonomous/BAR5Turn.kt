@@ -64,7 +64,7 @@ class BAR5Turn : Methods() {
                 .UNSTABLE_addTemporalMarkerOffset(-0.3){inRotationServo!!.position = inRotationPick}
                 .UNSTABLE_addTemporalMarkerOffset(0.0){verticalSlideTo(0,0.3)}
                 .lineToLinearHeading(Pose2d(37.03, -46.07, Math.toRadians(-30.00)))
-                .UNSTABLE_addTemporalMarkerOffset(-0.2){inRotationServo!!.position = inRotationUpAuto}
+                .UNSTABLE_addTemporalMarkerOffset(0.0){inRotationServo!!.position = inRotationUpAuto}
 
                     //SAMPLE2
                 .lineToLinearHeading(Pose2d(46.26, -29.37, Math.toRadians(35.00)))
@@ -203,8 +203,6 @@ class BAR5Turn : Methods() {
         if (isStopRequested) {return}
 
         drive!!.followTrajectorySequence(all)
-
         drive!!.updatePoseEstimate()
-        PoseStorage.currentPose = drive!!.poseEstimate
     }
 }

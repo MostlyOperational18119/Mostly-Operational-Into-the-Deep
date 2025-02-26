@@ -5,7 +5,6 @@ import com.acmerobotics.roadrunner.geometry.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.firstinspires.ftc.teamcode.Methods
-import org.firstinspires.ftc.teamcode.autonomous.PoseStorage
 
 @Autonomous(name = "BAR_Meet2", group = "AAAA")
 @Disabled

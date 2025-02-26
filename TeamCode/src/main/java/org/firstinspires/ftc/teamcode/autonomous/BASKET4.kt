@@ -173,8 +173,6 @@ class BASKET4 : Methods() {
         if (isStopRequested) {return}
 
         drive!!.followTrajectorySequence(all)
-
         drive!!.updatePoseEstimate()
-        PoseStorage.currentPose = drive!!.poseEstimate
     }
 }

@@ -2,11 +2,7 @@ package org.firstinspires.ftc.teamcode.teleop
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
-import com.qualcomm.robotcore.hardware.DcMotor
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor
 import org.firstinspires.ftc.teamcode.Methods
-import org.firstinspires.ftc.teamcode.autonomous.PoseStorage
-import org.firstinspires.ftc.teamcode.drive.advanced.SampleMecanumDriveCancelable
 
 @TeleOp(name = "STATES TELEOP", group = "AAA")
 class StatesTeleop: Methods() {

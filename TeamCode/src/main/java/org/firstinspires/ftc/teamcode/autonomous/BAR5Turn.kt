@@ -60,30 +60,30 @@ class BAR5Turn : Methods() {
 
                     //SAMPLE1
                 .UNSTABLE_addTemporalMarkerOffset(1.0){horizontalSlideTo(600,1.0)}
-                .splineTo(Vector2d(36.05, -29.0), Math.toRadians(40.00))
+                .splineTo(Vector2d(30.05, -35.0), Math.toRadians(40.00))
                 .UNSTABLE_addTemporalMarkerOffset(-0.3){inRotationServo!!.position = inRotationPick}
                 .UNSTABLE_addTemporalMarkerOffset(0.0){verticalSlideTo(0,0.3)}
-                .lineToLinearHeading(Pose2d(37.03, -46.07, Math.toRadians(-30.00)))
+                .lineToLinearHeading(Pose2d(34.03, -46.07, Math.toRadians(-30.00)))
                 .UNSTABLE_addTemporalMarkerOffset(0.0){inRotationServo!!.position = inRotationUpAuto}
 
                     //SAMPLE2
-                .lineToLinearHeading(Pose2d(46.26, -29.37, Math.toRadians(35.00)))
+                .lineToLinearHeading(Pose2d(36.26, -35.0, Math.toRadians(35.00)))
                 .UNSTABLE_addTemporalMarkerOffset(-0.2){inRotationServo!!.position = inRotationPick}
-                .lineToLinearHeading(Pose2d(43.71, -45.68, Math.toRadians(-35.00)))
+                .lineToLinearHeading(Pose2d(40.71, -45.68, Math.toRadians(-35.00)))
                 .UNSTABLE_addTemporalMarkerOffset(-0.2){inRotationServo!!.position = inRotationUpAuto}
                 .UNSTABLE_addTemporalMarkerOffset(0.0){horizontalSlideTo(400,1.0)}
 
                     //SAMPLE 3
-                .lineToLinearHeading(Pose2d(56.87, -28.76, Math.toRadians(35.00)))
+                .lineToLinearHeading(Pose2d(46.87, -35.0, Math.toRadians(35.00)))
                 .UNSTABLE_addTemporalMarkerOffset(-0.2){inRotationServo!!.position = inRotationPick}
                 .UNSTABLE_addTemporalMarkerOffset(0.0){
                     horizontalSlideTo(300, 0.1)
                     outRotationServo!!.position = outRotationFrontWall
                     outSwivelServo!!.position = outSwivelPerpFront
                 }
-                .lineToLinearHeading(Pose2d(45.44, -45.20, Math.toRadians(-30.00)))
-                .UNSTABLE_addTemporalMarkerOffset(-1.0){inRotationServo!!.position = inRotationUpAuto}
-                .UNSTABLE_addTemporalMarkerOffset(-1.0){horizontalSlideTo(0, 1.0)}
+                .lineToLinearHeading(Pose2d(48.44, -45.20, Math.toRadians(-30.00)))
+                .UNSTABLE_addTemporalMarkerOffset(-0.5){inRotationServo!!.position = inRotationUpAuto}
+                .UNSTABLE_addTemporalMarkerOffset(-0.5){horizontalSlideTo(0, 1.0)}
 
                 .setVelConstraint(slowConstraint)
                 .splineToLinearHeading(Pose2d(47.44, -60.20, Math.toRadians(90.00)), Math.toRadians(-90.0))

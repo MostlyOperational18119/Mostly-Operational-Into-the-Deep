@@ -130,7 +130,7 @@ class BASKET6 : Methods() {
                     intakeMotor!!.power = -1.0
                 }
 
-                .setVelConstraint(thirdSlowConstraint)
+                .setVelConstraint(slowConstraint)
                 .setReversed(true)
                 .lineToLinearHeading(Pose2d(-60.0, -60.0, Math.toRadians(45.00)))
                 .setReversed(false)

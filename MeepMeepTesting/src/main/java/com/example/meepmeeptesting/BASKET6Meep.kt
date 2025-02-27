@@ -8,9 +8,8 @@ import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityCons
 import com.acmerobotics.roadrunner.trajectory.constraints.TranslationalVelocityConstraint
 import org.rowlandhall.meepmeep.roadrunner.DriveShim
 import org.rowlandhall.meepmeep.roadrunner.trajectorysequence.TrajectorySequence
-import java.util.Arrays
 
-class BASKET7Meep : Auto {
+class BASKET6Meep : Auto {
     val slowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(listOf(
         TranslationalVelocityConstraint(12.0),
         AngularVelocityConstraint(1.2)))
@@ -47,7 +46,7 @@ class BASKET7Meep : Auto {
             .waitSeconds(1.2)
 
             //BASKET2
-            .setVelConstraint(thirdSlowConstraint)
+            .setVelConstraint(slowConstraint)
             .setReversed(true)
             .lineToLinearHeading(Pose2d(-60.0, -60.0, Math.toRadians(45.00)))
             .setReversed(false)

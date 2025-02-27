@@ -26,16 +26,16 @@ class BAR5Meep : Auto {
             .setReversed(false)
 
             //SAMPLE1
-            .splineTo(Vector2d(36.05, -29.0), Math.toRadians(40.00))
-            .lineToLinearHeading(Pose2d(37.03, -46.07, Math.toRadians(-30.00)))
+            .splineTo(Vector2d(30.05, -35.0), Math.toRadians(40.00))
+            .lineToLinearHeading(Pose2d(34.03, -46.07, Math.toRadians(-30.00)))
 
             //SAMPLE2
-            .lineToLinearHeading(Pose2d(46.26, -29.37, Math.toRadians(35.00)))
-            .lineToLinearHeading(Pose2d(43.71, -45.68, Math.toRadians(-35.00)))
+            .lineToLinearHeading(Pose2d(36.26, -35.0, Math.toRadians(35.00)))
+            .lineToLinearHeading(Pose2d(40.71, -45.68, Math.toRadians(-35.00)))
 
             //SAMPLE 3
-            .lineToLinearHeading(Pose2d(56.87, -28.76, Math.toRadians(35.00)))
-            .lineToLinearHeading(Pose2d(45.44, -45.20, Math.toRadians(-30.00)))
+            .lineToLinearHeading(Pose2d(46.87, -35.0, Math.toRadians(35.00)))
+            .lineToLinearHeading(Pose2d(48.44, -45.20, Math.toRadians(-30.00)))
 
             //PICK1
             .setVelConstraint(slowConstraint)

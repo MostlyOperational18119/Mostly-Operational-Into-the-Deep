@@ -74,20 +74,20 @@ class BAR5Turn : Methods() {
                 .UNSTABLE_addTemporalMarkerOffset(0.0){horizontalSlideTo(400,1.0)}
 
                     //SAMPLE 3
-                .lineToLinearHeading(Pose2d(57.87, -29.76, Math.toRadians(35.00)))
+                .lineToLinearHeading(Pose2d(56.87, -28.76, Math.toRadians(35.00)))
                 .UNSTABLE_addTemporalMarkerOffset(-0.2){inRotationServo!!.position = inRotationPick}
                 .UNSTABLE_addTemporalMarkerOffset(0.0){
                     horizontalSlideTo(300, 0.1)
                     outRotationServo!!.position = outRotationFrontWall
                     outSwivelServo!!.position = outSwivelPerpFront
                 }
-                .setVelConstraint(slowConstraint)
-                .setReversed(true)
-                .splineToLinearHeading(Pose2d(47.44, -60.20, Math.toRadians(-90.00)), Math.toRadians(-90.0))
-                .setReversed(false)
-                .resetConstraints()
+                .lineToLinearHeading(Pose2d(45.44, -45.20, Math.toRadians(-30.00)))
                 .UNSTABLE_addTemporalMarkerOffset(-1.0){inRotationServo!!.position = inRotationUpAuto}
                 .UNSTABLE_addTemporalMarkerOffset(-1.0){horizontalSlideTo(0, 1.0)}
+
+                .setVelConstraint(slowConstraint)
+                .splineToLinearHeading(Pose2d(47.44, -60.20, Math.toRadians(90.00)), Math.toRadians(-90.0))
+                .resetConstraints()
 
                 //PICK 1
                 .UNSTABLE_addTemporalMarkerOffset(-0.2){outClawServo!!.position = outClawClose}
@@ -97,9 +97,7 @@ class BAR5Turn : Methods() {
                     outSwivelServo!!.position = outSwivelPerpBack
                 }
                 //BAR 1
-                .setReversed(true)
                 .lineToConstantHeading(Vector2d(-4.0, -33.5))
-                .setReversed(false)
                 .UNSTABLE_addTemporalMarkerOffset(-0.2) { outRotationServo!!.position = outRotationBackPlace }
                 .UNSTABLE_addTemporalMarkerOffset(0.0) { outClawServo!!.position = outClawOpen}
                 .UNSTABLE_addTemporalMarkerOffset(0.2) {
@@ -109,7 +107,9 @@ class BAR5Turn : Methods() {
                 }
 
                 //PICK 2
-                .splineToLinearHeading(Pose2d(47.44, -60.20,Math.toRadians(90.0)), Math.toRadians(-90.00))
+                .setReversed(true)
+                .splineToConstantHeading(Vector2d(47.44, -60.20), Math.toRadians(-90.00))
+                .setReversed(false)
                 .UNSTABLE_addTemporalMarkerOffset(-0.2){outClawServo!!.position = outClawClose}
                 .UNSTABLE_addTemporalMarkerOffset(0.0) {
                     verticalSlideTo(verticalSlideBar, 1.0)

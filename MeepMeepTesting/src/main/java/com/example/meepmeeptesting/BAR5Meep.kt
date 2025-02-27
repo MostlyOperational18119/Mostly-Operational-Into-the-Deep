@@ -14,8 +14,8 @@ class BAR5Meep : Auto {
 
     val slowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(
         Arrays.asList(
-            TranslationalVelocityConstraint(30.0),
-            AngularVelocityConstraint(2.0)
+            TranslationalVelocityConstraint(20.0),
+            AngularVelocityConstraint(3.0)
         )
     )
 
@@ -35,21 +35,21 @@ class BAR5Meep : Auto {
 
             //SAMPLE 3
             .lineToLinearHeading(Pose2d(56.87, -28.76, Math.toRadians(35.00)))
-            .setVelConstraint(slowConstraint)
-            .setReversed(true)
-            .splineToLinearHeading(Pose2d(47.44, -60.20, Math.toRadians(-90.00)), Math.toRadians(-90.0))
-            .setReversed(false)
-            .resetConstraints()
+            .lineToLinearHeading(Pose2d(45.44, -45.20, Math.toRadians(-30.00)))
 
             //PICK1
+            .setVelConstraint(slowConstraint)
+            .splineToLinearHeading(Pose2d(47.44, -60.20, Math.toRadians(90.00)), Math.toRadians(-90.0))
+            .resetConstraints()
+
             //BAR 1
-            .setReversed(true)
             .lineToConstantHeading(Vector2d(-4.0, -33.5))
-            .setReversed(false)
 
             //PICK2
-            .splineToLinearHeading(Pose2d(47.44, -60.20,Math.toRadians(90.0)), Math.toRadians(-90.00))
-            //BAR 2
+            .setReversed(true)
+            .splineToConstantHeading(Vector2d(47.44, -60.20), Math.toRadians(-90.00))
+            .setReversed(false)
+            //BAR 3
             .lineToConstantHeading(Vector2d(-2.0, -33.5))
 
             //PICK3

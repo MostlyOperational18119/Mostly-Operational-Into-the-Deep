@@ -296,10 +296,10 @@ class BASKET6 : Methods() {
             telemetry.addLine(colorSeen)
             telemetry.update()
             colors = colorSensor!!.normalizedColors
-            if (colors!!.green > 0.6){ colorSeen = "yellow"; moveOn = true }
-            else if (colors!!.red > 0.6){ colorSeen = "red"; moveOn = true }
-            else if (colors!!.blue > 0.6){ colorSeen= "blue"; moveOn = true }
-            if (elapsedTime.time() > 1.2){ moveOn = true }
+            if (colors!!.green > 0.6){ colorSeen = "yellow"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update()}
+            else if (colors!!.red > 0.6){ colorSeen = "red"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
+            else if (colors!!.blue > 0.6){ colorSeen= "blue"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
+            if (elapsedTime.time() > 1.2){ moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
         }
 
         drive!!.followTrajectorySequence(basket2)
@@ -310,10 +310,10 @@ class BASKET6 : Methods() {
             telemetry.addLine(colorSeen)
             telemetry.update()
             colors = colorSensor!!.normalizedColors
-            if (colors!!.green > 0.6){ colorSeen = "yellow"; moveOn = true }
-            else if (colors!!.red > 0.6){ colorSeen = "red"; moveOn = true }
-            else if (colors!!.blue > 0.6){ colorSeen= "blue"; moveOn = true }
-            if (elapsedTime.time() > 1.2){ moveOn = true }
+            if (colors!!.green > 0.6){ colorSeen = "yellow"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
+            else if (colors!!.red > 0.6){ colorSeen = "red"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
+            else if (colors!!.blue > 0.6){ colorSeen= "blue"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
+            if (elapsedTime.time() > 1.2){ moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
         }
 
         drive!!.followTrajectorySequence(basket3)
@@ -324,10 +324,10 @@ class BASKET6 : Methods() {
             telemetry.addLine(colorSeen)
             telemetry.update()
             colors = colorSensor!!.normalizedColors
-            if (colors!!.green > 0.6){ colorSeen = "yellow"; moveOn = true }
-            else if (colors!!.red > 0.6){ colorSeen = "red"; moveOn = true }
-            else if (colors!!.blue > 0.6){ colorSeen= "blue"; moveOn = true }
-            if (elapsedTime.time() > 1.2){ moveOn = true }
+            if (colors!!.green > 0.6){ colorSeen = "yellow"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
+            else if (colors!!.red > 0.6){ colorSeen = "red"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
+            else if (colors!!.blue > 0.6){ colorSeen= "blue"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
+            if (elapsedTime.time() > 1.2){ moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
         }
 
         drive!!.followTrajectorySequence(basket4)
@@ -342,10 +342,10 @@ class BASKET6 : Methods() {
             telemetry.addLine(colorSeen)
             telemetry.update()
             colors = colorSensor!!.normalizedColors
-            if (colors!!.green > 0.6){ colorSeen = "yellow"; moveOn = true }
-            else if (colors!!.red > 0.6){ colorSeen = "red"; moveOn = true }
-            else if (colors!!.blue > 0.6){ colorSeen= "blue"; moveOn = true }
-            if (elapsedTime.time() > 1.5){ moveOn = true }
+            if (colors!!.green > 0.6){ colorSeen = "yellow"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
+            else if (colors!!.red > 0.6){ colorSeen = "red"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
+            else if (colors!!.blue > 0.6){ colorSeen= "blue"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
+            if (elapsedTime.time() > 1.5){ moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
         }
 
         if (startingColor == "blue" && colorSeen == "red"){ spitOut(2000);  requestOpModeStop() }

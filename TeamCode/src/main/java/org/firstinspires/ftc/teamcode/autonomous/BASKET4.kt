@@ -15,7 +15,7 @@ import java.util.Arrays
 @Autonomous(name = "BASKET4", group = "AAAA")
 class BASKET4 : Methods() {
     override fun runOpMode() {
-        drive = SampleMecanumDriveCancelable(hardwareMap)
+        initOdometry()
         initMotors()
         transferServo = hardwareMap.servo["Transfer"]
         transferServo!!.position = transferServoClose

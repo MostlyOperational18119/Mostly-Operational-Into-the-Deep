@@ -19,7 +19,7 @@ import java.util.Arrays
 
 class BAR5Turn : Methods() {
     override fun runOpMode() {
-        drive = SampleMecanumDriveCancelable(hardwareMap)
+        initOdometry()
         initMotors()
 
         transferServo = hardwareMap.servo["Transfer"]

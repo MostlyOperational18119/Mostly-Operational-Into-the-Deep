@@ -86,6 +86,6 @@ class BAR2 : Methods() {
         sleep(500)
 
         while (opModeIsActive() && !isStopRequested) { drive!!.update() }
-        PoseStorage.currentPose = drive!!.poseEstimate
+        //PoseStorage.currentPose = drive!!.poseEstimate
     }
 }

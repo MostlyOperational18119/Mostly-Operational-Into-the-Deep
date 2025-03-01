@@ -85,7 +85,7 @@ class StatesTeleop: Methods() {
                         drive!!.poseEstimate = Pose2d(47.44, -60.20, Math.toRadians(90.0))
                     }
 
-                    if (controller1.dpad_right && !(previousController1.dpad_right)) {
+                    if (controller1.dpad_down && !(previousController1.dpad_down)) {
                         val teleopBasket = drive!!.trajectorySequenceBuilder(drive!!.poseEstimate)
                             .setReversed(true)
                             .lineToLinearHeading(basketPose)
@@ -95,13 +95,26 @@ class StatesTeleop: Methods() {
                         automatedMovementToggle = AutomaticMovementState.Auto
                     }
                     if (controller1.dpad_left && !previousController1.dpad_left) {
+                        outSwivelServo!!.position = outSwivelPerpFront
+                        outClawServo!!.position = outClawClose
+                        outClawToggle = true
+                        outRotationServo!!.position = outRotationUp
+                        verticalSlideTo(verticalSlideBar, 1.0)
+                        verticalHeight = verticalSlideBar
+
                         val teleopBar =  drive!!.trajectorySequenceBuilder(drive!!.poseEstimate)
                             .lineToLinearHeading(barPose)
                             .build()
                         drive!!.followTrajectorySequenceAsync(teleopBar)
                         automatedMovementToggle = AutomaticMovementState.Auto
                     }
-                    if (controller1.dpad_down && !previousController1.dpad_down) {
+                    if (controller1.dpad_right && !previousController1.dpad_right) {
+                        outSwivelServo!!.position = outSwivelPerpBack
+                        outClawServo!!.position = outClawOpen
+                        outClawToggle = false
+                        outRotationServo!!.position = outRotationBackWall
+                        verticalSlideTo(0, 1.0)
+                        verticalHeight = 0
                         val teleopPickup = drive!!.trajectorySequenceBuilder(drive!!.poseEstimate)
                             .setReversed(true)
                             .splineToConstantHeading(clipPickVector, Math.toRadians(-90.00))
@@ -178,6 +191,9 @@ class StatesTeleop: Methods() {
                         verticalHeight = verticalSlideBar
                         outSwivelServo!!.position = outSwivelPerpFront
                         outRotationServo!!.position = outRotationFrontPlace
+                        sleep(500)
+                        outClawServo!!.position = outClawOpen
+                        outClawToggle = false
                     }
                     if (controller1.x && !previousController1.x){
                         verticalSlideTo(verticalSlideBar, 1.0)
@@ -238,9 +254,9 @@ class StatesTeleop: Methods() {
                     when (verticalSlideToggle) {
                         VerticalSlideState.Manual -> {
                             if (rightY2!! > 0) {
-                                verticalSlideTo(4000, (rightY2 as Double) / 1.5)
+                                verticalSlideTo(3000, (rightY2 as Double) / 1.3)
                             } else if (rightY2!! < 0 && slideVertical!!.currentPosition > 0) {
-                                verticalSlideTo(0, -(rightY2 as Double) / 1.5)
+                                verticalSlideTo(0, -(rightY2 as Double) / 1.3)
                             }
                             // This part here is for holding power
                             else if (controller2.right_stick_y.toDouble() == 0.0 && previousController2.right_stick_y.toDouble() != 0.0) {
@@ -277,9 +293,9 @@ class StatesTeleop: Methods() {
                         inStopServo!!.position = inStopAutoOpen
                     }
                     if (elapsedTime.time() > 0.3){
-                        verticalSlideTo(40,1.0)
+                        verticalSlideTo(20,1.0)
                     }
-                    if ((slideVertical!!.currentPosition < 50) && (elapsedTime.time() > timeHor + 0.6)){
+                    if ((slideVertical!!.currentPosition < 45) && (elapsedTime.time() > timeHor + 0.6)){
                         automaticTransferToggle = AutomaticTransferState.Pickup
                         doOnce = false
                     }

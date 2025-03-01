@@ -43,6 +43,7 @@ class BASKET6Meep : Auto {
 
             //SAMPLE2
             .lineToLinearHeading(Pose2d(-49.0, -43.3, Math.toRadians(90.0)))
+            //.lineToLinearHeading(Pose2d(-49.0, -43.3, Math.toRadians(90.0)))
             .waitSeconds(1.2)
 
             //BASKET2
@@ -54,6 +55,7 @@ class BASKET6Meep : Auto {
 
             //SAMPLE3
             .lineToLinearHeading(Pose2d(-58.5, -43.3, Math.toRadians(90.00)))
+            //.lineToLinearHeading(Pose2d(-58.5, -43.3, Math.toRadians(90.0)))
             .waitSeconds(1.2)
 
             //BASKET3
@@ -64,7 +66,8 @@ class BASKET6Meep : Auto {
             .resetConstraints()
 
             //SAMPLE4
-            .lineToLinearHeading(Pose2d(-60.5, -46.5, Math.toRadians(118.00)))
+            .lineToLinearHeading(Pose2d(-57.5, -46.5, Math.toRadians(125.00)))
+            //.lineToLinearHeading(Pose2d(-57.5, -46.5, Math.toRadians(125.00)))
             .waitSeconds(1.2)
 
             //BASKET4
@@ -76,6 +79,8 @@ class BASKET6Meep : Auto {
 
             //SAMPLE5
             .splineTo(Vector2d(-24.5, -11.3), Math.toRadians(0.0))
+//            .turn(Math.toRadians(-30.0))
+//            .splineTo(Vector2d(-24.5, -11.5), Math.toRadians(0.0))
             .waitSeconds(1.5)
 
             //BASKET5

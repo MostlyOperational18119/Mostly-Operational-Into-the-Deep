@@ -31,8 +31,8 @@ abstract class Methods : LinearOpMode() {
     val outClawClose = 0.6 //
     val outClawOpen = 0.43 //
 
-    val outSwivelPerpBack = 0.04 //
-    val outSwivelPerpFront = 0.69 //
+    val outSwivelPerpBack = 0.9 //
+    val outSwivelPerpFront = 0.23 //
 
     var outRotationBackPlace = 0.1
     var outRotationBackWall = 0.16
@@ -46,16 +46,16 @@ abstract class Methods : LinearOpMode() {
     val inRotationPick = 0.97//
     val inRotationUpAuto = 0.8 //
     val inRotationUp = 0.18 //
-    val inRotationTransfer = 0.52 //
-    val inRotationTransferMinus = 0.52
+    val inRotationTransfer = 0.49 ///
+    val inRotationTransferMinus = 0.49
 
     val inStopClose = 0.34
     val inStopAutoOpen = 0.04
     val inStopOpen = 0.04
 
-    val verticalSlideHigh = 2700 //4550
-    val verticalSlideBar = 650
-    val verticalSlideLow = 1250
+    val verticalSlideHigh = 1850 //4550
+    val verticalSlideBar = 475
+    val verticalSlideLow = 800
     val horizontalSlideExtend = 950
 
     var outClawToggle = false
@@ -78,10 +78,10 @@ abstract class Methods : LinearOpMode() {
 
     var drive: SampleMecanumDriveCancelable? = null
     val basketVector = Vector2d(-57.0, -57.0)
-    val barVector = Vector2d(5.0, -33.5)
-    val clipPickVector = Vector2d(47.44, -60.20)
-    val basketPose = Pose2d(-57.0, -57.0, Math.toRadians(45.00))
-    val barPose = Pose2d(5.0, -33.5, Math.toRadians(90.0))
+    val barVector = Vector2d(5.0, -35.5)
+    val clipPickVector = Vector2d(47.44, -62.50)
+    val basketPose = Pose2d(-60.0, -59.0, Math.toRadians(45.00))
+    val barPose = Pose2d(0.0, -30.0, Math.toRadians(90.0))
     val clipPickPose = Pose2d()
 
     var horizontalSlideToggle = HorizontalSlideState.Manual
@@ -269,6 +269,23 @@ abstract class Methods : LinearOpMode() {
         }
 
         switchPipeline(limelight, fileName)
+    }
+
+    fun formatSnapScript(colorLower: List<Int>, colorUpper: List<Int>): String {
+        assert(colorLower.size == 3)
+        assert(colorUpper.size == 3)
+
+        val ss = LimeLightPipelines.SnapScript
+
+        // Good enough, but could be better
+        ss.replace("cl0", colorLower[0].toString())
+        ss.replace("cl1", colorLower[1].toString())
+        ss.replace("cl2", colorLower[2].toString())
+        ss.replace("cu0", colorUpper[0].toString())
+        ss.replace("cu1", colorUpper[1].toString())
+        ss.replace("cu2", colorUpper[2].toString())
+
+        return ss
     }
 
     //insideJokes

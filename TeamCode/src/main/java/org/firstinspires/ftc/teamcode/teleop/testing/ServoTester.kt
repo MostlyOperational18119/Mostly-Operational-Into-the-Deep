@@ -63,6 +63,13 @@ class ServoTester : LinearOpMode() {
                 outClawServo.position -= 0.01
             }
 
+            if (currentGamepad2.dpad_up && !previousGamepad2.dpad_up ) {
+                outSwivelServo.position += 0.01
+            }
+            if (currentGamepad2.dpad_down  && !previousGamepad2.dpad_down) {
+                outSwivelServo.position -= 0.01
+            }
+
             telemetry.addData("transferServo position (AB):", transferServo.position)
             telemetry.addData("outClaw position:", outClawServo.position)
             telemetry.addData("outRotation position:", outRotationServo.position)

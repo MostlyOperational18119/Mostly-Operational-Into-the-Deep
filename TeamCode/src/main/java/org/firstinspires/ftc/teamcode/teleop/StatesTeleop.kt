@@ -174,7 +174,7 @@ class StatesTeleop: Methods() {
                     //INTAKE MOTOR
                     if (controller2.right_trigger > 0.5 && !(previousController2.right_trigger > 0.5)){ intakeInToggle  = !intakeInToggle;  intakeOutToggle = false }
                     if (controller2.left_trigger > 0.5 && !(previousController2.left_trigger > 0.5)){ intakeOutToggle = !intakeOutToggle; intakeInToggle = false  }
-                    if (intakeInToggle) { intakeMotor?.power = 0.5 }
+                    if (intakeInToggle) { intakeMotor?.power = 0.4 }
                     else if (intakeOutToggle) { intakeMotor?.power = -0.8 }
                     else { intakeMotor?.power = 0.0 }
 
@@ -235,14 +235,14 @@ class StatesTeleop: Methods() {
                         HorizontalSlideState.Manual -> {
                             if (leftY2!! > 0 && slideHorizontal!!.currentPosition < 950) {
                                 horizontalSlideTo(950,(leftY2 as Double)*0.8)
-                            } else if (leftY2!! < 0 && slideHorizontal!!.currentPosition > 0) {
-                                horizontalSlideTo(0, -(leftY2 as Double)*0.8)
+                            } else if (leftY2!! < 0 && slideHorizontal!!.currentPosition > -50) {
+                                horizontalSlideTo(-50, -(leftY2 as Double)*0.8)
                             } else {
                                 slideHorizontal!!.targetPosition = slideHorizontal!!.currentPosition
                                 slideHorizontal!!.power = 0.1
                             }
                         }
-                        HorizontalSlideState.Floor  -> { horizontalSlideTo(0,1.0);   horizontalBackToManual() }
+                        HorizontalSlideState.Floor  -> { horizontalSlideTo(-20,1.0);   horizontalBackToManual() }
                         HorizontalSlideState.Extend -> { horizontalSlideTo(950,1.0); horizontalBackToManual() }
                     }
 
@@ -280,7 +280,7 @@ class StatesTeleop: Methods() {
                     outClawServo!!.position = outClawOpen
                     inRotationServo!!.position = inRotationTransferMinus
                     intakeMotor?.power = 1.0
-                    horizontalSlideTo(-20,0.8)
+                    horizontalSlideTo(-30,0.8)
                     verticalSlideTo(1300,1.0)
                     transferServo!!.position = transferServoClose
                     outSwivelServo!!.position = outSwivelPerpBack
@@ -297,9 +297,9 @@ class StatesTeleop: Methods() {
                         outRotationServo!!.position = outRotationCenter
                     }
                     if (elapsedTime.time() > 0.4){
-                        verticalSlideTo(40,1.0)
+                        verticalSlideTo(20,1.0)
                     }
-                    if ((slideVertical!!.currentPosition < 70) && (elapsedTime.time() > timeHor + 0.7)){
+                    if ((slideVertical!!.currentPosition < 55) && (elapsedTime.time() > timeHor + 0.7)){
                         automaticTransferToggle = AutomaticTransferState.Pickup
                         doOnce = false
                     }
@@ -333,6 +333,7 @@ class StatesTeleop: Methods() {
                     inRotationToggle = false
                     intakeInToggle = false
                     outClawToggle = true
+                    transferServoToggle = false
                     automaticTransferToggle = AutomaticTransferState.Manual
                 }
             }

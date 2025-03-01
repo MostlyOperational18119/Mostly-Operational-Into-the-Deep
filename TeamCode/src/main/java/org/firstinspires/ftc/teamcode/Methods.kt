@@ -28,8 +28,8 @@ abstract class Methods : LinearOpMode() {
     val transferServoClose = 0.73 //
     val transferServoOpen = 0.5 //
 
-    val outClawClose = 0.89 //
-    val outClawOpen = 0.71 //
+    val outClawClose = 0.41 //
+    val outClawOpen = 0.28 //
 
 
     val outSwivelPerpBack = 0.01//
@@ -82,7 +82,7 @@ abstract class Methods : LinearOpMode() {
     val barVector = Vector2d(5.0, -35.5)
     val clipPickVector = Vector2d(47.44, -62.50)
     val basketPose = Pose2d(-60.0, -59.0, Math.toRadians(45.00))
-    val barPose = Pose2d(0.0, -30.0, Math.toRadians(90.0))
+    val barPose = Pose2d(0.0, -29.5, Math.toRadians(90.0))
     val clipPickPose = Pose2d()
 
     var horizontalSlideToggle = HorizontalSlideState.Manual
@@ -122,7 +122,7 @@ abstract class Methods : LinearOpMode() {
     // Places the sample
 
     fun spitOut(milliseconds : Long){
-        intakeMotor!!.power = -1.0
+        intakeMotor!!.power = -0.4
         sleep(milliseconds)
         intakeMotor!!.power = 0.0
     }

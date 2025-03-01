@@ -70,7 +70,7 @@ class BASKET6 : Methods() {
                 .UNSTABLE_addTemporalMarkerOffset(1.0) {
                     inRotationServo!!.position = inRotationPick
                     inStopServo!!.position = inStopClose
-                    intakeMotor!!.power = 1.0
+                    intakeMotor!!.power = 0.6
                 }
                 .splineToLinearHeading(Pose2d(19.5, -64.0, Math.toRadians(-8.0)), Math.toRadians(-8.0))
                 .UNSTABLE_addTemporalMarkerOffset(-0.2) {
@@ -94,8 +94,8 @@ class BASKET6 : Methods() {
                 .addTemporalMarker(0.5) {
                     inStopServo!!.position = inStopAutoOpen
                 }
-                .addTemporalMarker(0.8) { outClawServo!!.position = outClawClose }
-                .addTemporalMarker(0.95) {
+                .addTemporalMarker(0.9) { outClawServo!!.position = outClawClose }
+                .addTemporalMarker(1.1) {
                     transferServo!!.position = transferServoOpen
                     verticalSlideTo(verticalSlideHigh, 1.0)
                     outRotationServo!!.position = outRotationUp
@@ -117,7 +117,7 @@ class BASKET6 : Methods() {
                 .UNSTABLE_addTemporalMarkerOffset(0.0) {
                     verticalSlideTo(30, 0.5)
                     outRotationServo!!.position = outRotationCenter
-                    intakeMotor!!.power = 1.0
+                    intakeMotor!!.power = 0.6
                     transferServo!!.position = transferServoClose
                 }
                 .UNSTABLE_addDisplacementMarkerOffset(5.0) { horizontalSlideTo(800, 0.4) }
@@ -142,10 +142,10 @@ class BASKET6 : Methods() {
                 .addTemporalMarker(0.5) {
                     inStopServo!!.position = inStopAutoOpen
                 }
-                .addTemporalMarker(0.8) {
+                .addTemporalMarker(0.9) {
                     outClawServo!!.position = outClawClose
                 }
-                .addTemporalMarker(0.95) {
+                .addTemporalMarker(1.1) {
                     transferServo!!.position = transferServoOpen
                     verticalSlideTo(verticalSlideHigh, 1.0)
                     outRotationServo!!.position = outRotationUp
@@ -168,7 +168,7 @@ class BASKET6 : Methods() {
                     inStopServo!!.position = inStopClose
                     verticalSlideTo(30, 0.5)
                     outRotationServo!!.position = outRotationCenter
-                    intakeMotor!!.power = 1.0
+                    intakeMotor!!.power = 0.6
                     transferServo!!.position = transferServoClose
                 }
                 //SAMPLE3
@@ -192,10 +192,10 @@ class BASKET6 : Methods() {
                 .addTemporalMarker(0.5) {
                     inStopServo!!.position = inStopAutoOpen
                 }
-                .addTemporalMarker(0.8) {
+                .addTemporalMarker(0.9) {
                     outClawServo!!.position = outClawClose
                 }
-                .addTemporalMarker(0.95) {
+                .addTemporalMarker(1.1) {
                     verticalSlideTo(verticalSlideHigh, 1.0)
                     outRotationServo!!.position = outRotationUp
                     horizontalSlideTo(300, 1.0)
@@ -216,7 +216,7 @@ class BASKET6 : Methods() {
                 .UNSTABLE_addTemporalMarkerOffset(0.0) {
                     verticalSlideTo(30, 0.5)
                     outRotationServo!!.position = outRotationCenter
-                    intakeMotor!!.power = 1.0
+                    intakeMotor!!.power = 0.6
                     transferServo!!.position = transferServoClose
                     inStopServo!!.position = inStopClose
                 }
@@ -241,10 +241,10 @@ class BASKET6 : Methods() {
                 .addTemporalMarker(0.5) {
                     inStopServo!!.position = inStopAutoOpen
                 }
-                .addTemporalMarker(0.8) {
+                .addTemporalMarker(0.9) {
                     outClawServo!!.position = outClawClose
                 }
-                .addTemporalMarker(0.9) {
+                .addTemporalMarker(1.1) {
                     transferServo!!.position = transferServoOpen
                     verticalSlideTo(verticalSlideHigh, 1.0)
                     outRotationServo!!.position = outRotationUp
@@ -266,7 +266,7 @@ class BASKET6 : Methods() {
                     inStopServo!!.position = inStopClose
                     verticalSlideTo(30, 1.0)
                     outRotationServo!!.position = outRotationCenter
-                    intakeMotor!!.power = 0.7
+                    intakeMotor!!.power = 0.6
                     horizontalSlideTo(400, 1.0)
                     transferServo!!.position = transferServoClose
                     inRotationServo!!.position = inRotationTransfer
@@ -289,10 +289,10 @@ class BASKET6 : Methods() {
                 .addTemporalMarker(0.5) {
                     inStopServo!!.position = inStopAutoOpen
                 }
-                .addTemporalMarker(0.8) {
+                .addTemporalMarker(0.9) {
                     outClawServo!!.position = outClawClose
                 }
-                .addTemporalMarker(0.9) {
+                .addTemporalMarker(1.1) {
                     transferServo!!.position = transferServoOpen
                     verticalSlideTo(verticalSlideHigh, 1.0)
                     outRotationServo!!.position = outRotationUp

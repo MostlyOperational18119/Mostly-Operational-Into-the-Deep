@@ -10,6 +10,7 @@ class StatesTeleop: Methods() {
         initMotors()
         initServosAndSensorsSet()
         outRotationServo!!.position = outRotationCenter
+        outSwivelServo!!.position = outSwivelPerpFront
         insideJokes()
         initOdometry()
 
@@ -39,6 +40,7 @@ class StatesTeleop: Methods() {
             telemetry.addData("x: ", drive!!.poseEstimate.x)
             telemetry.addData("y: ", drive!!.poseEstimate.y)
             telemetry.addData("heading: ", drive!!.poseEstimate.heading)
+            telemetry.addData("outRotationSerov: ", outRotationServo!!.position)
             telemetry.update()
 
             leftY1 = -gamepad1.left_stick_y.toDouble()/speedDiv * otherReverse
@@ -172,7 +174,7 @@ class StatesTeleop: Methods() {
                     //INTAKE MOTOR
                     if (controller2.right_trigger > 0.5 && !(previousController2.right_trigger > 0.5)){ intakeInToggle  = !intakeInToggle;  intakeOutToggle = false }
                     if (controller2.left_trigger > 0.5 && !(previousController2.left_trigger > 0.5)){ intakeOutToggle = !intakeOutToggle; intakeInToggle = false  }
-                    if (intakeInToggle) { intakeMotor?.power = 0.8 }
+                    if (intakeInToggle) { intakeMotor?.power = 0.5 }
                     else if (intakeOutToggle) { intakeMotor?.power = -0.8 }
                     else { intakeMotor?.power = 0.0 }
 
@@ -204,7 +206,7 @@ class StatesTeleop: Methods() {
 
                     //OUT ROTATION SERVO
                     if (controller2.b && !previousController2.b){
-                        if (slideVertical!!.currentPosition > 1500){
+                        if (slideVertical!!.currentPosition > 800){
                             if (outRotation) {
                                 outRotationServo!!.position = outRotationFrontOut
                                 outSwivelServo!!.position = outSwivelPerpFront
@@ -275,12 +277,11 @@ class StatesTeleop: Methods() {
 
                 //TRANSFER SYSTEM
                 AutomaticTransferState.StartTransfer-> {
-                    outRotationServo!!.position = outRotationCenter
                     outClawServo!!.position = outClawOpen
                     inRotationServo!!.position = inRotationTransferMinus
-                    intakeMotor?.power = 0.7
-                    horizontalSlideTo(0,0.8)
-                    verticalSlideTo(1000,1.0)
+                    intakeMotor?.power = 1.0
+                    horizontalSlideTo(-20,0.8)
+                    verticalSlideTo(1300,1.0)
                     transferServo!!.position = transferServoClose
                     outSwivelServo!!.position = outSwivelPerpBack
                     if (!doOnce) {
@@ -292,10 +293,13 @@ class StatesTeleop: Methods() {
                         inRotationServo!!.position = inRotationTransfer
                         inStopServo!!.position = inStopAutoOpen
                     }
-                    if (elapsedTime.time() > 0.3){
-                        verticalSlideTo(20,1.0)
+                    if (elapsedTime.time() > 0.15){
+                        outRotationServo!!.position = outRotationCenter
                     }
-                    if ((slideVertical!!.currentPosition < 45) && (elapsedTime.time() > timeHor + 0.6)){
+                    if (elapsedTime.time() > 0.4){
+                        verticalSlideTo(40,1.0)
+                    }
+                    if ((slideVertical!!.currentPosition < 70) && (elapsedTime.time() > timeHor + 0.7)){
                         automaticTransferToggle = AutomaticTransferState.Pickup
                         doOnce = false
                     }
@@ -303,7 +307,7 @@ class StatesTeleop: Methods() {
                 AutomaticTransferState.Pickup -> {
                     outClawServo!!.position = outClawClose
                     if (!doOnce) { elapsedTime.reset(); doOnce = true }
-                    if (elapsedTime.time() > 0.3) {
+                    if (elapsedTime.time() > 0.4) {
                         automaticTransferToggle = AutomaticTransferState.ResetSlide
                         doOnce = false
                     }

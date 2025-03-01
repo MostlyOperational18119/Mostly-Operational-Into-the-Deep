@@ -271,6 +271,23 @@ abstract class Methods : LinearOpMode() {
         switchPipeline(limelight, fileName)
     }
 
+    fun formatSnapScript(colorLower: List<Int>, colorUpper: List<Int>): String {
+        assert(colorLower.size == 3)
+        assert(colorUpper.size == 3)
+
+        val ss = LimeLightPipelines.SnapScript
+
+        // Good enough, but could be better
+        ss.replace("cl0", colorLower[0].toString())
+        ss.replace("cl1", colorLower[1].toString())
+        ss.replace("cl2", colorLower[2].toString())
+        ss.replace("cu0", colorUpper[0].toString())
+        ss.replace("cu1", colorUpper[1].toString())
+        ss.replace("cu2", colorUpper[2].toString())
+
+        return ss
+    }
+
     //insideJokes
     fun insideJokes() {
         telemetry.addLine(when ((0..99).random()) {

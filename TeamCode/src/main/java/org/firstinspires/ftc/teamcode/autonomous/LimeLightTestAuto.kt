@@ -2,10 +2,12 @@ package org.firstinspires.ftc.teamcode.autonomous
 
 import com.qualcomm.hardware.limelightvision.Limelight3A
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
 import org.firstinspires.ftc.teamcode.Methods
 
 @Autonomous(name = "LimeLight Test Autonomous")
+@Disabled
 class LimeLightTestAuto : Methods() {
     override fun runOpMode() {
 //        val drive = SampleMecanumDriveCancelable(hardwareMap)

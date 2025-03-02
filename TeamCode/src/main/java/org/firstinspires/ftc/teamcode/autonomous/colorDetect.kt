@@ -2,12 +2,14 @@ package org.firstinspires.ftc.teamcode.autonomous
 
 import android.graphics.Color
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor
 import com.qualcomm.robotcore.hardware.NormalizedRGBA
 import org.firstinspires.ftc.teamcode.Methods
 
 
 @Autonomous(name = "Color", group = "Sensor")
+@Disabled
 class colorDetect: Methods() {
     override fun runOpMode() {
         var colors: NormalizedRGBA? = null

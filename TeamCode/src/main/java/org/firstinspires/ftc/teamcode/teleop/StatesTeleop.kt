@@ -21,9 +21,8 @@ class StatesTeleop: Methods() {
         transferServoToggle = false
 
         doOnce = false
-        var barUp = true
         var transferSide = true
-        var transferSideString = "Back Side"
+        var transferSideString : String
 
         var outRotation = false
         var reverseThing = false
@@ -40,7 +39,7 @@ class StatesTeleop: Methods() {
             telemetry.addData("x: ", drive!!.poseEstimate.x)
             telemetry.addData("y: ", drive!!.poseEstimate.y)
             telemetry.addData("heading: ", drive!!.poseEstimate.heading)
-            telemetry.addData("outRotationSerov: ", outRotationServo!!.position)
+            telemetry.addData("outRotationServo: ", outRotationServo!!.position)
             telemetry.update()
 
             leftY1 = -gamepad1.left_stick_y.toDouble()/speedDiv * otherReverse
@@ -84,7 +83,7 @@ class StatesTeleop: Methods() {
                     if (reverseThing ){ otherReverse = -1.0}
 
                     if (controller1.dpad_up && !(previousController1.dpad_up)) {
-                        drive!!.poseEstimate = Pose2d(47.44, -60.20, Math.toRadians(90.0))
+                        drive!!.poseEstimate = clipPickPose
                     }
 
                     if (controller1.dpad_down && !(previousController1.dpad_down)) {
@@ -97,13 +96,14 @@ class StatesTeleop: Methods() {
                         automatedMovementToggle = AutomaticMovementState.Auto
                     }
                     if (controller1.dpad_left && !previousController1.dpad_left) {
-                        outSwivelServo!!.position = outSwivelPerpFront
                         outClawServo!!.position = outClawClose
                         outClawToggle = true
+                        sleep(100)
+
+                        outSwivelServo!!.position = outSwivelPerpFront
                         outRotationServo!!.position = outRotationUp
                         verticalSlideTo(verticalSlideBar, 1.0)
                         verticalHeight = verticalSlideBar
-
                         val teleopBar =  drive!!.trajectorySequenceBuilder(drive!!.poseEstimate)
                             .lineToLinearHeading(barPose)
                             .build()
@@ -112,8 +112,6 @@ class StatesTeleop: Methods() {
                     }
                     if (controller1.dpad_right && !previousController1.dpad_right) {
                         outSwivelServo!!.position = outSwivelPerpBack
-                        outClawServo!!.position = outClawOpen
-                        outClawToggle = false
                         outRotationServo!!.position = outRotationBackWall
                         verticalSlideTo(0, 1.0)
                         verticalHeight = 0
@@ -143,16 +141,16 @@ class StatesTeleop: Methods() {
                     if (controller1.b && !previousController1.b){
                         transferSide = !transferSide
                     }
-                    if (transferSide){ transferSideString = "Back Side" }
-                    else {transferSideString = "Front Side"}
+                    transferSideString = if (transferSide){ "Back Side" }
+                    else { "Front Side" }
                     telemetry.addData("Transfer Side: ", transferSideString)
 
                     //COLOR DETECT
                     colors = colorSensor!!.normalizedColors
-                    if (colors!!.red > 0.6){ colorSeen = "red"}
-                    else if (colors!!.blue > 0.6){ colorSeen = "blue"}
-                    else if (colors!!.green > 0.2){ colorSeen = "yellow"}
-                    else{ colorSeen = "none "}
+                    colorSeen = if (colors!!.red > 0.6){ "red" }
+                    else if (colors!!.blue > 0.6) { "blue" }
+                    else if (colors!!.green > 0.2){ "yellow" }
+                    else{ "none " }
                     telemetry.addData("Color Seen: ", colorSeen)
 
                     //OUT CLAW
@@ -233,8 +231,8 @@ class StatesTeleop: Methods() {
                     }
                     when (horizontalSlideToggle) {
                         HorizontalSlideState.Manual -> {
-                            if (leftY2!! > 0 && slideHorizontal!!.currentPosition < 950) {
-                                horizontalSlideTo(950,(leftY2 as Double)*0.8)
+                            if (leftY2!! > 0 && slideHorizontal!!.currentPosition < horizontalSlideExtend) {
+                                horizontalSlideTo(horizontalSlideExtend,(leftY2 as Double)*0.8)
                             } else if (leftY2!! < 0 && slideHorizontal!!.currentPosition > -50) {
                                 horizontalSlideTo(-50, -(leftY2 as Double)*0.8)
                             } else {
@@ -242,8 +240,8 @@ class StatesTeleop: Methods() {
                                 slideHorizontal!!.power = 0.1
                             }
                         }
-                        HorizontalSlideState.Floor  -> { horizontalSlideTo(-20,1.0);   horizontalBackToManual() }
-                        HorizontalSlideState.Extend -> { horizontalSlideTo(950,1.0); horizontalBackToManual() }
+                        HorizontalSlideState.Floor  -> { horizontalSlideTo(-20,1.0);  horizontalBackToManual() }
+                        HorizontalSlideState.Extend -> { horizontalSlideTo(horizontalSlideExtend,1.0);  horizontalBackToManual() }
                     }
 
                     // VERTICAL SLIDE
@@ -256,9 +254,9 @@ class StatesTeleop: Methods() {
                     when (verticalSlideToggle) {
                         VerticalSlideState.Manual -> {
                             if (rightY2!! > 0) {
-                                verticalSlideTo(3000, (rightY2 as Double) / 1.3)
+                                verticalSlideTo(3000, (rightY2 as Double))
                             } else if (rightY2!! < 0 && slideVertical!!.currentPosition > 0) {
-                                verticalSlideTo(0, -(rightY2 as Double) / 1.3)
+                                verticalSlideTo(0, -(rightY2 as Double))
                             }
                             // This part here is for holding power
                             else if (controller2.right_stick_y.toDouble() == 0.0 && previousController2.right_stick_y.toDouble() != 0.0) {

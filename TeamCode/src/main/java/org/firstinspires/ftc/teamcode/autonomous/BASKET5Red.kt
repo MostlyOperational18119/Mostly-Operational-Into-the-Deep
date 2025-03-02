@@ -18,7 +18,7 @@ class BASKET5Red : Methods() {
         val autoTimer = ElapsedTime()
 
         initMotors()
-        initServosAndSensorsSet()
+        initServosAndSensorsNoSet()
         initOdometry()
         transferServo!!.position = transferServoClose
         outClawServo!!.position = outClawClose

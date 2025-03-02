@@ -10,7 +10,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.teamcode.Methods
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
-import java.util.Arrays
 
 
 @Autonomous(name = "BASKET5_BLUE", group = "AAAA")
@@ -20,7 +19,7 @@ class BASKET5Blue : Methods() {
         val autoTimer = ElapsedTime()
 
         initMotors()
-        initServosAndSensorsSet()
+        initServosAndSensorsNoSet()
         initOdometry()
         transferServo!!.position = transferServoClose
         outClawServo!!.position = outClawClose

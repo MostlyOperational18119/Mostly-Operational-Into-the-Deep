@@ -22,22 +22,16 @@ class BAR4Turn : Methods() {
     override fun runOpMode() {
         initOdometry()
         initMotors()
-
-        transferServo = hardwareMap.servo["Transfer"]
+        initServosAndSensorsNoSet()
         transferServo!!.position = transferServoOpen
-        outClawServo = hardwareMap.servo["OutClaw"]
         outClawServo!!.position = outClawClose
-        outRotationServo = hardwareMap.servo["OutRotation"]
-        outRotationServo!!.position = outRotationCenter
-        outSwivelServo = hardwareMap.servo["OutSwivel"]
-        inStopServo = hardwareMap.servo["InStop"]
-        inStopServo!!.position = inStopClose
-        inRotationServo = hardwareMap.servo["InRotation"]
-        inRotationServo!!.position = 1.0
+        outRotationServo!!.position = outRotationBackOut + 0.04
+        outSwivelServo!!.position = outSwivelPerpBack
+        inStopServo!!.position = inStopOpen
+        inRotationServo!!.position = inRotationUp
 
         drive!!.poseEstimate = Pose2d(14.5, -63.19, Math.toRadians(-90.00))
 
-        val accelConstraint: TrajectoryAccelerationConstraint = ProfileAccelerationConstraint(50.0)
         val slowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(
             Arrays.asList(
                 TranslationalVelocityConstraint(20.0),

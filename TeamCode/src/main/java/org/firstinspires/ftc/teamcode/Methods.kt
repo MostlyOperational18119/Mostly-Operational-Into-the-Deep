@@ -175,7 +175,7 @@ abstract class Methods : LinearOpMode() {
         inRotationServo = hardwareMap.servo["InRotation"]
     }
 
-    fun initServosAndSensorsSet() {
+    fun initServosAndSensorsNoSet() {
         transferServo = hardwareMap.servo["Transfer"]
         outClawServo = hardwareMap.servo["OutClaw"]
         outRotationServo = hardwareMap.servo["OutRotation"]

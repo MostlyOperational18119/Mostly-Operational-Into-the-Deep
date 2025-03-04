@@ -29,11 +29,11 @@ abstract class Methods : LinearOpMode() {
     val transferServoOpen = 0.5 //
 
     val outClawClose = 0.41 //
-    val outClawOpen = 0.28 //
+    val outClawOpen = 0.285 //
 
 
-    val outSwivelPerpBack = 0.01//
-    val outSwivelPerpFront = 0.69 //
+    val outSwivelPerpBack = 0.168//
+    val outSwivelPerpFront = 0.278 //
 
     var outRotationBackPlace = 0.1
     var outRotationBackWall = 0.16
@@ -42,17 +42,17 @@ abstract class Methods : LinearOpMode() {
     var outRotationFrontOut = 0.65
     var outRotationFrontWall = 0.72
     var outRotationFrontPlace = 0.78
-    val outRotationCenter = 0.96 // "center"
+    val outRotationCenter = 0.97 // "center"
 
-    val inRotationPick = 0.97//
-    val inRotationUpAuto = 0.8 //
-    val inRotationUp = 0.18 //
-    val inRotationTransfer = 0.49 ///
-    val inRotationTransferMinus = 0.49
+    val inRotationPick = 0.98//
+    val inRotationUpAuto = 0.7 //
+    val inRotationUp = 0.17 //
+    val inRotationTransfer = 0.45 ///
+    val inRotationTransferMinus = 0.45
 
-    val inStopClose = 0.34
-    val inStopAutoOpen = 0.04
-    val inStopOpen = 0.04
+    val inStopClose = 0.27
+    val inStopAutoOpen = 0.03
+    val inStopOpen = 0.03
 
     val verticalSlideHigh = 2000 //4550
     val verticalSlideBar = 475

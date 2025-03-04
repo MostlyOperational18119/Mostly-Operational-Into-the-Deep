@@ -284,7 +284,7 @@ class StatesTeleop: Methods() {
                     if (!doOnce) {
                         elapsedTime.reset()
                         doOnce = true
-                        timeHor = slideHorizontal!!.currentPosition * 0.0005
+                        timeHor = slideHorizontal!!.currentPosition * 0.001
                     }
                     if (slideHorizontal!!.currentPosition < 10){
                         inRotationServo!!.position = inRotationTransfer

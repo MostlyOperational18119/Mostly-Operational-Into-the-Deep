@@ -301,6 +301,17 @@ class BASKET5Red : Methods() {
                 .UNSTABLE_addTemporalMarkerOffset(-0.05) { outRotationServo!!.position = outRotationBackOut}
                 .UNSTABLE_addTemporalMarkerOffset(0.02) { outClawServo!!.position = outClawOpen }
                 .waitSeconds(0.13)
+
+                //SUBMERSIBLE
+                .UNSTABLE_addDisplacementMarkerOffset(0.0) {
+                    inStopServo!!.position = inStopClose
+                    verticalSlideTo(20, 1.0)
+                    outRotationServo!!.position = outRotationCenter
+                    intakeMotor!!.power = 0.0
+                    horizontalSlideTo(400, 1.0)
+                    inRotationServo!!.position = inRotationTransfer
+                }
+                .splineTo(Vector2d(-22.0, -8.5), Math.toRadians(0.0))
                 .build()
 
         while(!opModeIsActive()){
@@ -402,7 +413,7 @@ class BASKET5Red : Methods() {
         else if (startingColor == "red" && colorSeen == "blue"){ spitOut(2000);  requestOpModeStop() }
         else if (colorSeen == "none"){ spitOut(2000);  requestOpModeStop() }
 
-        if (autoTimer.time() < 26.0) {
+        if (autoTimer.time() < 26.5) {
             drive!!.followTrajectorySequence(subToBasket2)
             drive!!.updatePoseEstimate()
         }

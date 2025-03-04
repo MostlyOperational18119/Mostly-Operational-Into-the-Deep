@@ -417,10 +417,9 @@ class BASKET6Red : Methods() {
         else if (startingColor == "red" && colorSeen == "blue"){ spitOut(2000);  requestOpModeStop() }
         else if (colorSeen == "none"){ spitOut(2000);  requestOpModeStop() }
 
-        if (autoTimer.time() < 26.0) {
+        if (autoTimer.time() < 26.5) {
             drive!!.followTrajectorySequence(submersibleToBasket)
             drive!!.updatePoseEstimate()
-
         }
     }
 }

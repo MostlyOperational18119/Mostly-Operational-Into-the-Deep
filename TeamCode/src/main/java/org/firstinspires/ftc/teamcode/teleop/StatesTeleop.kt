@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.teleop
 
+import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.Methods
+import kotlin.math.abs
 
 @TeleOp(name = "STATES TELEOP", group = "AAA")
 class StatesTeleop: Methods() {
@@ -12,6 +14,7 @@ class StatesTeleop: Methods() {
         outSwivelServo!!.position = outSwivelPerpFront
         insideJokes()
         initOdometry()
+        drive!!.poseEstimate = Pose2d(-22.0, -8.5, Math.toRadians(0.0))
 
         outClawToggle = false
         inClawToggle = false
@@ -88,7 +91,7 @@ class StatesTeleop: Methods() {
                     if (controller1.dpad_down && !(previousController1.dpad_down)) {
                         val teleopBasket = drive!!.trajectorySequenceBuilder(drive!!.poseEstimate)
                             .setReversed(true)
-                            .lineToLinearHeading(basketPose)
+                            .splineToLinearHeading(basketPose, Math.toRadians(225.00))
                             .setReversed(false)
                             .build()
                         drive!!.followTrajectorySequenceAsync(teleopBasket)
@@ -124,6 +127,9 @@ class StatesTeleop: Methods() {
                     }
                 }
                 AutomaticMovementState.Auto ->{
+                    if (abs(controller1.left_stick_y) > 0.2){ drive!!.breakFollowing();automatedMovementToggle = AutomaticMovementState.Manual}
+                    if (abs(controller1.left_stick_x) > 0.2){ drive!!.breakFollowing();automatedMovementToggle = AutomaticMovementState.Manual}
+                    if (abs(controller1.right_stick_x) > 0.2){ drive!!.breakFollowing();automatedMovementToggle = AutomaticMovementState.Manual}
                     if (controller1.dpad_left && !previousController1.dpad_left) { drive!!.breakFollowing();automatedMovementToggle = AutomaticMovementState.Manual }
                     if (controller1.dpad_right && !previousController1.dpad_right) { drive!!.breakFollowing();automatedMovementToggle = AutomaticMovementState.Manual }
                     if (controller1.dpad_down && !previousController1.dpad_down) { drive!!.breakFollowing();automatedMovementToggle = AutomaticMovementState.Manual }

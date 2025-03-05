@@ -28,7 +28,6 @@ import org.firstinspires.ftc.teamcode.drive.advanced.SampleMecanumDriveCancelabl
  */
 @Config
 @Autonomous(group = "drive")
-@Disabled
 public class BackAndForth extends LinearOpMode {
 
     public static double DISTANCE = 72;

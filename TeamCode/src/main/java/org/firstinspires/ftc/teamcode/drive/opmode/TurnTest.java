@@ -14,7 +14,6 @@ import org.firstinspires.ftc.teamcode.drive.advanced.SampleMecanumDriveCancelabl
  */
 @Config
 @Autonomous(group = "drive")
-@Disabled
 //@Disabled
 public class TurnTest extends LinearOpMode {
     public static double ANGLE = 360; // deg

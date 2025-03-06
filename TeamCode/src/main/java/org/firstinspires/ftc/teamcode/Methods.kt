@@ -41,11 +41,11 @@ abstract class Methods : LinearOpMode() {
     var outRotationUp = 0.45
     var outRotationFrontOut = 0.65
     var outRotationFrontWall = 0.72
-    var outRotationFrontPlace = 0.78
+    var outRotationFrontPlace = 0.8
     val outRotationCenter = 0.97 // "center"
 
     val inRotationPick = 0.98//
-    val inRotationUpAuto = 0.7 //
+    val inRotationUpAuto = 0.65 //
     val inRotationUp = 0.17 //
     val inRotationTransfer = 0.45 ///
     val inRotationTransferMinus = 0.45

@@ -34,13 +34,9 @@ class BAR5Meep : Auto {
             .lineToLinearHeading(Pose2d(40.71, -45.68, Math.toRadians(-35.00)))
 
             //SAMPLE 3
-            .lineToLinearHeading(Pose2d(46.87, -35.0, Math.toRadians(35.00)))
-            .lineToLinearHeading(Pose2d(48.44, -45.20, Math.toRadians(-30.00)))
-
+            .splineToLinearHeading(Pose2d(52.5, -30.0, Math.toRadians(90.00)), Math.toRadians(180.0))
             //PICK1
-            .setVelConstraint(slowConstraint)
             .splineToLinearHeading(Pose2d(47.44, -60.20, Math.toRadians(90.00)), Math.toRadians(-90.0))
-            .resetConstraints()
 
             //BAR 1
             .lineToConstantHeading(Vector2d(-4.0, -33.5))

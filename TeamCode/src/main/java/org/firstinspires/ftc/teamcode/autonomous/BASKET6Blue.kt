@@ -9,6 +9,7 @@ import com.acmerobotics.roadrunner.trajectory.constraints.TranslationalVelocityC
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.teamcode.Methods
+import org.firstinspires.ftc.teamcode.drive.advanced.SampleMecanumDriveCancelable
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
 
 
@@ -20,7 +21,7 @@ class BASKET6Blue : Methods() {
 
         initMotors()
         initServosAndSensorsNoSet()
-        initOdometry()
+        val drive = SampleMecanumDriveCancelable(hardwareMap)
         transferServo!!.position = transferServoClose
         outClawServo!!.position = outClawClose
         inStopServo!!.position = inStopOpen

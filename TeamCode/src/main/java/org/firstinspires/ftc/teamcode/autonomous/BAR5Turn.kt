@@ -29,7 +29,7 @@ class BAR5Turn : Methods() {
         inStopServo!!.position = inStopOpen
         inRotationServo!!.position = inRotationUp
 
-        drive!!.poseEstimate = Pose2d(14.5, -63.19, Math.toRadians(-90.00))
+        drive!!.poseEstimate = Pose2d(14.5, -63.2, Math.toRadians(-90.00))
 
 
         val all: TrajectorySequence =
@@ -40,43 +40,42 @@ class BAR5Turn : Methods() {
                     outRotationServo!!.position = outRotationUp
                     outSwivelServo!!.position = outSwivelPerpBack
                 }
-                .setReversed(true)
-                .lineToConstantHeading(Vector2d(-4.5,-31.5))
+                .lineToConstantHeading(Vector2d(-4.5,-30.4))
                 .setReversed(false)
-                .UNSTABLE_addTemporalMarkerOffset(0.0){outRotationServo!!.position = outRotationBackPlace}
-                .UNSTABLE_addTemporalMarkerOffset(0.1){ outClawServo!!.position = outClawOpenAuto}
-                    .waitSeconds(0.05)
+                .UNSTABLE_addTemporalMarkerOffset(-0.01){outRotationServo!!.position = outRotationBackPlace}
+                .UNSTABLE_addTemporalMarkerOffset(0.05){ outClawServo!!.position = outClawOpenAuto}
+                .waitSeconds(0.07)
 
                     //SAMPLE1
                 .UNSTABLE_addTemporalMarkerOffset(1.0){horizontalSlideTo(600,1.0)}
-                .splineTo(Vector2d(31.05, -32.0), Math.toRadians(42.00))
+                .splineTo(Vector2d(30.75, -32.0), Math.toRadians(42.00))
                 .UNSTABLE_addTemporalMarkerOffset(-0.05){inRotationServo!!.position = inRotationPick}
                 .UNSTABLE_addTemporalMarkerOffset(0.0){verticalSlideTo(0,0.3)}
-                .lineToLinearHeading(Pose2d(38.03, -47.07, Math.toRadians(-70.00)))
+                .lineToLinearHeading(Pose2d(35.0, -51.5, Math.toRadians(-60.00)))
                 .UNSTABLE_addTemporalMarkerOffset(0.0){inRotationServo!!.position = inRotationUpAuto}
 
                     //SAMPLE2
-                .lineToLinearHeading(Pose2d(40.26, -32.0, Math.toRadians(50.00)))
+                .lineToLinearHeading(Pose2d(39.75, -32.0, Math.toRadians(42.00)))
                 .UNSTABLE_addTemporalMarkerOffset(-0.05){inRotationServo!!.position = inRotationPick}
-                .lineToLinearHeading(Pose2d(47.71, -50.68, Math.toRadians(-60.00)))
+                .lineToLinearHeading(Pose2d(44.0, -51.5, Math.toRadians(-60.00)))
                 .UNSTABLE_addTemporalMarkerOffset(-0.05){inRotationServo!!.position = inRotationUpAuto}
-                .UNSTABLE_addTemporalMarkerOffset(0.0){horizontalSlideTo(600,0.5)}
+                .UNSTABLE_addTemporalMarkerOffset(-0.05){horizontalSlideTo(50,1.0)}
 
                     //SAMPLE 3
-                .lineToLinearHeading(Pose2d(52.5, -30.0, Math.toRadians(50.00)))
-                .UNSTABLE_addTemporalMarkerOffset(-0.05){inRotationServo!!.position = inRotationPick}
+                .lineToLinearHeading(Pose2d(53.5, -25.0, Math.toRadians(30.00)))
+                .UNSTABLE_addTemporalMarkerOffset(-0.25){horizontalSlideTo(350,1.0)}
+                .UNSTABLE_addTemporalMarkerOffset(-0.02){inRotationServo!!.position = inRotationPick}
                 .UNSTABLE_addTemporalMarkerOffset(0.0){
-                    horizontalSlideTo(550, 0.07)
                     outRotationServo!!.position = outRotationBackWall
                     outSwivelServo!!.position = outSwivelPerpBack
                 }
-                .lineToLinearHeading(Pose2d(48.0, -55.20, Math.toRadians(-60.00)))
-                .UNSTABLE_addTemporalMarkerOffset(-0.5){inRotationServo!!.position = inRotationUpAuto}
+                .lineToLinearHeading(Pose2d(51.0, -60.20, Math.toRadians(-40.00)))
+                .UNSTABLE_addTemporalMarkerOffset(-0.5){inRotationServo!!.position = inRotationUp}
                 .UNSTABLE_addTemporalMarkerOffset(-0.5){horizontalSlideTo(0, 1.0)}
 
                 .resetConstraints()
                 .splineToLinearHeading(Pose2d(47.44, -59.0, Math.toRadians(90.00)), Math.toRadians(-90.0))
-                .splineToLinearHeading(Pose2d(47.44, -63.0, Math.toRadians(90.00)), Math.toRadians(-90.0))
+                .lineToConstantHeading(Vector2d(47.44, -63.2))
 
                 //PICK 1
                 .UNSTABLE_addTemporalMarkerOffset(-0.01){outClawServo!!.position = outClawClose}
@@ -86,10 +85,10 @@ class BAR5Turn : Methods() {
                     outSwivelServo!!.position = outSwivelPerpFront
                 }
                 //BAR 1
-                .lineToConstantHeading(Vector2d(-3.25, -31.5))
-                .UNSTABLE_addTemporalMarkerOffset(0.0){outRotationServo!!.position = outRotationFrontPlace}
-            .UNSTABLE_addTemporalMarkerOffset(0.1){ outClawServo!!.position = outClawOpenAuto}
-            .waitSeconds(0.05)
+                .lineToConstantHeading(Vector2d(-3.0, -30.4))
+                .UNSTABLE_addTemporalMarkerOffset(-0.01){outRotationServo!!.position = outRotationFrontPlace}
+                .UNSTABLE_addTemporalMarkerOffset(0.05){ outClawServo!!.position = outClawOpenAuto}
+                .waitSeconds(0.07)
                 .UNSTABLE_addTemporalMarkerOffset(0.2) {
                     verticalSlideTo(0, 0.3)
                     outRotationServo!!.position = outRotationBackWall
@@ -97,9 +96,7 @@ class BAR5Turn : Methods() {
                 }
 
                 //PICK 2
-                .setReversed(true)
-                .splineToConstantHeading(Vector2d(47.44, -63.0), Math.toRadians(-90.00))
-                .setReversed(false)
+                .lineToConstantHeading(Vector2d(47.44, -63.2))
                 .UNSTABLE_addTemporalMarkerOffset(-0.01){outClawServo!!.position = outClawClose}
                 .UNSTABLE_addTemporalMarkerOffset(0.05) {
                     verticalSlideTo(verticalSlideBar, 1.0)
@@ -107,10 +104,10 @@ class BAR5Turn : Methods() {
                     outSwivelServo!!.position = outSwivelPerpFront
                 }
                 //BAR 2
-                .lineToConstantHeading(Vector2d(-2.0, -31.5))
-                .UNSTABLE_addTemporalMarkerOffset(0.0){outRotationServo!!.position = outRotationFrontPlace}
-                .UNSTABLE_addTemporalMarkerOffset(0.1){ outClawServo!!.position = outClawOpenAuto}
-                .waitSeconds(0.05)
+                .lineToConstantHeading(Vector2d(-1.5, -30.4))
+                .UNSTABLE_addTemporalMarkerOffset(-0.01){outRotationServo!!.position = outRotationFrontPlace}
+                .UNSTABLE_addTemporalMarkerOffset(0.05){ outClawServo!!.position = outClawOpenAuto}
+                .waitSeconds(0.07)
                 .UNSTABLE_addTemporalMarkerOffset(0.2) {
                     verticalSlideTo(0, 0.3)
                     outRotationServo!!.position = outRotationBackWall
@@ -118,9 +115,7 @@ class BAR5Turn : Methods() {
                 }
 
                 //PICK 3
-                .setReversed(true)
-                .splineToConstantHeading(Vector2d(47.44, -63.0), Math.toRadians(-90.00))
-                .setReversed(false)
+                .lineToConstantHeading(Vector2d(47.44, -63.2))
                 .UNSTABLE_addTemporalMarkerOffset(-0.01){outClawServo!!.position = outClawClose}
                 .UNSTABLE_addTemporalMarkerOffset(0.05) {
                     verticalSlideTo(verticalSlideBar, 1.0)
@@ -128,10 +123,10 @@ class BAR5Turn : Methods() {
                     outSwivelServo!!.position = outSwivelPerpFront
                 }
                 //BAR 3
-                .lineToConstantHeading(Vector2d(-0.75, -31.5))
-                .UNSTABLE_addTemporalMarkerOffset(0.0){outRotationServo!!.position = outRotationFrontPlace}
-                .UNSTABLE_addTemporalMarkerOffset(0.1){ outClawServo!!.position = outClawOpenAuto}
-                .waitSeconds(0.05)
+                .lineToConstantHeading(Vector2d(0.0, -30.4))
+                .UNSTABLE_addTemporalMarkerOffset(-0.01){outRotationServo!!.position = outRotationFrontPlace}
+                .UNSTABLE_addTemporalMarkerOffset(0.05){ outClawServo!!.position = outClawOpenAuto}
+                .waitSeconds(0.07)
                 .UNSTABLE_addTemporalMarkerOffset(0.2) {
                     verticalSlideTo(0, 0.3)
                     outRotationServo!!.position = outRotationBackWall
@@ -139,9 +134,7 @@ class BAR5Turn : Methods() {
                 }
 
                 //PICK 4
-                .setReversed(true)
-                .splineToConstantHeading(Vector2d(47.44, -63.0), Math.toRadians(-90.00))
-                .setReversed(false)
+                .lineToConstantHeading(Vector2d(47.44, -63.2))
                 .UNSTABLE_addTemporalMarkerOffset(-0.01){outClawServo!!.position = outClawClose}
                 .UNSTABLE_addTemporalMarkerOffset(0.05) {
                     verticalSlideTo(verticalSlideBar, 1.0)
@@ -149,37 +142,15 @@ class BAR5Turn : Methods() {
                     outSwivelServo!!.position = outSwivelPerpFront
                 }
                 //BAR 4
-                .lineToConstantHeading(Vector2d(0.5, -31.5))
-                .UNSTABLE_addTemporalMarkerOffset(0.0){outRotationServo!!.position = outRotationFrontPlace}
-                .UNSTABLE_addTemporalMarkerOffset(0.1){ outClawServo!!.position = outClawOpenAuto}
-                .waitSeconds(0.05)
+                .lineToConstantHeading(Vector2d(1.5, -30.4))
+                .UNSTABLE_addTemporalMarkerOffset(-0.01){outRotationServo!!.position = outRotationFrontPlace}
+                .UNSTABLE_addTemporalMarkerOffset(0.05){ outClawServo!!.position = outClawOpenAuto}
                 .UNSTABLE_addTemporalMarkerOffset(0.2) {
                     verticalSlideTo(0, 0.3)
                     outRotationServo!!.position = outRotationBackWall
                     outSwivelServo!!.position = outSwivelPerpBack
                 }
-
-                //PICK 5
-                .setReversed(true)
-                .splineToConstantHeading(Vector2d(47.44, -63.0), Math.toRadians(-90.00))
-                .setReversed(false)
-                .UNSTABLE_addTemporalMarkerOffset(-0.01){outClawServo!!.position = outClawClose}
-                .UNSTABLE_addTemporalMarkerOffset(0.05) {
-                    verticalSlideTo(verticalSlideBar, 1.0)
-                    outRotationServo!!.position = outRotationUp
-                    outSwivelServo!!.position = outSwivelPerpFront
-                }
-                //BAR 5
-                .lineToConstantHeading(Vector2d(1.75, -31.5))
-                .UNSTABLE_addTemporalMarkerOffset(0.0){outRotationServo!!.position = outRotationFrontPlace}
-                .UNSTABLE_addTemporalMarkerOffset(0.1){ outClawServo!!.position = outClawOpenAuto}
-                .waitSeconds(0.05)
-                .UNSTABLE_addTemporalMarkerOffset(0.2) {
-                    verticalSlideTo(0, 0.3)
-                    outRotationServo!!.position = outRotationBackWall
-                    outSwivelServo!!.position = outSwivelPerpBack
-                }
-
+                .waitSeconds(0.07)
                 .resetConstraints()
 
                 .build()

@@ -20,7 +20,7 @@ import java.util.Arrays
 
 class BAR4Turn : Methods() {
     override fun runOpMode() {
-        initOdometry()
+        val drive = SampleMecanumDriveCancelable(hardwareMap)
         initMotors()
         initServosAndSensorsNoSet()
         transferServo!!.position = transferServoOpen

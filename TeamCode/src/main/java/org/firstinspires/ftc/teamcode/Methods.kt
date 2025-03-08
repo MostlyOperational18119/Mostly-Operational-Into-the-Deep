@@ -55,7 +55,7 @@ abstract class Methods : LinearOpMode() {
     val inStopOpen = 0.03
 
     val verticalSlideHigh = 2000 //4550
-    val verticalSlideBar = 475
+    val verticalSlideBar = 480
     val verticalSlideLow = 800
     val horizontalSlideExtend = 950
 
@@ -79,8 +79,8 @@ abstract class Methods : LinearOpMode() {
 
     var drive: SampleMecanumDriveCancelable? = null
     val basketVector = Vector2d(-60.0, -59.0)
-    val barVector = Vector2d(0.0, -31.0)
-    val clipPickVector = Vector2d(47.44, -62.50)
+    val barVector = Vector2d(0.0, -31.3)
+    val clipPickVector = Vector2d(47.44, -63.2)
     val basketPose = Pose2d(-60.0, -59.0, Math.toRadians(45.00))
     val barPose = Pose2d(0.0, -31.0, Math.toRadians(90.0))
     val clipPickPose = Pose2d(47.44, -62.50, Math.toRadians(90.0))

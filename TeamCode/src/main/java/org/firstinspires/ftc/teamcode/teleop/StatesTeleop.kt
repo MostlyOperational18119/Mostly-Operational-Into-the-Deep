@@ -196,9 +196,6 @@ class StatesTeleop: Methods() {
                         verticalHeight = verticalSlideBar
                         outSwivelServo!!.position = outSwivelPerpFront
                         outRotationServo!!.position = outRotationFrontPlace
-                        sleep(500)
-                        outClawServo!!.position = outClawOpen
-                        outClawToggle = false
                     }
                     if (controller1.x && !previousController1.x){
                         verticalSlideTo(verticalSlideBar, 1.0)

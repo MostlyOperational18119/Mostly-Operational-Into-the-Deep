@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.drive.advanced.SampleMecanumDriveCancelabl
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
 
 
-@Autonomous(name = "BASKETSub6_Red", group = "AAAA")
+@Autonomous(name = "BASKETObs6_Red", group = "AAAA")
 class BASKET6Red : Methods() {
     override fun runOpMode() {
         startingColor = "red"

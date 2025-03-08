@@ -47,15 +47,15 @@ abstract class Methods : LinearOpMode() {
     val inRotationPick = 0.98//
     val inRotationUpAuto = 0.65 //
     val inRotationUp = 0.17 //
-    val inRotationTransfer = 0.45 ///
-    val inRotationTransferMinus = 0.45
+    val inRotationTransfer = 0.47 ///
+    val inRotationTransferMinus = 0.47
 
     val inStopClose = 0.27
     val inStopAutoOpen = 0.03
     val inStopOpen = 0.03
 
     val verticalSlideHigh = 2000 //4550
-    val verticalSlideBar = 480
+    val verticalSlideBar = 485
     val verticalSlideLow = 800
     val horizontalSlideExtend = 950
 
@@ -200,6 +200,7 @@ abstract class Methods : LinearOpMode() {
         setMotorModeEncoderNoReset(intakeMotor!!)
         motorFL!!.direction = DcMotorSimple.Direction.REVERSE
         motorBL!!.direction = DcMotorSimple.Direction.REVERSE
+        intakeMotor!!.direction = DcMotorSimple.Direction.REVERSE
     }
 
     //Initializes and sets motors amd resets them
@@ -216,6 +217,7 @@ abstract class Methods : LinearOpMode() {
         setMotorModePosition(slideVertical!!)
         motorFL!!.direction = DcMotorSimple.Direction.REVERSE
         motorBL!!.direction = DcMotorSimple.Direction.REVERSE
+        intakeMotor!!.direction = DcMotorSimple.Direction.REVERSE
     }
 
     fun initOdometry() {

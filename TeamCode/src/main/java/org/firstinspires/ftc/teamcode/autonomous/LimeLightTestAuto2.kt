@@ -2,12 +2,14 @@ package org.firstinspires.ftc.teamcode.autonomous
 
 import com.qualcomm.hardware.limelightvision.Limelight3A
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
 import org.firstinspires.ftc.teamcode.Methods
 import org.opencv.calib3d.Calib3d
 import org.opencv.core.Core
 
 @Autonomous(name = "LimeLight Test Autonomous2")
+@Disabled
 class LimeLightTestAuto2 : Methods() {
     override fun runOpMode() {
         val limelight = hardwareMap.get(Limelight3A::class.java, "limelight")

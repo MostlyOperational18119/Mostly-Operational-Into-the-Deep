@@ -60,10 +60,12 @@ class StatesTeleop: Methods() {
 
             when (automatedMovementToggle) {
                 AutomaticMovementState.Manual -> {
-                    motorFL!!.power = (leftY1!! + leftX1!! + rightX1!!)
-                    motorBL!!.power = (leftY1!! - leftX1!! + rightX1!!)
-                    motorFR!!.power = (leftY1!! - leftX1!! - rightX1!!)
-                    motorBR!!.power = (leftY1!! + leftX1!! - rightX1!!)
+                    if (!controller1.left_bumper && !controller1.right_bumper) {
+                        motorFL!!.power = (leftY1!! + leftX1!! + rightX1!!)
+                        motorBL!!.power = (leftY1!! - leftX1!! + rightX1!!)
+                        motorFR!!.power = (leftY1!! - leftX1!! - rightX1!!)
+                        motorBR!!.power = (leftY1!! + leftX1!! - rightX1!!)
+                    }
 
                     if (controller1.right_trigger >0.5 && !(previousController1.right_trigger > 0.5)) { speedDiv = 1.0 }
                     if (!(controller1.left_trigger > 0.5) && !(controller1.right_trigger > 0.5))         { speedDiv = 2.3 }
@@ -196,9 +198,6 @@ class StatesTeleop: Methods() {
                         verticalHeight = verticalSlideBar
                         outSwivelServo!!.position = outSwivelPerpFront
                         outRotationServo!!.position = outRotationFrontPlace
-                        sleep(500)
-                        outClawServo!!.position = outClawOpen
-                        outClawToggle = false
                     }
                     if (controller1.x && !previousController1.x){
                         verticalSlideTo(verticalSlideBar, 1.0)

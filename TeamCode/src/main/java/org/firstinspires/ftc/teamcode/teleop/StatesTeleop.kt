@@ -8,10 +8,9 @@ import kotlin.math.abs
 @TeleOp(name = "STATES TELEOP", group = "AAA")
 class StatesTeleop: Methods() {
     override fun runOpMode() {
-        initMotors()
+        initMotorsNoReset()
         initServosAndSensorsNoSet()
         outRotationServo!!.position = outRotationCenter
-        outSwivelServo!!.position = outSwivelPerpFront
         insideJokes()
         initOdometry()
         drive!!.poseEstimate = Pose2d(-22.0, -8.5, Math.toRadians(0.0))
@@ -25,6 +24,8 @@ class StatesTeleop: Methods() {
         doOnce = false
         var transferSide = true
         var transferSideString : String
+
+        var horizontalSlideVar = 50
 
         var outRotation = false
         var reverseThing = false
@@ -237,8 +238,8 @@ class StatesTeleop: Methods() {
                         HorizontalSlideState.Manual -> {
                             if (leftY2!! > 0 && slideHorizontal!!.currentPosition < horizontalSlideExtend) {
                                 horizontalSlideTo(horizontalSlideExtend,(leftY2 as Double)*0.8)
-                            } else if (leftY2!! < 0 && slideHorizontal!!.currentPosition > -50) {
-                                horizontalSlideTo(-50, -(leftY2 as Double)*0.8)
+                            } else if (leftY2!! < 0 && slideHorizontal!!.currentPosition > -120) {
+                                horizontalSlideTo(-120, -(leftY2 as Double)*0.8)
                             } else {
                                 slideHorizontal!!.targetPosition = slideHorizontal!!.currentPosition
                                 slideHorizontal!!.power = 0.1
@@ -275,6 +276,10 @@ class StatesTeleop: Methods() {
                         VerticalSlideState.High  -> { verticalSlideTo(verticalSlideHigh,1.0); verticalBackToManual() }
                         VerticalSlideState.Bar  -> { verticalSlideTo(verticalSlideBar,1.0); verticalBackToManual() }
                     }
+
+                    if (controller2.a && !previousController2.a){
+                        horizontalSlideVar = 100
+                    }
                 }
 
                 //TRANSFER SYSTEM
@@ -282,7 +287,7 @@ class StatesTeleop: Methods() {
                     outClawServo!!.position = outClawOpen
                     inRotationServo!!.position = inRotationTransferMinus
                     intakeMotor?.power = 1.0
-                    horizontalSlideTo(-30,0.8)
+                    horizontalSlideTo(-1*horizontalSlideVar,0.8)
                     verticalSlideTo(1300,1.0)
                     transferServo!!.position = transferServoClose
                     outSwivelServo!!.position = outSwivelPerpBack

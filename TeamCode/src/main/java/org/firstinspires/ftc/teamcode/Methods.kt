@@ -46,7 +46,7 @@ abstract class Methods : LinearOpMode() {
 
     val inRotationPick = 0.99//
     val inRotationUpAuto = 0.65 //
-    val inRotationUp = 0.17 //
+    val inRotationUp = 0.20 //
     val inRotationTransfer = 0.47 ///
     val inRotationTransferMinus = 0.47
 
@@ -81,9 +81,9 @@ abstract class Methods : LinearOpMode() {
     val basketVector = Vector2d(-60.0, -59.0)
     val barVector = Vector2d(0.0, -31.3)
     val clipPickVector = Vector2d(47.44, -63.2)
-    val basketPose = Pose2d(-60.0, -59.0, Math.toRadians(45.00))
-    val barPose = Pose2d(0.0, -31.0, Math.toRadians(90.0))
-    val clipPickPose = Pose2d(47.44, -62.50, Math.toRadians(90.0))
+    val basketPose = Pose2d(-59.0, -61.0, Math.toRadians(225.00))
+    val barPose = Pose2d(0.0, -30.5, Math.toRadians(90.0))
+    val clipPickPose = Pose2d(47.44, -62.0, Math.toRadians(90.0))
 
     var horizontalSlideToggle = HorizontalSlideState.Manual
     var verticalSlideToggle = VerticalSlideState.Manual

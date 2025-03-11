@@ -31,47 +31,48 @@ class BAR5Turn : Methods() {
 
         drive!!.poseEstimate = Pose2d(14.5, -63.2, Math.toRadians(-90.00))
 
+        val fastConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(
+            Arrays.asList(
+                TranslationalVelocityConstraint(80.0),
+                AngularVelocityConstraint(4.0)
+            )
+        )
+        val accelConstraint: TrajectoryAccelerationConstraint = ProfileAccelerationConstraint(90.0)
+
 
         val bar0: TrajectorySequence =
             drive!!.trajectorySequenceBuilder(Pose2d(14.5, -63.2, Math.toRadians(-90.00)))
                     //BAR0
-                .addTemporalMarker{
-                    verticalSlideTo(verticalSlideBar, 1.0)
-                    outRotationServo!!.position = outRotationUp
-                    outSwivelServo!!.position = outSwivelPerpBack
-                }
-                .lineTo(Vector2d(-4.5,-31.5))
+                .lineToConstantHeading(Vector2d(-4.5,-31.0))
+                .UNSTABLE_addTemporalMarkerOffset(-0.01){outRotationServo!!.position = outRotationBackPlace}
                 .build()
 
         val sample1: TrajectorySequence =
-            drive!!.trajectorySequenceBuilder(Pose2d(-4.5,-31.8, Math.toRadians(-90.00)))
-                    //SAMPLE1
-                .addTemporalMarker(1.0){horizontalSlideTo(100,1.0);
-                    inStopServo!!.position = inStopClose
-                    inRotationServo!!.position = inRotationPick;
-                    intakeMotor!!.power = 0.4}
-                .splineTo(Vector2d(40.0, -40.0), Math.toRadians(70.00))
-                .UNSTABLE_addTemporalMarkerOffset(-0.5){horizontalSlideTo(400,1.0)}
+            drive!!.trajectorySequenceBuilder(Pose2d(-4.5,-31.0, Math.toRadians(-90.00)))
+                .splineTo(Vector2d(41.5, -40.0), Math.toRadians(70.00))
+                .UNSTABLE_addTemporalMarkerOffset(-0.6){intakeMotor!!.power = 0.0}
+                .UNSTABLE_addTemporalMarkerOffset(-0.25){horizontalSlideTo(350,0.7);intakeMotor!!.power = 0.4}
                 .build()
 
         val sample2: TrajectorySequence =
-            drive!!.trajectorySequenceBuilder(Pose2d(40.0,-40.0, Math.toRadians(70.00)))
+            drive!!.trajectorySequenceBuilder(Pose2d(41.5,-40.0, Math.toRadians(70.00)))
                 .lineToLinearHeading(Pose2d(36.0, -51.5, Math.toRadians(-60.00)))
                 .UNSTABLE_addTemporalMarkerOffset(-0.1){intakeMotor!!.power = -0.5}
 
                     //SAMPLE2
-                .lineToLinearHeading(Pose2d(48.0, -40.0, Math.toRadians(70.00)))
-                .UNSTABLE_addTemporalMarkerOffset(-1.0){horizontalSlideTo(100,1.0)}
-                .UNSTABLE_addTemporalMarkerOffset(-0.5){intakeMotor!!.power = 0.4; horizontalSlideTo(400,1.0) }
+                .UNSTABLE_addTemporalMarkerOffset(0.3){horizontalSlideTo(100,1.0)}
+                .lineToLinearHeading(Pose2d(50.0, -40.0, Math.toRadians(70.00)))
+                .UNSTABLE_addTemporalMarkerOffset(-0.6){intakeMotor!!.power = 0.0}
+                .UNSTABLE_addTemporalMarkerOffset(-0.25){horizontalSlideTo(350,0.7); intakeMotor!!.power = 0.4}
                 .build()
 
         val sample3: TrajectorySequence =
-            drive!!.trajectorySequenceBuilder(Pose2d(48.0,-40.0, Math.toRadians(70.00)))
+            drive!!.trajectorySequenceBuilder(Pose2d(50.0,-40.0, Math.toRadians(70.00)))
                 .lineToLinearHeading(Pose2d(43.0, -51.5, Math.toRadians(-60.00)))
                 .UNSTABLE_addTemporalMarkerOffset(-0.05){intakeMotor!!.power = -0.5}
                 .UNSTABLE_addTemporalMarkerOffset(-0.05){horizontalSlideTo(50,1.0)}
 
-                    //SAMPLE 3
+                //SAMPLE 3
                 .lineToLinearHeading(Pose2d(53.5, -25.0, Math.toRadians(30.00)))
                 .UNSTABLE_addTemporalMarkerOffset(-1.0){
                     inRotationServo!!.position = inRotationUpAuto;
@@ -87,27 +88,30 @@ class BAR5Turn : Methods() {
                     outSwivelServo!!.position = outSwivelPerpBack
                     horizontalSlideTo(200,0.1)
                 }
-                .lineToLinearHeading(Pose2d(51.0, -59.0, Math.toRadians(-50.00)))
+                .lineToLinearHeading(Pose2d(51.0, -57.0, Math.toRadians(-50.00)))
                 .UNSTABLE_addTemporalMarkerOffset(-0.5){inRotationServo!!.position = inRotationUp}
                 .UNSTABLE_addTemporalMarkerOffset(-0.5){horizontalSlideTo(0, 1.0)}
 
-                .resetConstraints()
+                .UNSTABLE_addTemporalMarkerOffset(0.1){inRotationServo!!.position = inRotationUp; intakeMotor!!.power = 0.0}
+                .UNSTABLE_addTemporalMarkerOffset(0.1){horizontalSlideTo(0, 1.0)}
+
                 .splineToLinearHeading(Pose2d(47.44, -57.0, Math.toRadians(90.00)), Math.toRadians(-90.0))
-                .lineTo(Vector2d(47.44, -61.5))
+                .splineToLinearHeading(Pose2d(47.44, -62.3, Math.toRadians(90.00)), Math.toRadians(-90.0))
 
                 //PICK 1
-                .UNSTABLE_addTemporalMarkerOffset(-0.001){outClawServo!!.position = outClawClose}
+                .UNSTABLE_addTemporalMarkerOffset(-0.01){outClawServo!!.position = outClawClose}
                 .UNSTABLE_addTemporalMarkerOffset(0.05) {
                     verticalSlideTo(verticalSlideBar, 1.0)
                     outRotationServo!!.position = outRotationUp
                     outSwivelServo!!.position = outSwivelPerpFront
                 }
                 //BAR 1
-                .lineTo(Vector2d(-3.0, -31.0))
+                .lineToConstantHeading(Vector2d(-3.0, -30.4))
+                .UNSTABLE_addTemporalMarkerOffset(-0.01){outRotationServo!!.position = outRotationFrontPlace}
                 .build()
 
         val bar1: TrajectorySequence =
-            drive!!.trajectorySequenceBuilder(Pose2d(-3.0, -31.0, Math.toRadians(90.00)))
+            drive!!.trajectorySequenceBuilder(Pose2d(-3.0, -30.4, Math.toRadians(90.00)))
                 .addTemporalMarker(0.2) {
                     verticalSlideTo(0, 0.3)
                     outRotationServo!!.position = outRotationBackWall
@@ -115,8 +119,8 @@ class BAR5Turn : Methods() {
                 }
 
                 //PICK 2
-                .lineTo(Vector2d(47.44, -61.5))
-                .UNSTABLE_addTemporalMarkerOffset(-0.001){outClawServo!!.position = outClawClose}
+                .lineToConstantHeading(Vector2d(47.44, -61.6))
+                .UNSTABLE_addTemporalMarkerOffset(-0.01){outClawServo!!.position = outClawClose}
                 .UNSTABLE_addTemporalMarkerOffset(0.05) {
                     verticalSlideTo(verticalSlideBar, 1.0)
                     outRotationServo!!.position = outRotationUp
@@ -124,11 +128,12 @@ class BAR5Turn : Methods() {
                 }
 
                 //BAR 2
-                .lineTo(Vector2d(-1.5, -30.8))
+                .lineToConstantHeading(Vector2d(-1.5, -30.0))
+                .UNSTABLE_addTemporalMarkerOffset(-0.01){outRotationServo!!.position = outRotationFrontPlace}
                 .build()
 
         val bar2: TrajectorySequence =
-            drive!!.trajectorySequenceBuilder(Pose2d(-1.5, -30.8, Math.toRadians(90.00)))
+            drive!!.trajectorySequenceBuilder(Pose2d(-1.5, -30.0, Math.toRadians(90.00)))
                 .addTemporalMarker(0.2) {
                     verticalSlideTo(0, 0.3)
                     outRotationServo!!.position = outRotationBackWall
@@ -136,34 +141,38 @@ class BAR5Turn : Methods() {
                 }
 
                 //PICK 3
-                .lineTo(Vector2d(47.44, -61.2))
-                .UNSTABLE_addTemporalMarkerOffset(-0.001){outClawServo!!.position = outClawClose}
+                .lineToConstantHeading(Vector2d(47.44, -61.9))
+                .UNSTABLE_addTemporalMarkerOffset(-0.01){outClawServo!!.position = outClawClose}
                 .UNSTABLE_addTemporalMarkerOffset(0.05) {
                     verticalSlideTo(verticalSlideBar, 1.0)
                     outRotationServo!!.position = outRotationUp
                     outSwivelServo!!.position = outSwivelPerpFront
                 }
                 //BAR 3
-                .lineTo(Vector2d(0.0, -30.4))
+                .lineToConstantHeading(Vector2d(0.0, -29.8))
+                .UNSTABLE_addTemporalMarkerOffset(-0.01){outRotationServo!!.position = outRotationFrontPlace}
                 .build()
 
         val bar3: TrajectorySequence =
-            drive!!.trajectorySequenceBuilder(Pose2d(0.0, -30.4, Math.toRadians(90.00)))
+            drive!!.trajectorySequenceBuilder(Pose2d(0.0, -29.8, Math.toRadians(90.00)))
                 .addTemporalMarker(0.2) {
                     verticalSlideTo(0, 0.3)
                     outRotationServo!!.position = outRotationBackWall
                     outSwivelServo!!.position = outSwivelPerpBack
                 }
                 //PICK 4
-                .lineTo(Vector2d(47.44, -61.2))
-                .UNSTABLE_addTemporalMarkerOffset(-0.001){outClawServo!!.position = outClawClose}
+                .lineToConstantHeading(Vector2d(47.44, -61.3))
+                .UNSTABLE_addTemporalMarkerOffset(-0.01){outClawServo!!.position = outClawClose}
+                .setVelConstraint(fastConstraint)
+                .setAccelConstraint(accelConstraint)
                 .UNSTABLE_addTemporalMarkerOffset(0.05) {
                     verticalSlideTo(verticalSlideBar, 1.0)
                     outRotationServo!!.position = outRotationUp
                     outSwivelServo!!.position = outSwivelPerpFront
                 }
                 //BAR 4
-                .lineTo(Vector2d(1.5, -29.7))
+                .lineToConstantHeading(Vector2d(1.5, -29.5))
+                .UNSTABLE_addTemporalMarkerOffset(-0.01){outRotationServo!!.position = outRotationFrontPlace}
                 .resetConstraints()
 
                 .build()
@@ -171,12 +180,17 @@ class BAR5Turn : Methods() {
         waitForStart()
         if (isStopRequested) {return}
 
+        verticalSlideTo(verticalSlideBar, 1.0)
+        outRotationServo!!.position = outRotationUp
+        outSwivelServo!!.position = outSwivelPerpBack
+
         drive!!.followTrajectorySequence(bar0)
         drive!!.updatePoseEstimate()
-        outRotationServo!!.position = outRotationBackPlace
-        sleep(100)
         outClawServo!!.position = outClawOpenAuto
 
+        horizontalSlideTo(100,1.0)
+        inStopServo!!.position = inStopClose
+        inRotationServo!!.position = inRotationPick;
         drive!!.followTrajectorySequence(sample1)
         drive!!.updatePoseEstimate()
 
@@ -190,7 +204,7 @@ class BAR5Turn : Methods() {
             if (colors!!.green > 0.6){ colorSeen = "yellow"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update()}
             else if (colors!!.red > 0.6){ colorSeen = "red"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
             else if (colors!!.blue > 0.6){ colorSeen= "blue"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
-            if (elapsedTime.time() > 0.5){ moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
+            if (elapsedTime.time() > 0.6){ moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
         }
 
         drive!!.followTrajectorySequence(sample2)
@@ -206,31 +220,23 @@ class BAR5Turn : Methods() {
             if (colors!!.green > 0.6){ colorSeen = "yellow"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update()}
             else if (colors!!.red > 0.6){ colorSeen = "red"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
             else if (colors!!.blue > 0.6){ colorSeen= "blue"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
-            if (elapsedTime.time() > 0.5){ moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
+            if (elapsedTime.time() > 0.6){ moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
         }
 
         drive!!.followTrajectorySequence(sample3)
         drive!!.updatePoseEstimate()
-        outRotationServo!!.position = outRotationFrontPlace
-        sleep(100)
         outClawServo!!.position = outClawOpenAuto
 
         drive!!.followTrajectorySequence(bar1)
         drive!!.updatePoseEstimate()
-        outRotationServo!!.position = outRotationFrontPlace
-        sleep(100)
         outClawServo!!.position = outClawOpenAuto
 
         drive!!.followTrajectorySequence(bar2)
         drive!!.updatePoseEstimate()
-        outRotationServo!!.position = outRotationFrontPlace
-        sleep(100)
         outClawServo!!.position = outClawOpenAuto
 
         drive!!.followTrajectorySequence(bar3)
         drive!!.updatePoseEstimate()
-        outRotationServo!!.position = outRotationFrontPlace
-        sleep(100)
         outClawServo!!.position = outClawOpenAuto
     }
 }

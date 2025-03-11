@@ -1,8 +1,15 @@
 package org.firstinspires.ftc.teamcode.teleop
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
+import com.acmerobotics.roadrunner.trajectory.constraints.AngularVelocityConstraint
+import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint
+import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationConstraint
+import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint
+import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint
+import com.acmerobotics.roadrunner.trajectory.constraints.TranslationalVelocityConstraint
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.Methods
+import java.util.Arrays
 import kotlin.math.abs
 
 @TeleOp(name = "STATES TELEOP", group = "AAA")
@@ -33,6 +40,14 @@ class StatesTeleop: Methods() {
         verticalHeight = 0
         speedDiv = 2.3
         var timeHor = 0.1
+
+        val slowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(
+            Arrays.asList(
+                TranslationalVelocityConstraint(50.0),
+                AngularVelocityConstraint(2.5)
+            )
+        )
+        val slowAccelConstraint: TrajectoryAccelerationConstraint = ProfileAccelerationConstraint(50.0)
 
         waitForStart()
 
@@ -72,16 +87,16 @@ class StatesTeleop: Methods() {
                     if (!(controller1.left_trigger > 0.5) && !(controller1.right_trigger > 0.5))         { speedDiv = 2.3 }
                     if (controller1.left_trigger > 0.5 && !(controller1.left_trigger > 0.5))         { speedDiv = 4.6 }
                     if (controller1.left_bumper){
-                        motorFL!!.power = -0.7
-                        motorBL!!.power = 0.7
-                        motorFR!!.power = 0.7
-                        motorBR!!.power = -0.7
+                        motorFL!!.power = -0.3
+                        motorBL!!.power = 0.3
+                        motorFR!!.power = 0.3
+                        motorBR!!.power = -0.3
                     }
                     if (controller1.right_bumper){
-                        motorFL!!.power = 0.7
-                        motorBL!!.power = -0.7
-                        motorFR!!.power = -0.7
-                        motorBR!!.power = 0.7
+                        motorFL!!.power = 0.3
+                        motorBL!!.power = -0.3
+                        motorFR!!.power = -0.3
+                        motorBR!!.power = 0.3
                     }
 
                     if (controller1.a && !previousController1.a){ reverseThing = !reverseThing }
@@ -94,9 +109,10 @@ class StatesTeleop: Methods() {
 
                     if (controller1.dpad_down && !(previousController1.dpad_down)) {
                         val teleopBasket = drive!!.trajectorySequenceBuilder(drive!!.poseEstimate)
-                            .setReversed(true)
-                            .splineToLinearHeading(basketPose, Math.toRadians(225.00))
-                            .setReversed(false)
+                            .setVelConstraint(slowConstraint)
+                            .setAccelConstraint(slowAccelConstraint)
+                            .lineToLinearHeading(basketPose)
+                            .resetConstraints()
                             .build()
                         drive!!.followTrajectorySequenceAsync(teleopBasket)
                         automatedMovementToggle = AutomaticMovementState.Auto
@@ -111,7 +127,10 @@ class StatesTeleop: Methods() {
                         verticalSlideTo(verticalSlideBar, 1.0)
                         verticalHeight = verticalSlideBar
                         val teleopBar =  drive!!.trajectorySequenceBuilder(drive!!.poseEstimate)
+                            .setVelConstraint(slowConstraint)
+                            .setAccelConstraint(slowAccelConstraint)
                             .lineToLinearHeading(barPose)
+                            .resetConstraints()
                             .build()
                         drive!!.followTrajectorySequenceAsync(teleopBar)
                         automatedMovementToggle = AutomaticMovementState.Auto
@@ -122,9 +141,10 @@ class StatesTeleop: Methods() {
                         verticalSlideTo(0, 1.0)
                         verticalHeight = 0
                         val teleopPickup = drive!!.trajectorySequenceBuilder(drive!!.poseEstimate)
-                            .setReversed(true)
-                            .splineToConstantHeading(clipPickVector, Math.toRadians(-90.00))
-                            .setReversed(false)
+                            .setVelConstraint(slowConstraint)
+                            .setAccelConstraint(slowAccelConstraint)
+                            .lineToLinearHeading(clipPickPose)
+                            .resetConstraints()
                             .build()
                         drive!!.followTrajectorySequenceAsync(teleopPickup)
                         automatedMovementToggle = AutomaticMovementState.Auto
@@ -277,8 +297,8 @@ class StatesTeleop: Methods() {
                         horizontalSlideVar = 100
                     }
                     if (controller2.a && !previousController2.a){
-                        verticalSlideTo(550,1.0)
-                        verticalHeight = 550
+                        verticalSlideTo(720,1.0)
+                        verticalHeight = 720
                         outRotationServo!!.position = outRotationFrontWall
                     }
                 }
@@ -301,10 +321,10 @@ class StatesTeleop: Methods() {
                         inRotationServo!!.position = inRotationTransfer
                         inStopServo!!.position = inStopAutoOpen
                     }
-                    if (elapsedTime.time() > 0.15){
+                    if (elapsedTime.time() > 0.25){
                         outRotationServo!!.position = outRotationCenter
                     }
-                    if (elapsedTime.time() > 0.4){
+                    if (elapsedTime.time() > 0.65){
                         verticalSlideTo(20,1.0)
                     }
                     if ((slideVertical!!.currentPosition < 55) && (elapsedTime.time() > timeHor + 0.7)){

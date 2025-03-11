@@ -44,9 +44,9 @@ abstract class Methods : LinearOpMode() {
     var outRotationFrontPlace = 0.8
     val outRotationCenter = 0.97 // "center"
 
-    val inRotationPick = 0.99//
+    val inRotationPick = 1.0//
     val inRotationUpAuto = 0.65 //
-    val inRotationUp = 0.20 //
+    val inRotationUp = 0.25 //
     val inRotationTransfer = 0.47 ///
     val inRotationTransferMinus = 0.47
 

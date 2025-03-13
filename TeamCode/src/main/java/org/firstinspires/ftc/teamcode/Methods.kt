@@ -42,19 +42,18 @@ abstract class Methods : LinearOpMode() {
     var outRotationFrontOut = 0.65
     var outRotationFrontWall = 0.72
     var outRotationFrontPlace = 0.8
-    val outRotationCenter = 0.97 // "center"
+    val outRotationCenter = 0.97
 
-    val inRotationPick = 1.0//
-    val inRotationUpAuto = 0.65 //
-    val inRotationUp = 0.25 //
-    val inRotationTransfer = 0.47 ///
-    val inRotationTransferMinus = 0.47
+    val inRotationPick = 0.85
+    val inRotationUpAuto = 0.64
+    val inRotationTransfer = 0.35
+    val inRotationUp = 0.07
 
     val inStopClose = 0.27
     val inStopAutoOpen = 0.03
     val inStopOpen = 0.03
 
-    val verticalSlideHigh = 2000 //4550
+    val verticalSlideHigh = 2000
     val verticalSlideBar = 485
     val verticalSlideLow = 800
     val horizontalSlideExtend = 950

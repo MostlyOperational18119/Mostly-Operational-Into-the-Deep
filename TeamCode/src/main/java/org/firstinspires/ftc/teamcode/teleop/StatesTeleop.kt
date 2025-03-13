@@ -85,18 +85,18 @@ class StatesTeleop: Methods() {
 
                     if (controller1.right_trigger >0.5 && !(previousController1.right_trigger > 0.5)) { speedDiv = 1.0 }
                     if (!(controller1.left_trigger > 0.5) && !(controller1.right_trigger > 0.5))         { speedDiv = 2.3 }
-                    if (controller1.left_trigger > 0.5 && !(controller1.left_trigger > 0.5))         { speedDiv = 4.6 }
+                    if (controller1.left_trigger > 0.5 && !(previousController1.left_trigger > 0.5))         { speedDiv = 4.6 }
                     if (controller1.left_bumper){
-                        motorFL!!.power = -0.3
-                        motorBL!!.power = 0.3
-                        motorFR!!.power = 0.3
-                        motorBR!!.power = -0.3
+                        motorFL!!.power = -0.45
+                        motorBL!!.power = 0.45
+                        motorFR!!.power = 0.45
+                        motorBR!!.power = -0.45
                     }
                     if (controller1.right_bumper){
-                        motorFL!!.power = 0.3
-                        motorBL!!.power = -0.3
-                        motorFR!!.power = -0.3
-                        motorBR!!.power = 0.3
+                        motorFL!!.power = 0.45
+                        motorBL!!.power = -0.45
+                        motorFR!!.power = -0.45
+                        motorBR!!.power = 0.45
                     }
 
                     if (controller1.a && !previousController1.a){ reverseThing = !reverseThing }
@@ -109,10 +109,7 @@ class StatesTeleop: Methods() {
 
                     if (controller1.dpad_down && !(previousController1.dpad_down)) {
                         val teleopBasket = drive!!.trajectorySequenceBuilder(drive!!.poseEstimate)
-                            .setVelConstraint(slowConstraint)
-                            .setAccelConstraint(slowAccelConstraint)
                             .lineToLinearHeading(basketPose)
-                            .resetConstraints()
                             .build()
                         drive!!.followTrajectorySequenceAsync(teleopBasket)
                         automatedMovementToggle = AutomaticMovementState.Auto
@@ -127,10 +124,7 @@ class StatesTeleop: Methods() {
                         verticalSlideTo(verticalSlideBar, 1.0)
                         verticalHeight = verticalSlideBar
                         val teleopBar =  drive!!.trajectorySequenceBuilder(drive!!.poseEstimate)
-                            .setVelConstraint(slowConstraint)
-                            .setAccelConstraint(slowAccelConstraint)
                             .lineToLinearHeading(barPose)
-                            .resetConstraints()
                             .build()
                         drive!!.followTrajectorySequenceAsync(teleopBar)
                         automatedMovementToggle = AutomaticMovementState.Auto
@@ -141,10 +135,7 @@ class StatesTeleop: Methods() {
                         verticalSlideTo(0, 1.0)
                         verticalHeight = 0
                         val teleopPickup = drive!!.trajectorySequenceBuilder(drive!!.poseEstimate)
-                            .setVelConstraint(slowConstraint)
-                            .setAccelConstraint(slowAccelConstraint)
                             .lineToLinearHeading(clipPickPose)
-                            .resetConstraints()
                             .build()
                         drive!!.followTrajectorySequenceAsync(teleopPickup)
                         automatedMovementToggle = AutomaticMovementState.Auto
@@ -248,7 +239,9 @@ class StatesTeleop: Methods() {
                             outSwivelServo!!.position = outSwivelPerpBack
                         }
                     }
-
+                    if (controller2.left_stick_button && !previousController2.left_stick_button) {
+                        horizontalSlideToggle = HorizontalSlideState.Floor
+                    }
                     //HOR SLIDE
                     when (horizontalSlideToggle) {
                         HorizontalSlideState.Manual -> {
@@ -269,7 +262,6 @@ class StatesTeleop: Methods() {
                     if (controller2.dpad_up && !previousController2.dpad_up) { verticalSlideToggle = VerticalSlideState.High; outRotationServo!!.position = outRotationBackOut}
                     if (controller2.dpad_right && !previousController2.dpad_right) { verticalSlideToggle = VerticalSlideState.Low; outRotationServo!!.position = outRotationBackOut}
                     if (controller2.dpad_down && !previousController2.dpad_down) { verticalSlideToggle = VerticalSlideState.Floor }
-                    if (controller2.right_stick_button && !previousController2.right_stick_button) { verticalSlideToggle = VerticalSlideState.Floor; outRotationServo!!.position = outRotationCenter }
                     if (controller2.dpad_left && !previousController2.dpad_left) { verticalSlideToggle = VerticalSlideState.Bar; outRotationServo!!.position = outRotationUp; outSwivelServo!!.position = outSwivelPerpFront}
                     if (rightY2!! >= 0.2 || rightY2!! <= -0.2) { verticalSlideToggle = VerticalSlideState.Manual }
                     when (verticalSlideToggle) {
@@ -293,9 +285,8 @@ class StatesTeleop: Methods() {
                         VerticalSlideState.Bar  -> { verticalSlideTo(verticalSlideBar,1.0); verticalBackToManual() }
                     }
 
-                    if (controller2.left_stick_button && !previousController2.left_stick_button) {
-                        horizontalSlideVar = 100
-                    }
+                    if (controller2.right_stick_button && !previousController2.right_stick_button) {  horizontalSlideVar = 100 }
+
                     if (controller2.a && !previousController2.a){
                         verticalSlideTo(720,1.0)
                         verticalHeight = 720
@@ -306,7 +297,7 @@ class StatesTeleop: Methods() {
                 //TRANSFER SYSTEM
                 AutomaticTransferState.StartTransfer-> {
                     outClawServo!!.position = outClawOpen
-                    inRotationServo!!.position = inRotationTransferMinus
+                    inRotationServo!!.position = inRotationTransfer
                     intakeMotor?.power = 1.0
                     horizontalSlideTo(-1*horizontalSlideVar,0.8)
                     verticalSlideTo(1300,1.0)

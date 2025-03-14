@@ -15,7 +15,6 @@ class ServoTester : LinearOpMode() {
         val outClawServo = hardwareMap.servo["OutClaw"]
         val outRotationServo = hardwareMap.servo["OutRotation"]
         val outSwivelServo = hardwareMap.servo["OutSwivel"]
-        outSwivelServo.position = 0.3
         val inRotationServo = hardwareMap.servo["InRotation"]
         val inStopServo = hardwareMap.servo["InStop"]
         val intakeMotor = hardwareMap.dcMotor["intakeMotor"]
@@ -65,10 +64,10 @@ class ServoTester : LinearOpMode() {
             }
 
             if (currentGamepad2.dpad_up && !previousGamepad2.dpad_up ) {
-                outSwivelServo.position += 0.002
+                outSwivelServo.position += 0.01
             }
             if (currentGamepad2.dpad_down  && !previousGamepad2.dpad_down) {
-                outSwivelServo.position -= 0.002
+                outSwivelServo.position -= 0.01
             }
 
             telemetry.addData("transferServo position (AB):", transferServo.position)

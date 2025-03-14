@@ -191,7 +191,7 @@ public class TrajectorySequenceRunnerCancelable {
             poseHistory.removeFirst();
         }
 
-        final double NOMINAL_VOLTAGE = 13.5;
+        final double NOMINAL_VOLTAGE = 13.0;
         double voltage = voltageSensor.getVoltage();
         if (driveSignal != null && !DriveConstants.RUN_USING_ENCODER) {
             driveSignal = new DriveSignal(

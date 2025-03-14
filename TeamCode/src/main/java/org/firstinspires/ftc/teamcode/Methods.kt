@@ -32,8 +32,8 @@ abstract class Methods : LinearOpMode() {
     val outClawOpen = 0.275 //
     val outClawOpenAuto = 0.25
 
-    val outSwivelPerpBack = 0.168//
-    val outSwivelPerpFront = 0.278 //
+    val outSwivelPerpBack = 0.85//
+    val outSwivelPerpFront = 0.18 //
 
     var outRotationBackPlace = 0.1
     var outRotationBackWall = 0.16
@@ -53,8 +53,8 @@ abstract class Methods : LinearOpMode() {
     val inStopAutoOpen = 0.03
     val inStopOpen = 0.03
 
-    val verticalSlideHigh = 2000
-    val verticalSlideBar = 485
+    val verticalSlideHigh = 2100
+    val verticalSlideBar = 480
     val verticalSlideLow = 800
     val horizontalSlideExtend = 950
 

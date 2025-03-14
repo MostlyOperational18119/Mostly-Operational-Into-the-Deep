@@ -13,10 +13,11 @@ import org.firstinspires.ftc.teamcode.drive.advanced.SampleMecanumDriveCancelabl
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence
 
 
-@Autonomous(name = "BASKET5_BLUE", group = "AAAA")
+@Autonomous(name = "BASKET5_Blue", group = "AAAA")
 class BASKET5Blue : Methods() {
     override fun runOpMode() {
         startingColor = "blue"
+
         val autoTimer = ElapsedTime()
 
         initMotors()
@@ -33,27 +34,27 @@ class BASKET5Blue : Methods() {
 
         val beginSlowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(listOf(
             TranslationalVelocityConstraint(13.4),
-            AngularVelocityConstraint(1.25)))
+            AngularVelocityConstraint(1.3)))
 
         val basket1SlowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(listOf(
             TranslationalVelocityConstraint(33.0),
             AngularVelocityConstraint(3.0)))
 
         val basket2SlowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(listOf(
-            TranslationalVelocityConstraint(4.0),
-            AngularVelocityConstraint(1.0)))
+            TranslationalVelocityConstraint(5.0),
+            AngularVelocityConstraint(1.3)))
 
         val basket3SlowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(listOf(
-            TranslationalVelocityConstraint(3.0),
-            AngularVelocityConstraint(1.0)))
+            TranslationalVelocityConstraint(4.0),
+            AngularVelocityConstraint(1.2)))
 
         val basket4SlowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(listOf(
-            TranslationalVelocityConstraint(4.0),
-            AngularVelocityConstraint(1.0)))
+            TranslationalVelocityConstraint(5.0),
+            AngularVelocityConstraint(1.3)))
 
         val basket5SlowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(listOf(
-            TranslationalVelocityConstraint(27.0),
-            AngularVelocityConstraint(2.5)))
+            TranslationalVelocityConstraint(25.0),
+            AngularVelocityConstraint(2.4)))
 
         val begin: TrajectorySequence =
             drive!!.trajectorySequenceBuilder(Pose2d(-38.0, -63.19, Math.toRadians(0.00)))
@@ -65,7 +66,58 @@ class BASKET5Blue : Methods() {
 
                 .setVelConstraint(beginSlowConstraint)
                 .setReversed(true)
-                .splineToLinearHeading(Pose2d(-59.0, -61.0, Math.toRadians(45.00)), Math.toRadians(225.00))
+                .splineToLinearHeading(Pose2d(-59.0, -61.5, Math.toRadians(45.00)), Math.toRadians(225.00))
+                .setReversed(false)
+                .resetConstraints()
+
+                .UNSTABLE_addTemporalMarkerOffset(-0.05) { outRotationServo!!.position = outRotationBackOut}
+                .UNSTABLE_addTemporalMarkerOffset(0.0) {outClawServo!!.position = outClawOpen}
+                .waitSeconds(0.11)
+
+                //OBSERVATION ZONE
+                .UNSTABLE_addTemporalMarkerOffset(0.0) {
+                    inStopServo!!.position = inStopClose
+                    verticalSlideTo(20, 0.5)
+                    outRotationServo!!.position = outRotationCenter
+                    intakeMotor!!.power = 0.4
+                    horizontalSlideTo(400, 1.0)
+                }
+                .UNSTABLE_addTemporalMarkerOffset(1.0) {
+                    inRotationServo!!.position = inRotationPick
+                }
+                .splineToLinearHeading(Pose2d(26.0, -60.0, Math.toRadians(-40.0)), Math.toRadians(-40.0))
+                .UNSTABLE_addTemporalMarkerOffset(-0.2) {
+                    horizontalSlideTo(600,0.7)
+                }
+                .build()
+
+        val recoverToTape1 : TrajectorySequence =
+            drive!!.trajectorySequenceBuilder(Pose2d(26.0, -61.0, Math.toRadians(-40.0)))
+                .addTemporalMarker {horizontalSlideTo(50, 1.0); intakeMotor!!.power = -1.0}
+                .lineToLinearHeading(Pose2d(-48.3, -50.3, Math.toRadians(90.0)))
+                .UNSTABLE_addTemporalMarkerOffset(-0.5){horizontalSlideTo(600, 0.3); intakeMotor!!.power = 0.4}
+                .build()
+
+        val observationToBasketToTape1: TrajectorySequence =
+            drive!!.trajectorySequenceBuilder(Pose2d(26.0, -61.0, Math.toRadians(-40.0)))
+                .addTemporalMarker(0.0) {
+                    horizontalSlideTo(-30, 1.0)
+                    inRotationServo!!.position = inRotationTransfer
+                    transferServo!!.position = transferServoClose}
+                .addTemporalMarker(0.55) { inStopServo!!.position = inStopAutoOpen }
+                .addTemporalMarker(1.2) { outClawServo!!.position = outClawClose }
+                .addTemporalMarker(1.5) {
+                    transferServo!!.position = transferServoOpen
+                    verticalSlideTo(verticalSlideHigh, 1.0)
+                    outRotationServo!!.position = outRotationUp
+                    horizontalSlideTo(300, 1.0)
+                    inRotationServo!!.position = inRotationPick
+                    intakeMotor!!.power = -1.0
+                }
+
+                .setVelConstraint(basket1SlowConstraint)
+                .setReversed(true)
+                .splineToLinearHeading(Pose2d(-59.0, -61.5, Math.toRadians(45.00)), Math.toRadians(225.00))
                 .setReversed(false)
                 .resetConstraints()
 
@@ -79,13 +131,9 @@ class BASKET5Blue : Methods() {
                     verticalSlideTo(20, 0.5)
                     outRotationServo!!.position = outRotationCenter
                     intakeMotor!!.power = 0.4
-                    horizontalSlideTo(400, 1.0)
                 }
-                .UNSTABLE_addTemporalMarkerOffset(1.0) {
-                    inRotationServo!!.position = inRotationPick
-                }
+                .UNSTABLE_addDisplacementMarkerOffset(5.0) { horizontalSlideTo(800, 0.4) }
                 .lineToLinearHeading(Pose2d(-48.3, -50.3, Math.toRadians(90.0)))
-                .UNSTABLE_addTemporalMarkerOffset(-0.5){horizontalSlideTo(600, 0.3); intakeMotor!!.power = 0.4}
                 .build()
 
         val recoverToTape2 : TrajectorySequence =
@@ -103,8 +151,8 @@ class BASKET5Blue : Methods() {
                     transferServo!!.position = transferServoClose
                 }
                 .addTemporalMarker(0.45) { inStopServo!!.position = inStopAutoOpen }
-                .addTemporalMarker(0.9) { outClawServo!!.position = outClawClose }
-                .addTemporalMarker(1.2) {
+                .addTemporalMarker(1.1) { outClawServo!!.position = outClawClose }
+                .addTemporalMarker(1.3) {
                     transferServo!!.position = transferServoOpen
                     verticalSlideTo(verticalSlideHigh, 1.0)
                     outRotationServo!!.position = outRotationUp
@@ -115,7 +163,7 @@ class BASKET5Blue : Methods() {
 
                 .setVelConstraint(basket2SlowConstraint)
                 .setReversed(true)
-                .lineToLinearHeading(Pose2d(-59.0, -61.0, Math.toRadians(45.00)))
+                .lineToLinearHeading(Pose2d(-59.0, -61.5, Math.toRadians(45.00)))
                 .setReversed(false)
                 .resetConstraints()
 
@@ -150,19 +198,19 @@ class BASKET5Blue : Methods() {
                     transferServo!!.position = transferServoClose
                 }
                 .addTemporalMarker(0.45) { inStopServo!!.position = inStopAutoOpen }
-                .addTemporalMarker(0.9) { outClawServo!!.position = outClawClose }
-                .addTemporalMarker(1.2) {
+                .addTemporalMarker(1.1) { outClawServo!!.position = outClawClose }
+                .addTemporalMarker(1.3) {
+                    transferServo!!.position = transferServoOpen
                     verticalSlideTo(verticalSlideHigh, 1.0)
                     outRotationServo!!.position = outRotationUp
-                    horizontalSlideTo(300, 1.0)
+                    horizontalSlideTo(200, 1.0)
                     inRotationServo!!.position = inRotationPick
-                    transferServo!!.position = transferServoOpen
                     intakeMotor!!.power = -1.0
                 }
 
                 .setVelConstraint(basket3SlowConstraint)
                 .setReversed(true)
-                .lineToLinearHeading(Pose2d(-59.0, -61.0, Math.toRadians(45.00)))
+                .lineToLinearHeading(Pose2d(-59.0, -61.5, Math.toRadians(45.00)))
                 .setReversed(false)
                 .resetConstraints()
 
@@ -186,7 +234,7 @@ class BASKET5Blue : Methods() {
                 .addTemporalMarker {horizontalSlideTo(250, 1.0); intakeMotor!!.power = -1.0}
                 .turn(Math.toRadians(-30.0))
                 .UNSTABLE_addTemporalMarkerOffset(0.0){inRotationServo!!.position = inRotationTransfer}
-                .splineTo(Vector2d(-22.0, -11.5), Math.toRadians(0.0))
+                .splineTo(Vector2d(-22.0, -9.0), Math.toRadians(0.0))
                 .UNSTABLE_addTemporalMarkerOffset(-0.05){
                     horizontalSlideTo(900, 0.15)
                     intakeMotor!!.power = 0.4
@@ -202,19 +250,19 @@ class BASKET5Blue : Methods() {
                     transferServo!!.position = transferServoClose
                 }
                 .addTemporalMarker(0.45) { inStopServo!!.position = inStopAutoOpen }
-                .addTemporalMarker(0.9) { outClawServo!!.position = outClawClose }
-                .addTemporalMarker(1.2) {
+                .addTemporalMarker(1.1) { outClawServo!!.position = outClawClose }
+                .addTemporalMarker(1.3) {
                     transferServo!!.position = transferServoOpen
                     verticalSlideTo(verticalSlideHigh, 1.0)
                     outRotationServo!!.position = outRotationUp
-                    horizontalSlideTo(300, 1.0)
+                    horizontalSlideTo(200, 1.0)
                     inRotationServo!!.position = inRotationPick
                     intakeMotor!!.power = -1.0
                 }
 
                 .setVelConstraint(basket4SlowConstraint)
                 .setReversed(true)
-                .lineToLinearHeading(Pose2d(-59.0, -61.0, Math.toRadians(45.00)))
+                .lineToLinearHeading(Pose2d(-59.0, -61.5, Math.toRadians(45.00)))
                 .setReversed(false)
                 .resetConstraints()
 
@@ -228,37 +276,80 @@ class BASKET5Blue : Methods() {
                     verticalSlideTo(20, 1.0)
                     outRotationServo!!.position = outRotationCenter
                     intakeMotor!!.power = 0.4
-                    horizontalSlideTo(250, 1.0)
+                    horizontalSlideTo(200, 1.0)
                     inRotationServo!!.position = inRotationTransfer
                 }
-                .splineTo(Vector2d(-22.0, -11.5), Math.toRadians(0.0))
-                .UNSTABLE_addTemporalMarkerOffset(-0.05) {
+                .splineToLinearHeading(Pose2d(-22.0, -9.0, Math.toRadians(0.0)), Math.toRadians(0.0))
+                .UNSTABLE_addTemporalMarkerOffset(-0.1) {
                     inRotationServo!!.position = inRotationPick
-                    horizontalSlideTo(900,0.15)
+                    horizontalSlideTo(900,0.4)
                 }
                 .build()
 
         val submersibleToBasket: TrajectorySequence =
-            drive!!.trajectorySequenceBuilder(Pose2d(-22.0, -11.5, Math.toRadians(0.0)))
+            drive!!.trajectorySequenceBuilder(Pose2d(-22.0, -9.0, Math.toRadians(0.0)))
                 .addTemporalMarker(0.0) {
                     horizontalSlideTo(-30, 1.0)
                     inRotationServo!!.position = inRotationTransfer
                     transferServo!!.position = transferServoClose
                 }
-                .addTemporalMarker(0.45) { inStopServo!!.position = inStopAutoOpen }
-                .addTemporalMarker(1.0) { outClawServo!!.position = outClawClose }
-                .addTemporalMarker(1.2) {
+                .addTemporalMarker(0.6) { inStopServo!!.position = inStopAutoOpen }
+                .addTemporalMarker(1.3) { outClawServo!!.position = outClawClose }
+                .addTemporalMarker(1.5) {
                     transferServo!!.position = transferServoOpen
                     verticalSlideTo(verticalSlideHigh, 1.0)
                     outRotationServo!!.position = outRotationUp
-                    horizontalSlideTo(300, 1.0)
+                    horizontalSlideTo(200, 1.0)
                     inRotationServo!!.position = inRotationPick
                     intakeMotor!!.power = -1.0
                 }
 
                 .setVelConstraint(basket5SlowConstraint)
                 .setReversed(true)
-                .splineTo(Vector2d(-59.0, -61.0), Math.toRadians(225.0))
+                .splineToLinearHeading(Pose2d(-59.0, -61.5, Math.toRadians(45.0)), Math.toRadians(225.0))
+                .setReversed(false)
+                .resetConstraints()
+
+                .UNSTABLE_addTemporalMarkerOffset(-0.05) { outRotationServo!!.position = outRotationBackOut}
+                .UNSTABLE_addTemporalMarkerOffset(0.0) {outClawServo!!.position = outClawOpen}
+                .waitSeconds(0.11)
+
+                .UNSTABLE_addDisplacementMarkerOffset(0.0) {
+                    inStopServo!!.position = inStopClose
+                    verticalSlideTo(20, 1.0)
+                    outRotationServo!!.position = outRotationCenter
+                    intakeMotor!!.power = 0.4
+                    horizontalSlideTo(200, 1.0)
+                    inRotationServo!!.position = inRotationTransfer
+                }
+                .splineToLinearHeading(Pose2d(-22.0, 0.0, Math.toRadians(0.0)), Math.toRadians(0.0))
+                .UNSTABLE_addTemporalMarkerOffset(-0.1) {
+                    inRotationServo!!.position = inRotationPick
+                    horizontalSlideTo(900,0.4)
+                }
+                .build()
+
+        val submersibleToBasket2: TrajectorySequence =
+            drive!!.trajectorySequenceBuilder(Pose2d(-22.0, 0.0, Math.toRadians(0.0)))
+                .addTemporalMarker(0.0) {
+                    horizontalSlideTo(-30, 1.0)
+                    inRotationServo!!.position = inRotationTransfer
+                    transferServo!!.position = transferServoClose
+                }
+                .addTemporalMarker(0.6) { inStopServo!!.position = inStopAutoOpen }
+                .addTemporalMarker(1.3) { outClawServo!!.position = outClawClose }
+                .addTemporalMarker(1.5) {
+                    transferServo!!.position = transferServoOpen
+                    verticalSlideTo(verticalSlideHigh, 1.0)
+                    outRotationServo!!.position = outRotationUp
+                    horizontalSlideTo(200, 1.0)
+                    inRotationServo!!.position = inRotationPick
+                    intakeMotor!!.power = -1.0
+                }
+
+                .setVelConstraint(basket5SlowConstraint)
+                .setReversed(true)
+                .splineToLinearHeading(Pose2d(-59.0, -61.5, Math.toRadians(45.0)), Math.toRadians(225.0))
                 .setReversed(false)
                 .resetConstraints()
 
@@ -277,6 +368,23 @@ class BASKET5Blue : Methods() {
 
         autoTimer.reset()
         drive!!.followTrajectorySequence(begin)
+
+        elapsedTime.reset()
+        colorSeen = "none"
+        moveOn = false
+        while(!moveOn && opModeIsActive()){
+            telemetry.addLine(colorSeen)
+            telemetry.update()
+            colors = colorSensor!!.normalizedColors
+            colors = colorSensor!!.normalizedColors
+            if (colors!!.green > 0.6){ colorSeen = "yellow"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update()}
+            else if (colors!!.red > 0.6){ colorSeen = "red"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
+            else if (colors!!.blue > 0.6){ colorSeen= "blue"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
+            if (elapsedTime.time() > 1.5){ moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
+        }
+
+        if (colorSeen == "none") { drive!!.followTrajectorySequence(recoverToTape1) }
+        else{ drive!!.followTrajectorySequence(observationToBasketToTape1) }
 
         elapsedTime.reset()
         colorSeen = "none"
@@ -345,11 +453,35 @@ class BASKET5Blue : Methods() {
         else if (startingColor == "red" && colorSeen == "blue"){ spitOut(1000);  requestOpModeStop() }
         else if (colorSeen == "none"){ spitOut(1000);  requestOpModeStop() }
 
-        if (autoTimer.time() < 26.0) {
+        if (autoTimer.time() < 28.0) {
             drive!!.followTrajectorySequence(submersibleToBasket)
             drive!!.updatePoseEstimate()
         }
+
+        elapsedTime.reset()
+        colorSeen = "none"
+        moveOn = false
+        while(!moveOn && opModeIsActive()){
+            telemetry.addLine(colorSeen)
+            telemetry.addLine(autoTimer.time().toString())
+            telemetry.update()
+            colors = colorSensor!!.normalizedColors
+            if (colors!!.green > 0.6){ colorSeen = "yellow"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
+            else if (colors!!.red > 0.6){ colorSeen = "red"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
+            else if (colors!!.blue > 0.6){ colorSeen= "blue"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
+            if (elapsedTime.time() > 2.5){ moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
+        }
+
+        if (startingColor == "blue" && colorSeen == "red"){ spitOut(1000);  requestOpModeStop() }
+        else if (startingColor == "red" && colorSeen == "blue"){ spitOut(1000);  requestOpModeStop() }
+        else if (colorSeen == "none"){ spitOut(1000);  requestOpModeStop() }
+
+        if (autoTimer.time() < 27.7) {
+            drive!!.followTrajectorySequence(submersibleToBasket2)
+            drive!!.updatePoseEstimate()
+        }
         outRotationServo!!.position = outRotationCenter
+        outClawServo!!.position = outClawOpen
         sleep(100)
         verticalSlideTo(0,1.0)
     }

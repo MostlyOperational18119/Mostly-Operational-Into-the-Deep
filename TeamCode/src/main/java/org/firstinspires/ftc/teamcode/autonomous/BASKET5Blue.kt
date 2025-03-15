@@ -33,28 +33,28 @@ class BASKET5Blue : Methods() {
         drive!!.poseEstimate = Pose2d(-36.5, -63.19, Math.toRadians(0.00))
 
         val beginSlowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(listOf(
-            TranslationalVelocityConstraint(13.4),
-            AngularVelocityConstraint(1.3)))
+            TranslationalVelocityConstraint(14.0),
+            AngularVelocityConstraint(1.35)))
 
         val basket1SlowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(listOf(
-            TranslationalVelocityConstraint(33.0),
+            TranslationalVelocityConstraint(37.0),
             AngularVelocityConstraint(3.0)))
 
         val basket2SlowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(listOf(
             TranslationalVelocityConstraint(5.0),
-            AngularVelocityConstraint(1.3)))
+            AngularVelocityConstraint(1.35)))
 
         val basket3SlowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(listOf(
-            TranslationalVelocityConstraint(4.0),
-            AngularVelocityConstraint(1.2)))
+            TranslationalVelocityConstraint(4.5),
+            AngularVelocityConstraint(1.4)))
 
         val basket4SlowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(listOf(
-            TranslationalVelocityConstraint(5.0),
-            AngularVelocityConstraint(1.3)))
+            TranslationalVelocityConstraint(5.5),
+            AngularVelocityConstraint(1.4)))
 
         val basket5SlowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(listOf(
-            TranslationalVelocityConstraint(25.0),
-            AngularVelocityConstraint(2.4)))
+            TranslationalVelocityConstraint(27.0),
+            AngularVelocityConstraint(2.5)))
 
         val begin: TrajectorySequence =
             drive!!.trajectorySequenceBuilder(Pose2d(-38.0, -63.19, Math.toRadians(0.00)))

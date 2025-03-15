@@ -71,8 +71,8 @@ class ServoTester : LinearOpMode() {
             }
 
             telemetry.addData("transferServo position (AB):", transferServo.position)
-            telemetry.addData("outClaw position:", outClawServo.position)
-            telemetry.addData("outRotation position:", outRotationServo.position)
+            telemetry.addData("outClaw position (Dpad 1 up/down):", outClawServo.position)
+            telemetry.addData("outRotation position (dpad 1 left/right):", outRotationServo.position)
             telemetry.addData("outSwivel position:", outSwivelServo.position)
             telemetry.addData("inRotation position:", inRotationServo.position)
             telemetry.addData("inStopServo (XY) position:", inStopServo.position)

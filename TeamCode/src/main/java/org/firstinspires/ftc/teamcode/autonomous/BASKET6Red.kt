@@ -33,28 +33,28 @@ class BASKET6Red : Methods() {
         drive!!.poseEstimate = Pose2d(-36.5, -63.19, Math.toRadians(0.00))
 
         val beginSlowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(listOf(
-            TranslationalVelocityConstraint(13.4),
-            AngularVelocityConstraint(1.3)))
+            TranslationalVelocityConstraint(14.0),
+            AngularVelocityConstraint(1.35)))
 
         val basket1SlowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(listOf(
-            TranslationalVelocityConstraint(33.0),
+            TranslationalVelocityConstraint(37.0),
             AngularVelocityConstraint(3.0)))
 
         val basket2SlowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(listOf(
             TranslationalVelocityConstraint(5.0),
-            AngularVelocityConstraint(1.3)))
+            AngularVelocityConstraint(1.35)))
 
         val basket3SlowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(listOf(
-            TranslationalVelocityConstraint(4.0),
-            AngularVelocityConstraint(1.2)))
+            TranslationalVelocityConstraint(4.5),
+            AngularVelocityConstraint(1.4)))
 
         val basket4SlowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(listOf(
-            TranslationalVelocityConstraint(5.0),
-            AngularVelocityConstraint(1.3)))
+            TranslationalVelocityConstraint(5.5),
+            AngularVelocityConstraint(1.4)))
 
         val basket5SlowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(listOf(
-            TranslationalVelocityConstraint(26.0),
-            AngularVelocityConstraint(2.4)))
+            TranslationalVelocityConstraint(27.0),
+            AngularVelocityConstraint(2.5)))
 
         val begin: TrajectorySequence =
             drive!!.trajectorySequenceBuilder(Pose2d(-38.0, -63.19, Math.toRadians(0.00)))
@@ -93,7 +93,7 @@ class BASKET6Red : Methods() {
 
         val recoverToTape1 : TrajectorySequence =
             drive!!.trajectorySequenceBuilder(Pose2d(26.0, -61.0, Math.toRadians(-40.0)))
-                .addTemporalMarker {horizontalSlideTo(50, 1.0); intakeMotor!!.power = -1.0}
+                .addTemporalMarker {horizontalSlideTo(50, 1.0); intakeMotor!!.power = 0.0}
                 .lineToLinearHeading(Pose2d(-48.3, -50.3, Math.toRadians(90.0)))
                 .UNSTABLE_addTemporalMarkerOffset(-0.5){horizontalSlideTo(600, 0.3); intakeMotor!!.power = 0.4}
                 .build()
@@ -112,7 +112,7 @@ class BASKET6Red : Methods() {
                     outRotationServo!!.position = outRotationUp
                     horizontalSlideTo(300, 1.0)
                     inRotationServo!!.position = inRotationPick
-                    intakeMotor!!.power = -1.0
+                    intakeMotor!!.power = 0.0
                 }
 
                 .setVelConstraint(basket1SlowConstraint)
@@ -138,7 +138,7 @@ class BASKET6Red : Methods() {
 
         val recoverToTape2 : TrajectorySequence =
             drive!!.trajectorySequenceBuilder(Pose2d(-48.3, -50.3, Math.toRadians(90.0)))
-                .addTemporalMarker {horizontalSlideTo(50, 1.0); intakeMotor!!.power = -1.0}
+                .addTemporalMarker {horizontalSlideTo(50, 1.0); intakeMotor!!.power = 0.0}
                 .lineToLinearHeading(Pose2d(-59.0, -50.3, Math.toRadians(90.0)))
                 .UNSTABLE_addTemporalMarkerOffset(-0.5){horizontalSlideTo(600, 0.3); intakeMotor!!.power = 0.4}
                 .build()
@@ -158,7 +158,7 @@ class BASKET6Red : Methods() {
                     outRotationServo!!.position = outRotationUp
                     horizontalSlideTo(200, 1.0)
                     inRotationServo!!.position = inRotationPick
-                    intakeMotor!!.power = -1.0
+                    intakeMotor!!.power = 0.0
                 }
 
                 .setVelConstraint(basket2SlowConstraint)
@@ -184,7 +184,7 @@ class BASKET6Red : Methods() {
 
         val recoverToTape3 : TrajectorySequence =
             drive!!.trajectorySequenceBuilder(Pose2d(-59.0, -50.3, Math.toRadians(90.00)))
-                .addTemporalMarker {horizontalSlideTo(300, 1.0); intakeMotor!!.power = -1.0}
+                .addTemporalMarker {horizontalSlideTo(300, 1.0); intakeMotor!!.power = 0.0}
                 .waitSeconds(0.2)
                 .lineToLinearHeading(Pose2d(-58.0, -46.5, Math.toRadians(127.00)))
                 .UNSTABLE_addTemporalMarkerOffset(0.1){horizontalSlideTo(800, 0.5); intakeMotor!!.power = 0.4}
@@ -205,7 +205,7 @@ class BASKET6Red : Methods() {
                     outRotationServo!!.position = outRotationUp
                     horizontalSlideTo(200, 1.0)
                     inRotationServo!!.position = inRotationPick
-                    intakeMotor!!.power = -1.0
+                    intakeMotor!!.power = 0.0
                 }
 
                 .setVelConstraint(basket3SlowConstraint)
@@ -231,7 +231,7 @@ class BASKET6Red : Methods() {
 
         val recoverToSubmersible : TrajectorySequence =
             drive!!.trajectorySequenceBuilder(Pose2d(-58.0, -46.5, Math.toRadians(127.00)))
-                .addTemporalMarker {horizontalSlideTo(250, 1.0); intakeMotor!!.power = -1.0}
+                .addTemporalMarker {horizontalSlideTo(250, 1.0); intakeMotor!!.power = 0.0}
                 .turn(Math.toRadians(-30.0))
                 .UNSTABLE_addTemporalMarkerOffset(0.0){inRotationServo!!.position = inRotationTransfer}
                 .splineTo(Vector2d(-22.0, -9.0), Math.toRadians(0.0))
@@ -257,7 +257,7 @@ class BASKET6Red : Methods() {
                     outRotationServo!!.position = outRotationUp
                     horizontalSlideTo(200, 1.0)
                     inRotationServo!!.position = inRotationPick
-                    intakeMotor!!.power = -1.0
+                    intakeMotor!!.power = 0.0
                 }
 
                 .setVelConstraint(basket4SlowConstraint)

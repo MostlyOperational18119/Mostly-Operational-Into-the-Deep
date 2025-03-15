@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleop
+package org.firstinspires.ftc.teamcode.teleop.testing
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
@@ -13,7 +13,7 @@ class ColorSensorTest : LinearOpMode() {
 
     override fun runOpMode() {
         // Get the color sensor from hardwareMap
-        color_sensor = hardwareMap.get(ColorSensor::class.java, "colorSensor")
+        color_sensor = hardwareMap.get(ColorSensor::class.java, "color")
         // Wait for the Play button to be pressed
         waitForStart()
         // While the OpMode is running, update the telemetry values.

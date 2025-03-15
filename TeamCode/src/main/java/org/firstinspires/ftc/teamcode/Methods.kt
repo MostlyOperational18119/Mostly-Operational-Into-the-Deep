@@ -28,9 +28,9 @@ abstract class Methods : LinearOpMode() {
     val transferServoClose = 0.73 //
     val transferServoOpen = 0.5 //
 
-    val outClawClose = 0.425 //
-    val outClawOpen = 0.275 //
-    val outClawOpenAuto = 0.25
+    val outClawClose = 0.36 //
+    val outClawOpen = 0.21 //
+    val outClawOpenAuto = 0.21
 
     val outSwivelPerpBack = 0.85//
     val outSwivelPerpFront = 0.18 //
@@ -44,16 +44,16 @@ abstract class Methods : LinearOpMode() {
     var outRotationFrontPlace = 0.8
     val outRotationCenter = 0.97
 
-    val inRotationPick = 0.85
-    val inRotationUpAuto = 0.64
-    val inRotationTransfer = 0.35
-    val inRotationUp = 0.07
+    val inRotationPick = 0.81
+    val inRotationUpAuto = 0.52
+    val inRotationTransfer = 0.27
+    val inRotationUp = 0.03
 
-    val inStopClose = 0.27
-    val inStopAutoOpen = 0.03
-    val inStopOpen = 0.03
+    val inStopClose = 0.84
+    val inStopAutoOpen = 0.6
+    val inStopOpen = 0.6
 
-    val verticalSlideHigh = 2100
+    val verticalSlideHigh = 2000
     val verticalSlideBar = 480
     val verticalSlideLow = 800
     val horizontalSlideExtend = 950
@@ -199,7 +199,6 @@ abstract class Methods : LinearOpMode() {
         setMotorModeEncoderNoReset(intakeMotor!!)
         motorFL!!.direction = DcMotorSimple.Direction.REVERSE
         motorBL!!.direction = DcMotorSimple.Direction.REVERSE
-        intakeMotor!!.direction = DcMotorSimple.Direction.REVERSE
     }
 
     //Initializes and sets motors amd resets them
@@ -216,7 +215,6 @@ abstract class Methods : LinearOpMode() {
         setMotorModePosition(slideVertical!!)
         motorFL!!.direction = DcMotorSimple.Direction.REVERSE
         motorBL!!.direction = DcMotorSimple.Direction.REVERSE
-        intakeMotor!!.direction = DcMotorSimple.Direction.REVERSE
     }
 
     fun initOdometry() {

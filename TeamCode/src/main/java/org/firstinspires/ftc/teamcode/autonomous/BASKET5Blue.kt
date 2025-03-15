@@ -41,8 +41,8 @@ class BASKET5Blue : Methods() {
             AngularVelocityConstraint(3.0)))
 
         val basket2SlowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(listOf(
-            TranslationalVelocityConstraint(5.0),
-            AngularVelocityConstraint(1.35)))
+            TranslationalVelocityConstraint(4.5),
+            AngularVelocityConstraint(1.3)))
 
         val basket3SlowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(listOf(
             TranslationalVelocityConstraint(4.5),
@@ -74,63 +74,14 @@ class BASKET5Blue : Methods() {
                 .UNSTABLE_addTemporalMarkerOffset(0.0) {outClawServo!!.position = outClawOpen}
                 .waitSeconds(0.11)
 
-                //OBSERVATION ZONE
-                .UNSTABLE_addTemporalMarkerOffset(0.0) {
-                    inStopServo!!.position = inStopClose
-                    verticalSlideTo(20, 0.5)
-                    outRotationServo!!.position = outRotationCenter
-                    intakeMotor!!.power = 0.4
-                    horizontalSlideTo(400, 1.0)
-                }
-                .UNSTABLE_addTemporalMarkerOffset(1.0) {
-                    inRotationServo!!.position = inRotationPick
-                }
-                .splineToLinearHeading(Pose2d(26.0, -60.0, Math.toRadians(-40.0)), Math.toRadians(-40.0))
-                .UNSTABLE_addTemporalMarkerOffset(-0.2) {
-                    horizontalSlideTo(600,0.7)
-                }
-                .build()
-
-        val recoverToTape1 : TrajectorySequence =
-            drive!!.trajectorySequenceBuilder(Pose2d(26.0, -61.0, Math.toRadians(-40.0)))
-                .addTemporalMarker {horizontalSlideTo(50, 1.0); intakeMotor!!.power = -1.0}
-                .lineToLinearHeading(Pose2d(-48.3, -50.3, Math.toRadians(90.0)))
-                .UNSTABLE_addTemporalMarkerOffset(-0.5){horizontalSlideTo(600, 0.3); intakeMotor!!.power = 0.4}
-                .build()
-
-        val observationToBasketToTape1: TrajectorySequence =
-            drive!!.trajectorySequenceBuilder(Pose2d(26.0, -61.0, Math.toRadians(-40.0)))
-                .addTemporalMarker(0.0) {
-                    horizontalSlideTo(-30, 1.0)
-                    inRotationServo!!.position = inRotationTransfer
-                    transferServo!!.position = transferServoClose}
-                .addTemporalMarker(0.55) { inStopServo!!.position = inStopAutoOpen }
-                .addTemporalMarker(1.2) { outClawServo!!.position = outClawClose }
-                .addTemporalMarker(1.5) {
-                    transferServo!!.position = transferServoOpen
-                    verticalSlideTo(verticalSlideHigh, 1.0)
-                    outRotationServo!!.position = outRotationUp
-                    horizontalSlideTo(300, 1.0)
-                    inRotationServo!!.position = inRotationPick
-                    intakeMotor!!.power = -1.0
-                }
-
-                .setVelConstraint(basket1SlowConstraint)
-                .setReversed(true)
-                .splineToLinearHeading(Pose2d(-59.0, -61.5, Math.toRadians(45.00)), Math.toRadians(225.00))
-                .setReversed(false)
-                .resetConstraints()
-
-                .UNSTABLE_addTemporalMarkerOffset(-0.05) { outRotationServo!!.position = outRotationBackOut}
-                .UNSTABLE_addTemporalMarkerOffset(0.0) {outClawServo!!.position = outClawOpen}
-                .waitSeconds(0.11)
-
                 //TAPE 1
                 .UNSTABLE_addTemporalMarkerOffset(0.0) {
                     inStopServo!!.position = inStopClose
                     verticalSlideTo(20, 0.5)
                     outRotationServo!!.position = outRotationCenter
                     intakeMotor!!.power = 0.4
+                    horizontalSlideTo(200,1.0)
+                    inRotationServo!!.position = inRotationPick
                 }
                 .UNSTABLE_addDisplacementMarkerOffset(5.0) { horizontalSlideTo(800, 0.4) }
                 .lineToLinearHeading(Pose2d(-48.3, -50.3, Math.toRadians(90.0)))
@@ -380,22 +331,6 @@ class BASKET5Blue : Methods() {
             if (colors!!.green > 0.6){ colorSeen = "yellow"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update()}
             else if (colors!!.red > 0.6){ colorSeen = "red"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
             else if (colors!!.blue > 0.6){ colorSeen= "blue"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
-            if (elapsedTime.time() > 1.5){ moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
-        }
-
-        if (colorSeen == "none") { drive!!.followTrajectorySequence(recoverToTape1) }
-        else{ drive!!.followTrajectorySequence(observationToBasketToTape1) }
-
-        elapsedTime.reset()
-        colorSeen = "none"
-        moveOn = false
-        while(!moveOn && opModeIsActive()){
-            telemetry.addLine(colorSeen)
-            telemetry.update()
-            colors = colorSensor!!.normalizedColors
-            if (colors!!.green > 0.6){ colorSeen = "yellow"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update()}
-            else if (colors!!.red > 0.6){ colorSeen = "red"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
-            else if (colors!!.blue > 0.6){ colorSeen= "blue"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
             if (elapsedTime.time() > 1.0){ moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
         }
 
@@ -469,7 +404,7 @@ class BASKET5Blue : Methods() {
             if (colors!!.green > 0.6){ colorSeen = "yellow"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
             else if (colors!!.red > 0.6){ colorSeen = "red"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
             else if (colors!!.blue > 0.6){ colorSeen= "blue"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
-            if (elapsedTime.time() > 2.5){ moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
+            if (elapsedTime.time() > 3.0){ moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
         }
 
         if (startingColor == "blue" && colorSeen == "red"){ spitOut(1000);  requestOpModeStop() }

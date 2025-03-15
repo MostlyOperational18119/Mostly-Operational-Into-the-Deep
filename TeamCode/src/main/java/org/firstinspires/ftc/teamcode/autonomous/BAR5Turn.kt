@@ -51,13 +51,13 @@ class BAR5Turn : Methods() {
                     //BAR0
                 .setVelConstraint(slowConstraint1)
                 .setAccelConstraint(accelConstraint1)
-                .lineToConstantHeading(Vector2d(-4.2,-30.75))
+                .lineToConstantHeading(Vector2d(-4.2,-30.8))
                 .UNSTABLE_addTemporalMarkerOffset(-0.01){outRotationServo!!.position = outRotationBackPlace}
                 .resetConstraints()
                 .build()
 
         val sample1: TrajectorySequence =
-            drive!!.trajectorySequenceBuilder(Pose2d(-4.2,-30.75, Math.toRadians(-90.00)))
+            drive!!.trajectorySequenceBuilder(Pose2d(-4.2,-30.8, Math.toRadians(-90.00)))
                 .addTemporalMarker(0.4){horizontalSlideTo(150,1.0)
                     inStopServo!!.position = inStopClose }
                 .addTemporalMarker(0.6){inRotationServo!!.position = inRotationPick }

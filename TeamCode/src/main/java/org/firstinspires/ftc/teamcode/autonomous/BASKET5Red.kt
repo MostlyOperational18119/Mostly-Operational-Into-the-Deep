@@ -41,8 +41,8 @@ class BASKET5Red : Methods() {
             AngularVelocityConstraint(3.0)))
 
         val basket2SlowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(listOf(
-            TranslationalVelocityConstraint(5.0),
-            AngularVelocityConstraint(1.35)))
+            TranslationalVelocityConstraint(4.5),
+            AngularVelocityConstraint(1.3)))
 
         val basket3SlowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(listOf(
             TranslationalVelocityConstraint(4.5),

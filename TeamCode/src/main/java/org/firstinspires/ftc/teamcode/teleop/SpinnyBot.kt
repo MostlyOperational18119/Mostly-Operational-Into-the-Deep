@@ -15,19 +15,19 @@ class SpinnyBot : LinearOpMode() {
         rotate.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
         rotate.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
         rotate.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-        val sensor = hardwareMap.get(DigitalChannel::class.java, "sensor")
+        val sensor = hardwareMap.get(TouchSensor::class.java, "sensor")
         val gamepad1Current = Gamepad()
         val gamepad1Previous = Gamepad()
-        val clicks = 2786
+        val clicks = 3896
         var encoderClicks = 0
-        while (sensor.state) {
-            rotate.power = 0.15
+        while (!sensor.isPressed) {
+            rotate.power = 0.3
         }
         rotate.power = 0.0
         rotate.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
-        rotate.targetPosition = -clicks/8
+        rotate.targetPosition = 0
         rotate.mode = DcMotor.RunMode.RUN_TO_POSITION
-        rotate.power = 0.2
+        rotate.power = 0.3
         waitForStart()
         rotate.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
         while (opModeIsActive()) {
@@ -36,33 +36,33 @@ class SpinnyBot : LinearOpMode() {
 
             if (gamepad1Current.dpad_up && !gamepad1Previous.dpad_up) {
                 rotate.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
-                rotate.power = 0.2
+                rotate.power = 0.3
             }
             if (gamepad1Current.dpad_down && !gamepad1Previous.dpad_down) {
-                rotate.power = -0.2
+                rotate.power = -0.3
                 rotate.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
             }
 
             if (gamepad1Current.a && !gamepad1Previous.a && rotate.currentPosition < 0) {
-                rotate.targetPosition = 5*(clicks/64)
+                rotate.targetPosition = -1*(clicks/64)
                 rotate.mode = DcMotor.RunMode.RUN_TO_POSITION
-                rotate.power = 0.2
+                rotate.power = 0.3
             }
             if (gamepad1Current.b && !gamepad1Previous.b && rotate.currentPosition < clicks/4) {
-                rotate.targetPosition = 37*(clicks/64)
+                rotate.targetPosition = 33*(clicks/64)
                 rotate.mode = DcMotor.RunMode.RUN_TO_POSITION
-                rotate.power = 0.2
+                rotate.power = 0.3
             }
 
             if (gamepad1Current.a && !gamepad1Previous.a && rotate.currentPosition > 0) {
-                rotate.targetPosition = 5*(clicks/64)
+                rotate.targetPosition = -1*(clicks/64)
                 rotate.mode = DcMotor.RunMode.RUN_TO_POSITION
-                rotate.power = -0.2
+                rotate.power = -0.3
             }
             if (gamepad1Current.b && !gamepad1Previous.b && rotate.currentPosition > clicks/4) {
-                rotate.targetPosition = 37*(clicks/64)
+                rotate.targetPosition = 33*(clicks/64)
                 rotate.mode = DcMotor.RunMode.RUN_TO_POSITION
-                rotate.power = -0.2
+                rotate.power = -0.3
             }
 
 
@@ -71,7 +71,7 @@ class SpinnyBot : LinearOpMode() {
 
             telemetry.addData("rotate power", rotate.power)
             telemetry.addData("position", rotate.currentPosition)
-            telemetry.addData("sensor val", !sensor.state)
+            telemetry.addData("sensor val", sensor.isPressed)
             telemetry.addData("target", rotate.targetPosition)
             telemetry.update()
 

@@ -37,22 +37,15 @@ class StatesTeleop: Methods() {
         var outRotation = false
         var reverseThing = false
         var otherReverse = 1.0
-        verticalHeight = 0
         speedDiv = 2.3
         var timeHor = 0.1
-
-        val slowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(
-            Arrays.asList(
-                TranslationalVelocityConstraint(50.0),
-                AngularVelocityConstraint(2.5)
-            )
-        )
-        val slowAccelConstraint: TrajectoryAccelerationConstraint = ProfileAccelerationConstraint(50.0)
 
         waitForStart()
 
         while (opModeIsActive()) {
             telemetry.addData("Vertical Pos: ", slideVertical?.currentPosition)
+            telemetry.addData("Vertical Target: ", slideVertical?.targetPosition)
+            telemetry.addData("Vertical Power: ", slideVertical?.power)
             telemetry.addData("Horizontal Pos : ", slideHorizontal?.currentPosition)
             telemetry.addData("x: ", drive!!.poseEstimate.x)
             telemetry.addData("y: ", drive!!.poseEstimate.y)
@@ -107,39 +100,39 @@ class StatesTeleop: Methods() {
                         drive!!.poseEstimate = clipPickPose
                     }
 
-                    if (controller1.dpad_down && !(previousController1.dpad_down)) {
-                        val teleopBasket = drive!!.trajectorySequenceBuilder(drive!!.poseEstimate)
-                            .lineToLinearHeading(basketPose)
-                            .build()
-                        drive!!.followTrajectorySequenceAsync(teleopBasket)
-                        automatedMovementToggle = AutomaticMovementState.Auto
-                    }
-                    if (controller1.dpad_left && !previousController1.dpad_left) {
-                        outClawServo!!.position = outClawClose
-                        outClawToggle = true
-                        sleep(100)
-
-                        outSwivelServo!!.position = outSwivelPerpFront
-                        outRotationServo!!.position = outRotationUp
-                        verticalSlideTo(verticalSlideBar, 1.0)
-                        verticalHeight = verticalSlideBar
-                        val teleopBar =  drive!!.trajectorySequenceBuilder(drive!!.poseEstimate)
-                            .lineToLinearHeading(barPose)
-                            .build()
-                        drive!!.followTrajectorySequenceAsync(teleopBar)
-                        automatedMovementToggle = AutomaticMovementState.Auto
-                    }
-                    if (controller1.dpad_right && !previousController1.dpad_right) {
-                        outSwivelServo!!.position = outSwivelPerpBack
-                        outRotationServo!!.position = outRotationBackWall
-                        verticalSlideTo(0, 1.0)
-                        verticalHeight = 0
-                        val teleopPickup = drive!!.trajectorySequenceBuilder(drive!!.poseEstimate)
-                            .lineToLinearHeading(clipPickPose)
-                            .build()
-                        drive!!.followTrajectorySequenceAsync(teleopPickup)
-                        automatedMovementToggle = AutomaticMovementState.Auto
-                    }
+//                    if (controller1.dpad_down && !(previousController1.dpad_down)) {
+//                        val teleopBasket = drive!!.trajectorySequenceBuilder(drive!!.poseEstimate)
+//                            .lineToLinearHeading(basketPose)
+//                            .build()
+//                        drive!!.followTrajectorySequenceAsync(teleopBasket)
+//                        automatedMovementToggle = AutomaticMovementState.Auto
+//                    }
+//                    if (controller1.dpad_left && !previousController1.dpad_left) {
+//                        outClawServo!!.position = outClawClose
+//                        outClawToggle = true
+//                        sleep(100)
+//
+//                        outSwivelServo!!.position = outSwivelPerpFront
+//                        outRotationServo!!.position = outRotationUp
+//                        verticalSlideTo(verticalSlideBar, 1.0)
+//                        verticalHeight = verticalSlideBar
+//                        val teleopBar =  drive!!.trajectorySequenceBuilder(drive!!.poseEstimate)
+//                            .lineToLinearHeading(barPose)
+//                            .build()
+//                        drive!!.followTrajectorySequenceAsync(teleopBar)
+//                        automatedMovementToggle = AutomaticMovementState.Auto
+//                    }
+//                    if (controller1.dpad_right && !previousController1.dpad_right) {
+//                        outSwivelServo!!.position = outSwivelPerpBack
+//                        outRotationServo!!.position = outRotationBackWall
+//                        verticalSlideTo(0, 1.0)
+//                        verticalHeight = 0
+//                        val teleopPickup = drive!!.trajectorySequenceBuilder(drive!!.poseEstimate)
+//                            .lineToLinearHeading(clipPickPose)
+//                            .build()
+//                        drive!!.followTrajectorySequenceAsync(teleopPickup)
+//                        automatedMovementToggle = AutomaticMovementState.Auto
+//                    }
                 }
                 AutomaticMovementState.Auto ->{
                     if (abs(controller1.left_stick_y) > 0.2){ drive!!.breakFollowing();automatedMovementToggle = AutomaticMovementState.Manual}

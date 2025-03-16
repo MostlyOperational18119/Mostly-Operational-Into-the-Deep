@@ -49,7 +49,7 @@ abstract class Methods : LinearOpMode() {
     val inRotationTransfer = 0.27
     val inRotationUp = 0.03
 
-    val inStopClose = 0.84
+    val inStopClose = 0.86
     val inStopAutoOpen = 0.6
     val inStopOpen = 0.6
 

@@ -79,7 +79,7 @@ class BASKET6Red : Methods() {
                     inStopServo!!.position = inStopClose
                     verticalSlideTo(20, 0.5)
                     outRotationServo!!.position = outRotationCenter
-                    intakeMotor!!.power = 0.3
+                    intakeMotor!!.power = 0.6
                     horizontalSlideTo(400, 1.0)
                 }
                 .UNSTABLE_addTemporalMarkerOffset(1.0) {
@@ -95,7 +95,7 @@ class BASKET6Red : Methods() {
             drive!!.trajectorySequenceBuilder(Pose2d(26.0, -61.0, Math.toRadians(-40.0)))
                 .addTemporalMarker {horizontalSlideTo(50, 1.0); intakeMotor!!.power = 0.0}
                 .lineToLinearHeading(Pose2d(-48.3, -50.3, Math.toRadians(90.0)))
-                .UNSTABLE_addTemporalMarkerOffset(-0.5){horizontalSlideTo(600, 0.3); intakeMotor!!.power = 0.3}
+                .UNSTABLE_addTemporalMarkerOffset(-0.5){horizontalSlideTo(600, 0.3); intakeMotor!!.power = 0.6}
                 .build()
 
         val observationToBasketToTape1: TrajectorySequence =
@@ -130,7 +130,7 @@ class BASKET6Red : Methods() {
                     inStopServo!!.position = inStopClose
                     verticalSlideTo(20, 0.5)
                     outRotationServo!!.position = outRotationCenter
-                    intakeMotor!!.power = 0.3
+                    intakeMotor!!.power = 0.6
                 }
                 .UNSTABLE_addDisplacementMarkerOffset(5.0) { horizontalSlideTo(800, 0.4) }
                 .lineToLinearHeading(Pose2d(-48.3, -50.3, Math.toRadians(90.0)))
@@ -140,7 +140,7 @@ class BASKET6Red : Methods() {
             drive!!.trajectorySequenceBuilder(Pose2d(-48.3, -50.3, Math.toRadians(90.0)))
                 .addTemporalMarker {horizontalSlideTo(50, 1.0); intakeMotor!!.power = 0.0}
                 .lineToLinearHeading(Pose2d(-59.0, -50.3, Math.toRadians(90.0)))
-                .UNSTABLE_addTemporalMarkerOffset(-0.5){horizontalSlideTo(600, 0.3); intakeMotor!!.power = 0.3}
+                .UNSTABLE_addTemporalMarkerOffset(-0.5){horizontalSlideTo(600, 0.3); intakeMotor!!.power = 0.6}
                 .build()
 
         val tape1ToBasketToTape2: TrajectorySequence =
@@ -177,7 +177,7 @@ class BASKET6Red : Methods() {
                     inStopServo!!.position = inStopClose
                     verticalSlideTo(20, 0.5)
                     outRotationServo!!.position = outRotationCenter
-                    intakeMotor!!.power = 0.3
+                    intakeMotor!!.power = 0.6
                 }
                 .lineToLinearHeading(Pose2d(-59.0, -50.3, Math.toRadians(90.00)))
                 .build()
@@ -187,7 +187,7 @@ class BASKET6Red : Methods() {
                 .addTemporalMarker {horizontalSlideTo(300, 1.0); intakeMotor!!.power = 0.0}
                 .waitSeconds(0.2)
                 .lineToLinearHeading(Pose2d(-57.0, -46.5, Math.toRadians(127.00)))
-                .UNSTABLE_addTemporalMarkerOffset(0.1){horizontalSlideTo(800, 0.5); intakeMotor!!.power = 0.3}
+                .UNSTABLE_addTemporalMarkerOffset(0.1){horizontalSlideTo(800, 0.5); intakeMotor!!.power = 0.6}
                 .build()
 
         val tape2ToBasketToTape3: TrajectorySequence =
@@ -222,7 +222,7 @@ class BASKET6Red : Methods() {
                 .UNSTABLE_addTemporalMarkerOffset(0.0) {
                     verticalSlideTo(20, 0.5)
                     outRotationServo!!.position = outRotationCenter
-                    intakeMotor!!.power = 0.3
+                    intakeMotor!!.power = 0.6
                     inStopServo!!.position = inStopClose
                 }
                 .UNSTABLE_addDisplacementMarkerOffset(5.0) { horizontalSlideTo(800, 0.5) }
@@ -237,7 +237,7 @@ class BASKET6Red : Methods() {
                 .splineTo(Vector2d(-22.0, -9.0), Math.toRadians(0.0))
                 .UNSTABLE_addTemporalMarkerOffset(-0.05){
                     horizontalSlideTo(900, 0.15)
-                    intakeMotor!!.power = 0.3
+                    intakeMotor!!.power = 0.6
                     inRotationServo!!.position = inRotationPick
                 }
                 .build()
@@ -275,14 +275,14 @@ class BASKET6Red : Methods() {
                     inStopServo!!.position = inStopClose
                     verticalSlideTo(20, 1.0)
                     outRotationServo!!.position = outRotationCenter
-                    intakeMotor!!.power = 0.4
+                    intakeMotor!!.power = 0.6
                     horizontalSlideTo(200, 1.0)
                     inRotationServo!!.position = inRotationTransfer
                 }
                 .splineToLinearHeading(Pose2d(-22.0, -9.0, Math.toRadians(0.0)), Math.toRadians(0.0))
                 .UNSTABLE_addTemporalMarkerOffset(-0.1) {
                     inRotationServo!!.position = inRotationPick
-                    horizontalSlideTo(900,0.4)
+                    horizontalSlideTo(900,0.3)
                 }
                 .build()
 
@@ -301,7 +301,7 @@ class BASKET6Red : Methods() {
                     outRotationServo!!.position = outRotationUp
                     horizontalSlideTo(200, 1.0)
                     inRotationServo!!.position = inRotationPick
-                    intakeMotor!!.power = -0.15
+                    intakeMotor!!.power = -0.4
                 }
 
                 .setVelConstraint(basket5SlowConstraint)
@@ -403,14 +403,14 @@ class BASKET6Red : Methods() {
             if (colors!!.green > 0.6){ colorSeen = "yellow"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
             else if (colors!!.red > 0.6){ colorSeen = "red"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
             else if (colors!!.blue > 0.6){ colorSeen= "blue"; moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
-            if (elapsedTime.time() > 2.5){ moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
+            if (elapsedTime.time() > 4.0){ moveOn = true; telemetry.addLine(colorSeen); telemetry.update() }
         }
 
         if (startingColor == "blue" && colorSeen == "red"){ spitOut(1000);  requestOpModeStop() }
         else if (startingColor == "red" && colorSeen == "blue"){ spitOut(1000);  requestOpModeStop() }
         else if (colorSeen == "none"){ spitOut(1000);  requestOpModeStop() }
 
-        if (autoTimer.time() < 27.4) {
+        if (autoTimer.time() < 28.0) {
             drive!!.followTrajectorySequence(submersibleToBasket)
             drive!!.updatePoseEstimate()
         }

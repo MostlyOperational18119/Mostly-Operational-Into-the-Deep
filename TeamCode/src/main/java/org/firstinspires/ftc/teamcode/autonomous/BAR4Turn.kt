@@ -31,7 +31,7 @@ class BAR4Turn : Methods() {
 
         val slowConstraint1: TrajectoryVelocityConstraint = MinVelocityConstraint(
             Arrays.asList(
-                TranslationalVelocityConstraint(40.0),
+                TranslationalVelocityConstraint(37.0),
                 AngularVelocityConstraint(3.0)
             )
         )
@@ -43,7 +43,7 @@ class BAR4Turn : Methods() {
             )
         )
 
-        val accelConstraint1: TrajectoryAccelerationConstraint = ProfileAccelerationConstraint(40.0)
+        val accelConstraint1: TrajectoryAccelerationConstraint = ProfileAccelerationConstraint(37.0)
         val accelConstraint2: TrajectoryAccelerationConstraint = ProfileAccelerationConstraint(50.0)
 
         val bar0: TrajectorySequence =
@@ -51,13 +51,13 @@ class BAR4Turn : Methods() {
                 //BAR0
                 .setVelConstraint(slowConstraint1)
                 .setAccelConstraint(accelConstraint1)
-                .lineToConstantHeading(Vector2d(-4.7,-30.9))
+                .lineToConstantHeading(Vector2d(-4.4,-30.9))
                 .UNSTABLE_addTemporalMarkerOffset(-0.01){outRotationServo!!.position = outRotationBackPlace}
                 .resetConstraints()
                 .build()
 
         val sample1: TrajectorySequence =
-            drive!!.trajectorySequenceBuilder(Pose2d(-4.7,-30.9, Math.toRadians(-90.00)))
+            drive!!.trajectorySequenceBuilder(Pose2d(-4.4,-30.9, Math.toRadians(-90.00)))
                 .addTemporalMarker(0.4){horizontalSlideTo(150,1.0)
                     inStopServo!!.position = inStopClose }
                 .addTemporalMarker(0.6){inRotationServo!!.position = inRotationPick }
@@ -108,14 +108,14 @@ class BAR4Turn : Methods() {
                 //BAR 1
                 .setVelConstraint(slowConstraint1)
                 .setAccelConstraint(accelConstraint1)
-                .lineToConstantHeading(Vector2d(-3.4, -30.4))
+                .lineToConstantHeading(Vector2d(-3.1, -30.4))
                 .UNSTABLE_addTemporalMarkerOffset(-0.01){outRotationServo!!.position = outRotationFrontPlace}
                 .UNSTABLE_addTemporalMarkerOffset(-0.01){outSwivelServo!!.position = outSwivelPerpFront}
                 .resetConstraints()
                 .build()
 
         val pick2: TrajectorySequence =
-            drive!!.trajectorySequenceBuilder(Pose2d(-3.4, -30.4, Math.toRadians(90.00)))
+            drive!!.trajectorySequenceBuilder(Pose2d(-3.1, -30.4, Math.toRadians(90.00)))
                 .setVelConstraint(slowConstraint2)
                 .setAccelConstraint(accelConstraint2)
                 .addTemporalMarker(0.2) {
@@ -136,14 +136,14 @@ class BAR4Turn : Methods() {
                     outRotationServo!!.position = outRotationUp
                     outSwivelServo!!.position = outSwivelPerpFront
                 }
-                .lineToConstantHeading(Vector2d(-1.4, -30.2))
+                .lineToConstantHeading(Vector2d(-1.7, -30.2))
                 .UNSTABLE_addTemporalMarkerOffset(-0.01){outRotationServo!!.position = outRotationFrontPlace}
                 .UNSTABLE_addTemporalMarkerOffset(-0.01){outSwivelServo!!.position = outSwivelPerpFront}
                 .resetConstraints()
                 .build()
 
         val pick3: TrajectorySequence =
-            drive!!.trajectorySequenceBuilder(Pose2d(-1.4, -30.2, Math.toRadians(90.00)))
+            drive!!.trajectorySequenceBuilder(Pose2d(-1.7, -30.2, Math.toRadians(90.00)))
                 .setVelConstraint(slowConstraint2)
                 .setAccelConstraint(accelConstraint2)
                 .addTemporalMarker(0.2) {
@@ -165,14 +165,14 @@ class BAR4Turn : Methods() {
                     outSwivelServo!!.position = outSwivelPerpFront
                 }
                 //BAR 3
-                .lineToConstantHeading(Vector2d(0.7, -30.0))
+                .lineToConstantHeading(Vector2d(-0.5, -30.0))
                 .UNSTABLE_addTemporalMarkerOffset(-0.01){outRotationServo!!.position = outRotationFrontPlace}
                 .UNSTABLE_addTemporalMarkerOffset(-0.01){outSwivelServo!!.position = outSwivelPerpFront}
                 .resetConstraints()
                 .build()
 
         val pick4: TrajectorySequence =
-            drive!!.trajectorySequenceBuilder(Pose2d(0.7, -30.0, Math.toRadians(90.00)))
+            drive!!.trajectorySequenceBuilder(Pose2d(-0.5, -30.0, Math.toRadians(90.00)))
                 .resetConstraints()
                 .addTemporalMarker(0.2) {
                     verticalSlideTo(0, 0.3)
@@ -194,7 +194,7 @@ class BAR4Turn : Methods() {
                     outSwivelServo!!.position = outSwivelPerpFront
                 }
                 //BAR 4
-                .lineToConstantHeading(Vector2d(1.0, -28.0))
+                .lineToConstantHeading(Vector2d(0.0, -28.0))
                 .UNSTABLE_addTemporalMarkerOffset(-0.01){outRotationServo!!.position = outRotationFrontPlace}
                 .UNSTABLE_addTemporalMarkerOffset(-0.01){outSwivelServo!!.position = outSwivelPerpFront}
                 .resetConstraints()

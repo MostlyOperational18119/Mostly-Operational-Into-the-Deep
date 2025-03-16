@@ -121,7 +121,7 @@ abstract class Methods : LinearOpMode() {
     // Places the sample
 
     fun spitOut(milliseconds : Long){
-        intakeMotor!!.power = -0.4
+        intakeMotor!!.power = -0.3
         sleep(milliseconds)
         intakeMotor!!.power = 0.0
     }

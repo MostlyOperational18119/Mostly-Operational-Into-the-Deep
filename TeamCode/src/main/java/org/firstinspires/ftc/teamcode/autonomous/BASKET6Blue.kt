@@ -33,24 +33,24 @@ class BASKET6Blue : Methods() {
         drive!!.poseEstimate = Pose2d(-36.5, -63.19, Math.toRadians(0.00))
 
         val beginSlowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(listOf(
-            TranslationalVelocityConstraint(14.0),
-            AngularVelocityConstraint(1.35)))
+            TranslationalVelocityConstraint(14.5),
+            AngularVelocityConstraint(1.4)))
 
         val basket1SlowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(listOf(
             TranslationalVelocityConstraint(37.0),
             AngularVelocityConstraint(3.0)))
 
         val basket2SlowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(listOf(
-            TranslationalVelocityConstraint(4.5),
-            AngularVelocityConstraint(1.3)))
+            TranslationalVelocityConstraint(5.0),
+            AngularVelocityConstraint(1.4)))
 
         val basket3SlowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(listOf(
-            TranslationalVelocityConstraint(4.5),
-            AngularVelocityConstraint(1.4)))
+            TranslationalVelocityConstraint(5.0),
+            AngularVelocityConstraint(1.45)))
 
         val basket4SlowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(listOf(
-            TranslationalVelocityConstraint(5.5),
-            AngularVelocityConstraint(1.4)))
+            TranslationalVelocityConstraint(6.0),
+            AngularVelocityConstraint(1.45)))
 
         val basket5SlowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(listOf(
             TranslationalVelocityConstraint(27.0),

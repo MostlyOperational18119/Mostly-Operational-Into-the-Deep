@@ -185,7 +185,7 @@ class StatesTeleop: Methods() {
                     //INTAKE MOTOR
                     if (controller2.right_trigger > 0.5 && !(previousController2.right_trigger > 0.5)){ intakeInToggle  = !intakeInToggle;  intakeOutToggle = false }
                     if (controller2.left_trigger > 0.5 && !(previousController2.left_trigger > 0.5)){ intakeOutToggle = !intakeOutToggle; intakeInToggle = false  }
-                    if (intakeInToggle) { intakeMotor?.power = 0.4 }
+                    if (intakeInToggle) { intakeMotor?.power = 0.8 }
                     else if (intakeOutToggle) { intakeMotor?.power = -0.5 }
                     else { intakeMotor?.power = 0.0 }
 

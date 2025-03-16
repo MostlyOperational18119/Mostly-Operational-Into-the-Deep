@@ -41,8 +41,8 @@ class BASKET6Red : Methods() {
             AngularVelocityConstraint(3.0)))
 
         val basket2SlowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(listOf(
-            TranslationalVelocityConstraint(5.0),
-            AngularVelocityConstraint(1.35)))
+            TranslationalVelocityConstraint(4.5),
+            AngularVelocityConstraint(1.3)))
 
         val basket3SlowConstraint: TrajectoryVelocityConstraint = MinVelocityConstraint(listOf(
             TranslationalVelocityConstraint(4.5),
@@ -410,7 +410,7 @@ class BASKET6Red : Methods() {
         else if (startingColor == "red" && colorSeen == "blue"){ spitOut(1000);  requestOpModeStop() }
         else if (colorSeen == "none"){ spitOut(1000);  requestOpModeStop() }
 
-        if (autoTimer.time() < 27.7) {
+        if (autoTimer.time() < 27.4) {
             drive!!.followTrajectorySequence(submersibleToBasket)
             drive!!.updatePoseEstimate()
         }

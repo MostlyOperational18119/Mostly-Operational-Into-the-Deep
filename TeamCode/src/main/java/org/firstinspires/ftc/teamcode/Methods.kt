@@ -22,7 +22,7 @@ abstract class Methods : LinearOpMode() {
     enum class AutomaticTransferState { Manual, StartTransfer, Pickup, ResetSlide, RotateOut }
     enum class AutomaticMovementState { Manual, Auto }
     enum class ColorStates {None, Red, Yellow, Blue}
-    enum class PipelineType { Red, Orange, Blue, AprilTag }
+    enum class PipelineType { Red, Orange, Blue, AprilTag, SnapScript }
     //enum class HangStates { Up, Down, Reset, None}
 
     val transferServoClose = 0.73 //
@@ -266,6 +266,7 @@ abstract class Methods : LinearOpMode() {
             PipelineType.Blue -> LimeLightPipelines.BluePipeline
             PipelineType.Orange -> LimeLightPipelines.OrangePipeline
             PipelineType.AprilTag -> LimeLightPipelines.AprilTagPipeline
+            PipelineType.SnapScript -> LimeLightPipelines.SnapScriptPipeline
         }
 
         switchPipeline(limelight, fileName)
@@ -275,7 +276,7 @@ abstract class Methods : LinearOpMode() {
         assert(colorLower.size == 3)
         assert(colorUpper.size == 3)
 
-        val ss = LimeLightPipelines.SnapScript
+        val ss = Base64.decode(LimeLightPipelines.SnapScript, 0).toString()
 
         // Good enough, but could be better
         ss.replace("cl0", colorLower[0].toString())

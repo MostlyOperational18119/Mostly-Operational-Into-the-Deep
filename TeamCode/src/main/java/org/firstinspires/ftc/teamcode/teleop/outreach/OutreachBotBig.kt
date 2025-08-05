@@ -26,8 +26,7 @@ class OutreachBotBig : LinearOpMode() {
         val launcherRotateMotor = hardwareMap.dcMotor["launcherRotateMotor"]
 
         // Set motor directions and mode
-        motorFR.direction = DcMotorSimple.Direction.REVERSE
-        motorBR.direction = DcMotorSimple.Direction.REVERSE
+        motorFL.direction = DcMotorSimple.Direction.REVERSE
         launcherRotateMotor.direction = DcMotorSimple.Direction.REVERSE
 
         launcherRotateMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
@@ -89,10 +88,10 @@ class OutreachBotBig : LinearOpMode() {
 
             // Launcher rotation motor
             if ((currentGamepad1.dpad_up && !previousGamepad1.dpad_up) && rotateRunCounter == 0) {
-                launcherRotateMotor.power = -0.3
+                launcherRotateMotor.power = -0.15
                 rotateRunCounter = 3
             } else if ((currentGamepad1.dpad_down && !previousGamepad1.dpad_down) && rotateRunCounter == 0) {
-                launcherRotateMotor.power = 0.3
+                launcherRotateMotor.power = 0.15
                 rotateRunCounter = 3
             }
 
